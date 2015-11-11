@@ -1,0 +1,23 @@
+{
+    "extends": "airbnb",
+    "globals": {
+        "__DEV__": true,
+        "it": true,
+        "describe": true,
+        "expect": true,
+        "jest": true
+    },
+    "rules": {
+        "react/jsx-quotes": 0,
+        "jsx-quotes": [
+            2,
+            "prefer-double"
+        ],
+        "indent": 0,
+        "vars-on-top": 0,
+        "no-unused-vars": 0,
+        "space-before-function-paren": 0,
+        "no-var": 0,
+        "comma-dangle": 0
+    }
+}
