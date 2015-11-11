@@ -1,26 +1,49 @@
-import { USER_LOGIN, USER_LOGOFF } from './../actions/Actions';
+import {
+    USER_LOGIN,
+    USER_LOGOFF,
+    USER_LOGIN_VALID,
+    USER_LOGIN_INVALID,
+
+    USER_STATE_ANON,
+    USER_STATE_LOGIN_SUBMITTED,
+    USER_STATE_VALIDATED,
+    USER_STATE_LOGIN_REJECTED
+} from './../actions/Actions';
 
 const initialState = {
-    user: null
+    user: null,
+    userState: USER_STATE_ANON
 };
 
 const state = (pState, action) => {
-    let lState = pState || Object.assign({}, initialState);
-    // eslint is squeamish about modifying input parameters, so...
+    let update = {};
 
     switch (action.type) {
         case USER_LOGIN:
-            lState = Object.assign({}, lState, {user: action.user});
+            update = {user: action.user, userState: USER_STATE_LOGIN_SUBMITTED};
             break;
 
         case USER_LOGOFF:
-            lState = Object.assign({}, lState, pState, {user: null});
+            update = {user: null, userState: USER_STATE_ANON};
+            break;
+
+        case USER_LOGIN_VALID:
+            update = {userState: USER_STATE_VALIDATED};
+            break;
+
+        case USER_LOGIN_INVALID:
+            update = {userState: USER_STATE_LOGIN_REJECTED};
+            break;
+
+        case '@@redux/INIT':
             break;
 
         default:
-            throw new Error('cannot recognize action ', action.type);
+            console.log('strange action:', action);
+            throw new Error('cannot recognize action ', action);
     }
-    return lState;
+
+    return Object.assign({}, pState || Object.assign({}, initialState), update);
 };
 
 export default state;

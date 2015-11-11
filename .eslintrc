@@ -18,6 +18,8 @@
         "no-unused-vars": 0,
         "space-before-function-paren": 0,
         "no-var": 0,
-        "comma-dangle": 0
+        "comma-dangle": 0,
+        "id-length": 0,
+        "func-names": 0
     }
 }
