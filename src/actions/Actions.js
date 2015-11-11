@@ -6,6 +6,7 @@ const USER_LOGIN = 'USER_LOGIN';
 const USER_LOGOFF = 'USER_LOGOFF';
 const USER_LOGIN_VALID = 'USER_LOGIN_VALID';
 const USER_LOGIN_INVALID = 'USER_LOGIN_INVALID';
+const USER_RESET_ANON = 'USER_RESET_ANON';
 
 /**
  * State Names
@@ -37,6 +38,11 @@ const logInGood = () => ({type: USER_LOGIN_VALID});
 const loginBad = (reason = false) => ({type: USER_LOGIN_INVALID, userInvalidReason: reason});
 
 /**
+ * call this action after receiving login rejection to reset the state
+ * to USER_STATE_ANON. Does not flush user data (call logoff for that).
+ */
+const loginResetAnon = () => ({type: USER_RESET_ANON});
+/**
  * this action is called when a logoff attempt is submitted;
  * it is assumed to be successful.
  */
@@ -48,11 +54,13 @@ export {
     logOff,
     logInGood,
     loginBad,
+    loginResetAnon,
 
     USER_LOGIN,
     USER_LOGOFF,
     USER_LOGIN_VALID,
     USER_LOGIN_INVALID,
+    USER_RESET_ANON,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,

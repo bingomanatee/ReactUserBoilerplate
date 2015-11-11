@@ -3,6 +3,7 @@ import {
     USER_LOGOFF,
     USER_LOGIN_VALID,
     USER_LOGIN_INVALID,
+    USER_RESET_ANON,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,
@@ -21,6 +22,11 @@ const state = (pState, action) => {
     switch (action.type) {
         case USER_LOGIN:
             update = {user: action.user, userState: USER_STATE_LOGIN_SUBMITTED};
+            break;
+
+        case USER_RESET_ANON:
+            // IMPORTANT: USER_RESET_ANON does NOT flush any user data in state.
+            update = {userState: USER_STATE_ANON};
             break;
 
         case USER_LOGOFF:

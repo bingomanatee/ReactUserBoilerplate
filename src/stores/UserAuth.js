@@ -1,5 +1,7 @@
 /**
- * This is a "metavalidation" adapter. It doesn't validate user credentials directly
+ * This is a "gateway" adapter to user authentication.
+ * It doesn't validate user credentials directly but accepts an authentication method
+ * that the developer can inject to perform asynchronous authentication.
  * @type {string}
  */
 
