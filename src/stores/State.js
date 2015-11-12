@@ -49,7 +49,11 @@ const state = (pState, action) => {
             throw new Error('cannot recognize action ', action);
     }
 
-    return Object.assign({}, pState || Object.assign({}, initialState), update);
+    var start = pState || initialState;
+    console.log('updating ', start, ' to ', update);
+    var out = Object.assign({}, start, update);
+    console.log('out = ', out);
+    return out;
 };
 
 export default state;

@@ -2,6 +2,7 @@ jest.dontMock('./../State');
 jest.dontMock('./../Store');
 jest.dontMock('./../../actions/Actions');
 jest.dontMock('redux');
+jest.dontMock('./../UserAuth');
 
 var state = require('./../State');
 var store = require('./../Store');

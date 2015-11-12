@@ -5,24 +5,22 @@
  * @type {string}
  */
 
-const VALIDATION_METHOD_TYPE_SYNC = 'SYNC';
-const VALIDATION_METHOD_TYPE_ASYNC = 'ASYNC';
-const VALIDATION_METHOD_TYPE_PROMISE = 'PROMISE';
+export const VALIDATION_METHOD_TYPE_SYNC = 'SYNC';
+export const VALIDATION_METHOD_TYPE_ASYNC = 'ASYNC';
+export const VALIDATION_METHOD_TYPE_PROMISE = 'PROMISE';
 
 var methodType = VALIDATION_METHOD_TYPE_SYNC;
 
-var validationMethod = () => false; // until setUserValidation is called, no validation will happen.
+var validationMethod = () => {
+    console.log('warning: validation method has not been overridden; ' +
+        'please inject an app-specific user validator via setUserValidation. ');
+    return false;
+}; // until setUserValidation is called, no validation will happen.
 
-const setUserValidation = (pValidationMethod, pMethodType) => {
+export const setUserValidation = (pValidationMethod, pMethodType) => {
+    console.log('setting user Validation');
     validationMethod = pValidationMethod;
     methodType = pMethodType;
-};
-
-export {
-    setUserValidation,
-    VALIDATION_METHOD_TYPE_SYNC,
-    VALIDATION_METHOD_TYPE_ASYNC,
-    VALIDATION_METHOD_TYPE_PROMISE
 };
 
 /**
@@ -36,7 +34,7 @@ export {
  *
  * @param userData
  */
-export default (userData) => {
+export const auth = (userData) => {
     var response = null;
     switch (methodType) {
         case VALIDATION_METHOD_TYPE_PROMISE:

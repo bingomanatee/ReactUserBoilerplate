@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
 import state from './State';
-const userAuth = require('./UserAuth');
+import { auth } from './UserAuth';
 
 import {
     logInGood,
@@ -28,9 +28,13 @@ let authSubscribe = store.subscribe(() => {
 
     if (newState.userState === USER_STATE_LOGIN_SUBMITTED) {
         var user = newState.user;
-        userAuth(user)
+        auth(user)
             .then(
-                () =>store.dispatch(logInGood()),
+                () => {
+                    var good = logInGood();
+                    console.log('user authed - resolve is ', good);
+                    store.dispatch(good);
+                },
                 (result) => store.dispatch(loginBad(result))
             );
     }
