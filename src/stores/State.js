@@ -50,10 +50,7 @@ const state = (pState, action) => {
     }
 
     var start = pState || initialState;
-    console.log('updating ', start, ' to ', update);
-    var out = Object.assign({}, start, update);
-    console.log('out = ', out);
-    return out;
+    return Object.assign({}, start, update);
 };
 
 export default state;
