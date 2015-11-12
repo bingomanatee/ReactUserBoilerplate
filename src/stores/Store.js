@@ -30,11 +30,7 @@ let authSubscribe = store.subscribe(() => {
         var user = newState.user;
         auth(user)
             .then(
-                () => {
-                    var good = logInGood();
-                    console.log('user authed - resolve is ', good);
-                    store.dispatch(good);
-                },
+                () => store.dispatch(logInGood()),
                 (result) => store.dispatch(loginBad(result))
             );
     }

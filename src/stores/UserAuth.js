@@ -18,7 +18,6 @@ var validationMethod = () => {
 }; // until setUserValidation is called, no validation will happen.
 
 export const setUserValidation = (pValidationMethod, pMethodType) => {
-    console.log('setting user Validation');
     validationMethod = pValidationMethod;
     methodType = pMethodType;
 };
