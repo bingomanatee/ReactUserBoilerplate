@@ -49,13 +49,14 @@ describe('UserAuth', function () {
          * the userState is promoted to validated.
          */
         var globalReject;
+        const INVALID_REASON = 'bob is bad';
         beforeEach(function () {
             // configure an always-authing API that waits 500ms to authenticate.
             UserAuth.setUserValidation((user) => new Promise((resolve, reject) => {
                 globalReject = reject;
             }), UserAuth.VALIDATION_METHOD_TYPE_PROMISE);
             store.dispatch(Actions.logIn({user: 'bob'}));
-            globalReject({error: 'bob is a bad man'});
+            globalReject({error: INVALID_REASON});
         });
 
         it('shifts the state to USER_STATE_REJECTED eventually', function () {
@@ -70,8 +71,9 @@ describe('UserAuth', function () {
             });
 
             runs(() => {
-                const loggedInState = store.getState();
-                expect(loggedInState.userState).toBe(Actions.USER_STATE_LOGIN_REJECTED);
+                const loginRejectedState = store.getState();
+                expect(loginRejectedState.userState).toBe(Actions.USER_STATE_LOGIN_REJECTED);
+                expect(loginRejectedState.userInvalidReason.error).toBe(INVALID_REASON);
             });
         });
     });

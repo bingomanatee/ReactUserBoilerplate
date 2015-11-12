@@ -39,6 +39,9 @@ const state = (pState, action) => {
 
         case USER_LOGIN_INVALID:
             update = {userState: USER_STATE_LOGIN_REJECTED};
+            if (action.userInvalidReason) {
+                update.userInvalidReason = action.userInvalidReason;
+            }
             break;
 
         case '@@redux/INIT':
