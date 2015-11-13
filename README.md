@@ -25,4 +25,4 @@ logInBad has an optional data manifest, 'userInvalidReason', that contains serve
 information about which field(s) are invalid; its up to the app designer to decide whether to tell the user 
 what went wrong... security vs. user friendliness. 
 
-All other actions exist purely to update userState. 
+All other actions exist purely to update userState.

@@ -1,20 +1,17 @@
-@import '../../../node_modules/normalize.css/normalize.css';
-
+@import url(../../../node_modules/normalize.css/normalize.css);
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
-
-@import '../variables.css';
-
+@import url(../variables.css);
 /*
  * Base styles
  * ========================================================================== */
-
 html {
   color: #222;
   font-weight: 100;
-  font-size: 1em; /* ~16px; */
+  font-size: 1em;
+  /* ~16px; */
   font-family: var(--font-family-base);
-  line-height: 1.375; /* ~22px */
-}
+  line-height: 1.375;
+  /* ~22px */ }
 
 /*
  * Remove text-shadow in selection highlight:
@@ -23,146 +20,176 @@ html {
  * These selection rule sets have to be separate.
  * Customize the background color to match your design.
  */
-
 ::-moz-selection {
   background: #b3d4fc;
-  text-shadow: none;
-}
+  text-shadow: none; }
 
 ::selection {
   background: #b3d4fc;
-  text-shadow: none;
-}
+  text-shadow: none; }
 
 /*
  * A better looking default horizontal rule
  */
-
 hr {
   display: block;
   height: 1px;
   border: 0;
   border-top: 1px solid #ccc;
   margin: 1em 0;
-  padding: 0;
-}
+  padding: 0; }
 
 /*
  * Remove the gap between audio, canvas, iframes,
  * images, videos and the bottom of their containers:
  * https://github.com/h5bp/html5-boilerplate/issues/440
  */
-
 audio,
 canvas,
 iframe,
 img,
 svg,
 video {
-  vertical-align: middle;
-}
+  vertical-align: middle; }
 
 /*
  * Remove default fieldset styles.
  */
-
 fieldset {
   border: 0;
   margin: 0;
-  padding: 0;
-}
+  padding: 0; }
 
 /*
  * Allow only vertical resizing of textareas.
  */
-
 textarea {
-  resize: vertical;
-}
+  resize: vertical; }
 
 /*
  * Browser upgrade prompt
  * ========================================================================== */
-
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
   color: #000;
-  padding: 0.2em 0;
-}
+  padding: 0.2em 0; }
 
 /*
  * Print styles
  * Inlined to avoid the additional HTTP request:
  * http://www.phpied.com/delay-loading-your-print-css/
  * ========================================================================== */
-
 @media print {
   *,
   *:before,
   *:after {
     background: transparent !important;
-    color: #000 !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */
+    color: #000 !important;
+    /* Black prints faster: http://www.sanbeiji.com/archives/953 */
     box-shadow: none !important;
-    text-shadow: none !important;
-  }
+    text-shadow: none !important; }
 
   a,
   a:visited {
-    text-decoration: underline;
-  }
+    text-decoration: underline; }
 
   a[href]:after {
-    content: " (" attr(href) ")";
-  }
+    content: " (" attr(href) ")"; }
 
   abbr[title]:after {
-    content: " (" attr(title) ")";
-  }
+    content: " (" attr(title) ")"; }
 
   /*
    * Don't show links that are fragment identifiers,
    * or use the `javascript:` pseudo protocol
    */
-
   a[href^="#"]:after,
   a[href^="javascript:"]:after {
-    content: "";
-  }
+    content: ""; }
 
   pre,
   blockquote {
     border: 1px solid #999;
-    page-break-inside: avoid;
-  }
+    page-break-inside: avoid; }
 
   /*
    * Printing Tables:
    * http://css-discuss.incutio.com/wiki/Printing_Tables
    */
-
   thead {
-    display: table-header-group;
-  }
+    display: table-header-group; }
 
   tr,
   img {
-    page-break-inside: avoid;
-  }
+    page-break-inside: avoid; }
 
   img {
-    max-width: 100% !important;
-  }
+    max-width: 100% !important; }
 
   p,
   h2,
   h3 {
     orphans: 3;
-    widows: 3;
-  }
+    widows: 3; }
 
   h2,
   h3 {
-    page-break-after: avoid;
-  }
-}
+    page-break-after: avoid; } }
+/* *********** FORM ************ */
+.form {
+  max-width: 40rem; }
+  .form .form-row {
+    display: flex;
+    min-height: 2rem;
+    margin-bottom: 1rem;
+    justify-content: space-between; }
+    .form .form-row.form-row-button-row {
+      align-content: flex-end;
+      justify-content: flex-end; }
+      .form .form-row.form-row-button-row button {
+        -webkit-appearance: none;
+        background-color: goldenrod;
+        font-weight: bold;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+        flex-grow: 1;
+        flex-basis: 5rem;
+        max-width: 12rem;
+        border: none;
+        margin-left: 1rem; }
+        .form .form-row.form-row-button-row button.secondary {
+          background-color: palegoldenrod; }
+        .form .form-row.form-row-button-row button:disabled {
+          background-color: lightgrey;
+          color: red; }
+    .form .form-row p {
+      margin: 0;
+      padding: 0;
+      margin-top: 0.15rem;
+      line-height: 105%; }
+      .form .form-row p small {
+        font-size: 0.8rem;
+        font-weight: 800; }
+      .form .form-row p.error {
+        color: red; }
+    .form .form-row label {
+      flex-basis: 10rem;
+      flex-grow: 1;
+      flex-shrink: 1;
+      text-align: right;
+      display: block;
+      padding-right: 1.5rem; }
+    .form .form-row .form-row__input {
+      flex-basis: 20rem;
+      flex-grow: 0; }
+      .form .form-row .form-row__input input, .form .form-row .form-row__input textarea {
+        -webkit-appearance: none;
+        border: 1px solid lightslategray;
+        padding: 0.25rem;
+        width: 100%; }
+        .form .form-row .form-row__input input:focus, .form .form-row .form-row__input textarea:focus {
+          border-color: black;
+          outline: none; }
+
+/*# sourceMappingURL=App.css.map */

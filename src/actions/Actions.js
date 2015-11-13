@@ -12,10 +12,10 @@ const USER_RESET_ANON = 'USER_RESET_ANON';
  * State Names
  * @type {string}
  */
-const USER_STATE_ANON = 'USER_STATE_ANON';
-const USER_STATE_LOGIN_SUBMITTED = 'USER_STATE_LOGIN_SUBMITTED';
-const USER_STATE_VALIDATED = 'USER_STATE_VALIDATED';
-const USER_STATE_LOGIN_REJECTED = 'USER_STATE_LOGIN_REJECTED';
+const USER_STATE_ANON = 'USER_STATE_ANON'; // no logged in user
+const USER_STATE_LOGIN_SUBMITTED = 'USER_STATE_LOGIN_SUBMITTED'; // user credentials submtted to server
+const USER_STATE_VALIDATED = 'USER_STATE_VALIDATED'; // server validates user credentials
+const USER_STATE_LOGIN_REJECTED = 'USER_STATE_LOGIN_REJECTED'; // server rejects user credentials
 
 /**
  * this action is called when a login attempt is submitted.
