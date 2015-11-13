@@ -1,0 +1,7 @@
+{
+    "head": "head",
+    "foot": "foot",
+    "kn": "knife",
+    "extraHoldThe": "extra @EXTRA@ hold the @HOLD@",
+    "metaKn": "meta @^kn@"
+}

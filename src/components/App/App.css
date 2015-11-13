@@ -139,57 +139,5 @@ textarea {
 /* *********** FORM ************ */
 .form {
   max-width: 40rem; }
-  .form .form-row {
-    display: flex;
-    min-height: 2rem;
-    margin-bottom: 1rem;
-    justify-content: space-between; }
-    .form .form-row.form-row-button-row {
-      align-content: flex-end;
-      justify-content: flex-end; }
-      .form .form-row.form-row-button-row button {
-        -webkit-appearance: none;
-        background-color: goldenrod;
-        font-weight: bold;
-        font-size: 0.8rem;
-        padding: 0.25rem 0.75rem;
-        flex-grow: 1;
-        flex-basis: 5rem;
-        max-width: 12rem;
-        border: none;
-        margin-left: 1rem; }
-        .form .form-row.form-row-button-row button.secondary {
-          background-color: palegoldenrod; }
-        .form .form-row.form-row-button-row button:disabled {
-          background-color: lightgrey;
-          color: red; }
-    .form .form-row p {
-      margin: 0;
-      padding: 0;
-      margin-top: 0.15rem;
-      line-height: 105%; }
-      .form .form-row p small {
-        font-size: 0.8rem;
-        font-weight: 800; }
-      .form .form-row p.error {
-        color: red; }
-    .form .form-row label {
-      flex-basis: 10rem;
-      flex-grow: 1;
-      flex-shrink: 1;
-      text-align: right;
-      display: block;
-      padding-right: 1.5rem; }
-    .form .form-row .form-row__input {
-      flex-basis: 20rem;
-      flex-grow: 0; }
-      .form .form-row .form-row__input input, .form .form-row .form-row__input textarea {
-        -webkit-appearance: none;
-        border: 1px solid lightslategray;
-        padding: 0.25rem;
-        width: 100%; }
-        .form .form-row .form-row__input input:focus, .form .form-row .form-row__input textarea:focus {
-          border-color: black;
-          outline: none; }
 
 /*# sourceMappingURL=App.css.map */

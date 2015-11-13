@@ -7,8 +7,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
 import Html from './components/Html';
+const bodyParser = require('body-parser');
 
 const server = global.server = express();
+server.use(require('cookie-parser')());
+server.use(bodyParser.json()); // get information from html forms
+server.use(bodyParser.urlencoded({extended: true}));
 
 server.set('port', (process.env.PORT || 5000));
 server.use(express.static(path.join(__dirname, 'public')));
@@ -17,6 +21,7 @@ server.use(express.static(path.join(__dirname, 'public')));
 // Register API middleware
 // -----------------------------------------------------------------------------
 server.use('/api/content', require('./api/content'));
+require('./api/session')(server);
 
 //
 // Register server-side rendering middleware

@@ -3,7 +3,7 @@
 import React, { PropTypes, Component } from 'react';
 import styles from './LoginPage.css';
 import withStyles from '../../decorators/withStyles';
-import Strings from './../../utils/Strings';
+import strings from './../../utils/Strings';
 
 @withStyles(styles)
 class LoginPage extends Component {
@@ -19,21 +19,21 @@ class LoginPage extends Component {
     }
 
     render() {
-        const s = Strings('LoginPage');
+        const s = strings('LoginPage');
         return (
             <div className="LoginPage">
                 <div className="LoginPage-container">
-                    <h1>{s.title}</h1>
-                    <p>{s.text}</p>
+                    <h1>{s('title')}</h1>
+                    <p>{s('text')}</p>
                     <form className="form LoginPage__form">
                         <div className="form-row">
-                            <label>{s.username}</label>
+                            <label>{s('username')}</label>
                             <div className="form-row__input">
                                 <input type="text" name="username"/>
                             </div>
                         </div>
                         <div className="form-row">
-                            <label>{s.password}</label>
+                            <label>{s('password')}</label>
                             <div className="form-row__input">
                                 <input type="password" name="password"/>
                             </div>
