@@ -12,5 +12,10 @@
     "bioDesc": "this will be shared publicly",
     "shortAlert": "your @FIELD@ is too short(@LENGTH@ characters). It must be at least @MIN@ characters.",
     "longAlert": "your @FIELD@ is too long(@LENGTH@ characters). It cannot be over @MAX@ characters.",
-    "pwMissmatch": "your passwords are different; plesae make sure you are entering the right value by submitting the same password twice."
+    "pwMissmatch": "your passwords are different; plesae make sure you are entering the right value by submitting the same password twice.",
+    "usernameOptional": "@^username@ (@^optional@)",
+    "usernameRange": "@^username@ (@MIN@..@MAX@) @^lettersLong@",
+    "passwordPlaceholder": "@^password@ (@MIN@..@MAX@) @^lettersLong@)",
+    "password2Placeholder": "@^password@ -- repeat (@MIN@..@MAX@) @^lettersLong@)",
+    "bioPlaceholder": "@^bio@ (@^optional@)"
 }
