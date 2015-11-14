@@ -10,7 +10,7 @@
     "classnames": "2.1.5",
     "connect-firebase": "0.0.8",
     "cookie-parser": "^1.4.0",
-    "eventemitter3": "1.1.1",
+    "eventemitter3": "^1.1.1",
     "express": "4.13.3",
     "express-session": "^1.12.1",
     "fastclick": "1.0.6",
@@ -21,11 +21,11 @@
     "front-matter": "1.0.0",
     "history": "1.11.1",
     "jade": "1.11.0",
-    "jest-cli": "^0.7.1",
     "json-loader": "^0.5.3",
     "lodash": "^3.10.1",
     "normalize.css": "3.0.3",
     "react": "^0.14",
+    "react-addons-test-utils": "^0.14.2",
     "react-dom": "0.14.0-rc1",
     "react-routing": "0.0.4",
     "redux": "^3.0.4",
@@ -50,7 +50,7 @@
     "gaze": "^0.5.1",
     "git-repository": "^0.1.1",
     "glob": "^5.0.15",
-    "jest-cli": "^0.5.8",
+    "jest-cli": "^0.7.1",
     "jscs": "^2.2.1",
     "lodash.merge": "^3.3.2",
     "mkdirp": "^0.5.1",
@@ -78,7 +78,10 @@
     "scriptPreprocessor": "../preprocessor.js",
     "unmockedModulePathPatterns": [
       "fbjs",
-      "react"
+      "react",
+      "react-dom",
+      "react-addons-test-utils",
+      "fbjs"
     ]
   },
   "scripts": {

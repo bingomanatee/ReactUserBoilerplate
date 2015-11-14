@@ -1,5 +1,5 @@
 import strings from './Strings';
-
+const EventEmitter = require('eventemitter3');
 const sRE = /^s\.(.*)/;
 
 /**
@@ -95,6 +95,7 @@ class FieldDef {
         this.name = name;
         this.label = '';
         this.placeholder = '';
+        this.ee = new EventEmitter();
         this.validators = [];
         this.fieldType = fieldType || 'text';
         if (params) {
@@ -121,6 +122,7 @@ class FieldDef {
     set fieldValue(pValue) {
         this._fieldValue = pValue;
         this.validators.forEach(val => val.update());
+        this.ee.emit('change', this._fieldValue);
     }
 
     get fieldValue() {
@@ -129,6 +131,14 @@ class FieldDef {
 
     get label() {
         return this._label;
+    }
+
+    watch(handler) {
+        return this.ee.on('change', handler);
+    }
+
+    unwatch(handler) {
+        return this.ee.off('change', handler);
     }
 
     set label(pLabel) {
