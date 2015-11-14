@@ -22,6 +22,7 @@ server.use(express.static(path.join(__dirname, 'public')));
 // -----------------------------------------------------------------------------
 server.use('/api/content', require('./api/content'));
 require('./api/session')(server);
+require('./api/firebaseUsers')(server);
 
 //
 // Register server-side rendering middleware

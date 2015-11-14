@@ -1,12 +1,13 @@
 .form-row {
     display: flex;
-    min-height: 2rem;
     margin-bottom: 1rem;
     justify-content: space-between;
+    min-height: 4rem;
 
     &.form-row-button-row {
         align-content: flex-end;
         justify-content: flex-end;
+        min-height: auto;
         button {
             -webkit-appearance: none;
             background-color: goldenrod;
@@ -40,7 +41,7 @@
             color: red;
         }
         &.hide {
-            visibility: hidden;
+            display: none;
         }
     }
     label {

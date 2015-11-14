@@ -157,7 +157,7 @@ class RegisterPage extends Component {
         if (!this.state.password2) {
             return MISSING;
         }
-        if (outOfBounds(this.state.password2,  MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)) {
+        if (outOfBounds(this.state.password2, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)) {
             return BOUNDS;
         }
         return true;
@@ -169,7 +169,7 @@ class RegisterPage extends Component {
         }
 
         if (this.state.username && outOfbounds(this.state.username, MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)) {
-                return BOUNDS;
+            return BOUNDS;
         }
         return true;
     }
@@ -178,8 +178,13 @@ class RegisterPage extends Component {
         if (REQUIRE_EMAIL && !this.state.email) {
             return EMAIL_MISSING;
         }
-        if (this.state.email && !emailRE.test(this.state.email)) {
-            return EMAIL_BAD;
+        if (this.state.email) {
+            if (!emailRE.test(this.state.email)) {
+                return EMAIL_BAD;
+            }
+        }
+        if (this.state.emailRegError) {
+            return this.state.emailRegError;
         }
         return true;
     }
@@ -188,12 +193,57 @@ class RegisterPage extends Component {
         return (this._pwValid() === true) && (this._pw2valid() === true) && (this._emailValid() === true) && (this._unValid() === true)
     }
 
+    _register() {
+        if (!this._isValid()) {
+            console.log('this should never happen');
+            return false;
+        }
+
+        const s = strings('RegisterPage');
+        this.setState({
+            generalRegError: '',
+            emailRegError: '',
+            sendState: s('sendingReg')
+        });
+
+        try {
+            http.post('/api/users', _.pick(this.state, 'username,password,email,bio'.split(',')))
+                .then(this._handleGoodReg.bind(this), this._handleRegError.bind(this));
+        } catch (err) {
+            console.log('error thrown in post: ', err);
+        }
+        return false;
+    }
+
+    _handleGoodReg(result) {
+       console.log('result of registration: ', result);
+        const s = strings('RegisterPage');
+        this.setState({sendState: s('goodReg')});
+    }
+
+    _handleRegError(err) {
+        console.log('handling reg error: ', err);
+        const s = strings('RegisterPage');
+        this.setState({sendState: ''})
+        if (err && err.response && err.response.body.code) {
+            switch (err.response.body.code) {
+                case 'EMAIL_TAKEN':
+                    this.setState({generalRegError: s('emailRegErrorTaken', {email: this.state.email})});
+                    break;
+
+                default:
+                    this.setState({generalRegError: s('generalRegError')});
+            }
+        } else {
+            this.setState({generalRegError: s('generalRegError')});
+        }
+    }
+
     render() {
         const s = strings('RegisterPage');
         const pwValueLink = this._valueLink('password');
         const pw2ValueLink = this._valueLink('password2');
         const bioLink = this._valueLink(('bio'));
-        console.log('this.state: ', this.state);
         const pwFeedback = this._pwFeedback();
         const pw2Feedback = this._pw2feedback();
 
@@ -212,7 +262,7 @@ class RegisterPage extends Component {
                 MIN: MIN_USERNAME_LENGTH,
                 MAX: MAX_USERNAME_LENGTH
             }) : s('usernameOptional');
-            identity.push(<FormField type="text" label={STR_USERNAME} name="username" valueLink={unValueLink}
+            identity.push(<FormField type="text" label={STR_USERNAME} name="username" valueLink={unValueLink} key={0}
                                      placeholder={unPlaceholder} feedback={unFeedback}/>);
         }
         if (ASK_EMAIL) {
@@ -220,7 +270,7 @@ class RegisterPage extends Component {
             const emailValueLink = this._valueLink('email');
             const STR_EMAIL = s('email');
             var emailPlaceholder = REQUIRE_EMAIL ? `${STR_EMAIL}` : `${STR_EMAIL} (${STR_OPTIONAL})`;
-            identity.push(<FormField type="text" label={STR_EMAIL} name="email" valueLink={emailValueLink}
+            identity.push(<FormField type="text" label={STR_EMAIL} name="email" valueLink={emailValueLink} key={1}
                                      placeholder={emailPlaceholder} feedback={emailFeedback}/>);
         }
 
@@ -231,17 +281,30 @@ class RegisterPage extends Component {
                     <p>{s('text')}</p>
                     <form className="form LoginPage__form">
                         {identity}
-                        <FormField type="password" label={s('password')} name="password" valueLink={pwValueLink}
+                        <FormField type="password" label={s('password')} name={'password'} valueLink={pwValueLink}
                                    placeholder={passwordPlaceholder}
                                    feedback={pwFeedback}/>
-                        <FormField type="password" label={s('password2')} name="password2" valueLink={pw2ValueLink}
+                        <FormField type="password" label={s('password2')} name={'password2'} valueLink={pw2ValueLink}
                                    placeholder={password2Placeholder}
                                    feedback={pw2Feedback}/>
-                        <FormField type="textarea" label={s('bio')} name="password2" valueLink={bioLink}
+                        <FormField type="textarea" label={s('bio')} name={'bio'} valueLink={bioLink}
                                    placeholder={s('bioPlaceholder')} feedback={false}/>
                         <div className="form-row form-row-button-row">
                             <button className="secondary" type="Cancel">Cancel</button>
-                            <button type="Submit" disabled={!this._isValid()}>Register</button>
+                            <button type="button" onClick={this._register.bind(this)} disabled={!this._isValid()}>
+                                Register
+                            </button>
+                        </div>
+                        <div className="form-row">
+                            <label>&nbsp;</label>
+                            <div className="form-row__input">
+                                <p className="form-status">
+                                    <small>{this.state.sendState}</small>
+                                </p>
+                                <p className="form-error error">
+                                    <small>{this.state.generalRegError}</small>
+                                </p>
+                            </div>
                         </div>
                     </form>
                 </div>

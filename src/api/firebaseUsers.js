@@ -1,12 +1,15 @@
 var Firebase = require('firebase');
 var express = require('express');
-
+var FirebaseTokenGenerator = require("firebase-token-generator");
 var options = require('./.auth/firebase.json');
+var tokenGenerator = new FirebaseTokenGenerator(options.secret);
+var token = tokenGenerator.createToken({ uid: "uniqueId1", some: "arbitrary", data: "here" });
+
 var uri = 'https://' + options.host;
 
 var root = new Firebase(uri);
 
-root.authWithCustomToken(options.token, function (err, fb) {
+root.authWithCustomToken(token, function (err, fb) {
     if (err) {
         throw err;
     }
@@ -31,8 +34,10 @@ module.exports = (app) => {
             }, function(error, userData) {
                 if (error) {
                     console.log('Error creating user:', error);
+                    res.status(400).send(error);
                 } else {
                     console.log('Successfully created user account with uid:', userData.uid);
+                    res.send(userData);
                 }
             });
         }

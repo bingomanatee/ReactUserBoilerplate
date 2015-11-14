@@ -15,12 +15,6 @@ const FEEDBACK_DELAY = 1500;
 @withStyles(styles)
 class FormField extends Component {
 
-    static contextTypes = {
-        feedback: PropTypes.object,
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired
-    }
-
     constructor() {
         super();
         this.state = {feedbackShowClass: 'hide'};
@@ -69,15 +63,21 @@ class FormField extends Component {
         var input = '';
         const placeholder = this.props.placeholder || this.props.label;
         switch (this.props.type) {
+
+            case 'password':
+                input = (<input type="password" name={this.props.name} placeholder={placeholder} autoComplete="off"
+                                valueLink={this.props.valueLink}/>);
+                break;
+
             case 'textarea':
                 var rows = this.props.rows || 4;
                 input = (<textarea name={this.props.name} rows={rows} placeholder={placeholder}
-                                  valueLink={this.props.valueLink}/>);
+                                   valueLink={this.props.valueLink}/>);
                 break;
 
             default:
                 input = (<input type={this.props.type} name={this.props.name} placeholder={placeholder}
-                               valueLink={this.props.valueLink}/>);
+                                valueLink={this.props.valueLink}/>);
         }
         return (<div className="form-row">
             <label>{this.props.label}</label>

@@ -17,5 +17,9 @@
     "usernameRange": "@^username@ (@MIN@..@MAX@) @^lettersLong@",
     "passwordPlaceholder": "@^password@ (@MIN@..@MAX@) @^lettersLong@)",
     "password2Placeholder": "@^password@ -- repeat (@MIN@..@MAX@) @^lettersLong@)",
-    "bioPlaceholder": "@^bio@ (@^optional@)"
+    "bioPlaceholder": "@^bio@ (@^optional@)",
+    "emailRegErrorTaken": "there is already an @EMAIL@ in our user list; please sign in",
+    "generalRegError": "You cannot register with these credentials. Please try some other ones.",
+    "sendingReg": "Submitting your credentials; please wait...",
+    "goodReg": "Your credentials have been accepted; please log in."
 }
