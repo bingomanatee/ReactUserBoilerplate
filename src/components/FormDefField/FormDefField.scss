@@ -1,16 +1,22 @@
+$buttonColor: #ffe853;
+$buttonColorHover: darken($buttonColor, 25%);
+$buttonColorSecondary: #a1e2e3;
+$buttonColorSecondaryHover: darken($buttonColorSecondary, 20%);
+$label: #654145;
+
 .form-row {
     display: flex;
     margin-bottom: 1rem;
     justify-content: space-between;
-    min-height: 4rem;
+    min-height: 3rem;
 
     &.form-row-button-row {
         align-content: flex-end;
         justify-content: flex-end;
-        min-height: auto;
+        min-height: initial;
         button {
             -webkit-appearance: none;
-            background-color: goldenrod;
+            background-color: $buttonColor;
             font-weight: bold;
             font-size: 0.8rem;
             padding: 0.25rem 0.75rem;
@@ -19,12 +25,21 @@
             max-width: 12rem;
             border: none;
             margin-left: 1rem;
+            .last {
+                margin-left: 0;
+            }
             &.secondary {
-                background-color: palegoldenrod;
+                background-color:$buttonColorSecondary;
+                &:hover {
+                    background-color: $buttonColorSecondaryHover;
+                }
             }
             &:disabled {
                 background-color: lightgrey;
                 color: red;
+            }
+            &:hover {
+                background-color: $buttonColorHover
             }
         }
     }
@@ -37,7 +52,7 @@
             font-size: 0.66rem;
             font-weight: 800;
         }
-        &.error {
+        &.errors {
             color: red;
         }
         &.hide {
@@ -48,9 +63,12 @@
         flex-basis: 10rem;
         flex-grow: 1;
         flex-shrink: 1;
+        font-weight: 400;
         text-align: right;
         display: block;
         padding-right: 1.5rem;
+        padding-top: 0.25rem;
+        color: $label
     }
 
     .form-row__input {
@@ -61,6 +79,8 @@
             border: 1px solid lightslategray;
             padding: 0.25rem;
             width: 100%;
+            box-sizing: border-box;
+            font-weight: 400;
             &:focus {
                 border-color: black;
                 outline: none;

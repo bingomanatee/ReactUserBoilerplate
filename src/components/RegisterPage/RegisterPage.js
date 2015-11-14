@@ -7,17 +7,7 @@ import strings from './../../utils/Strings';
 import _ from 'lodash';
 import FormField from './../FormField';
 import http from './../../core/HttpClient';
-
-const MIN_USERNAME_LENGTH = 4;
-const MAX_USERNAME_LENGTH = 12;
-
-const MIN_PASSWORD_LENGTH = 6;
-const MAX_PASSWORD_LENGTH = 20;
-
-const REQUIRE_EMAIL = true;
-const ASK_EMAIL = true;
-const REQUIRE_USERNAME = false;
-const ASK_USERNAME = false;
+import {MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME, ASK_USERNAME } from '../../config';
 
 const EMAIL_MISSING = 'email missing';
 const EMAIL_BAD = 'email bad';
@@ -46,7 +36,6 @@ const boundsMessage = (value, min, max, name, label) => {
 const outOfBounds = (str, min, max) => str.length < min || str.length > max;
 const emailRE = /[\w]+\@[\w]+\.[\w.]+/;
 const emailMessage = (value, name, label) => {
-    var fieldName = label || name;
     if (!emailRE.test(value)) {
         const s = strings('RegisterPage');
         return {

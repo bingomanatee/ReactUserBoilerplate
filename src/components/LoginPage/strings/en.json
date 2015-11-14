@@ -1,6 +1,11 @@
 {
     "title": "Login Page",
     "text": "Welcome to My Site. Please log in.",
+    "email": "E-mail",
+    "emailError": "Please enter a well formed email address",
+    "emailPlaceholder": "E-mail",
     "username": "Username",
-    "password": "Password"
+    "password": "Password",
+    "passwordPlaceholder": "Password",
+    "badEmail": "That doesn't look like an email address."
 }

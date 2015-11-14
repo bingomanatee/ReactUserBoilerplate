@@ -49,13 +49,51 @@ describe('FieldDef', function () {
             });
 
             it('should change bad to good when field value changes', function () {
-                badField.value = 'a very long value';
+                badField.fieldValue = 'a very long value';
                 expect(badField.errors).toBeNull();
             });
 
             it('should change good to bad when field value changes', function () {
-                goodField.value = 'foo';
+                goodField.fieldValue = 'foo';
                 expect(goodField.errors).toBe(TOO_SHORT);
+            });
+        });
+
+        describe('regex', function () {
+            var badField;
+            var goodField;
+            const BAD_REGEX = 'bad regex';
+            const REGEX = /^\d[\w]+$/;
+
+            beforeEach(function () {
+                badField = new fieldDef.FieldDef('beta', 'alpha', 'text', {
+                    validators: [
+                        [{type: 'regex', limit: REGEX}, BAD_REGEX]
+                    ]
+                });
+                goodField = new fieldDef.FieldDef('gamma', '2alpha', 'text', {
+                    validators: [
+                        [{type: 'regex', limit: REGEX}, BAD_REGEX]
+                    ]
+                });
+            });
+
+            it('should register "alpha" as ' + BAD_REGEX, function () {
+                expect(badField.errors).toBe(BAD_REGEX);
+            });
+
+            it('should register "2alpha" as null (long enough)', function () {
+                expect(goodField.errors).toBeNull();
+            });
+
+            it('should change bad to good when field value changes', function () {
+                badField.fieldValue = '3beat';
+                expect(badField.errors).toBeNull();
+            });
+
+            it('should change good to bad when field value changes', function () {
+                goodField.fieldValue = 'foo';
+                expect(goodField.errors).toBe(BAD_REGEX);
             });
         });
     });

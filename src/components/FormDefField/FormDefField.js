@@ -20,21 +20,24 @@ class FormDefField extends Component {
     }
 
     componentWillMount() {
-        this.__onChange = this._onChange.bind(this);
-        this.props.def.watch(this.__onChange);
     }
 
     componentWillUnmount() {
-        this.props.def.unwatch(this.__onChange);
     }
 
-    _onChange() {
+    _onChange(value) {
+        console.log('FormDefField value: ', value);
+        this.props.def.fieldValue = value;
         this.forceUpdate();
     }
 
     render() {
         var def = this.props.def;
-        var valueLink = null;
+        console.log('def value: ', def.fieldValue);
+        var valueLink = {
+            value: def.fieldValue,
+            requestChange: this._onChange.bind(this)
+        };
         var input = null;
 
         switch (def.fieldType) {
@@ -46,7 +49,7 @@ class FormDefField extends Component {
 
             case 'textarea':
                 var rows = this.props.rows || 4;
-                input = (<textarea name={def.name} placeholder={def.placeholder}
+                input = (<textarea name={def.name} placeholder={def.placeholder} value={def.fieldValue}
                                    valueLink={valueLink}/>);
                 break;
 
@@ -69,4 +72,4 @@ class FormDefField extends Component {
     }
 }
 
-module.exports = FormDefField;
+export default FormDefField;

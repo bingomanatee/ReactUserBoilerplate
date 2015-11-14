@@ -22,10 +22,11 @@ const rangeFactory = (params) => (value) => (typeof value === 'string') && ( val
 
 const regexFactory = (params) => (value) => (typeof value === 'string') && params.limit.test(value);
 
-const emailFactory = (params) => regexFactory({limit: /[.*]+@[\w]+\.[\w.]+}/});
+const emailFactory = (params) => regexFactory({limit: /.+@.*\..*/});
 
 class FieldDefValidator {
-    constructor(pFieldDef, pTest, pMessage) {
+    constructor(pFieldDef, pTest, pMessage, pTranslation) {
+        this.s = pTranslation;
         this.fieldDef = pFieldDef;
         this.test = pTest;
         this.message = pMessage;
@@ -79,7 +80,7 @@ class FieldDefValidator {
         }
         let m = sRE.exec(pMessage);
         if (m) {
-            this._message = m[1];
+            this._message = this.s ? this.s(m[1]) : m[2];
         } else {
             this._message = pMessage;
         }
@@ -97,7 +98,6 @@ class FieldDef {
         this.placeholder = '';
         this.ee = new EventEmitter();
         this.validators = [];
-        this.fieldType = fieldType || 'text';
         if (params) {
             this.s = params.s || strings(params.comp, params.label);
             if (params.label) {
@@ -112,20 +112,23 @@ class FieldDef {
                 params.validators.forEach((v) => this.addVD.apply(this, v));
             }
         }
+        this.fieldType = fieldType || 'text';
         this.fieldValue = value;
     }
 
-    addVD(pType, pMessage, pParams) {
-        this.validators.push(new FieldDefValidator(this, pType, pMessage, pParams));
+    addVD(pTest, pMessage) {
+        this.validators.push(new FieldDefValidator(this, pTest, pMessage, this.s));
     }
 
     set fieldValue(pValue) {
+        console.log('FieldDef name = ', this.name, 'value set to ', pValue);
         this._fieldValue = pValue;
         this.validators.forEach(val => val.update());
         this.ee.emit('change', this._fieldValue);
     }
 
     get fieldValue() {
+        console.log('FieldDef name = ', this.name, 'value is ', this._fieldValue);
         return this._fieldValue;
     }
 
@@ -148,7 +151,7 @@ class FieldDef {
         }
         var m = sRE.exec(pLabel);
         if (m) {
-            this._label = this.s(m[1]);
+            this._label = this.s ? this.s(m[1]) : m[1];
         } else {
             this._label = pLabel;
         }
@@ -161,7 +164,7 @@ class FieldDef {
     set placeholder(pPlaceholder) {
         var m = sRE.exec(pPlaceholder);
         if (m) {
-            this._placeholder = this.s(m[1]);
+            this._placeholder = this.s? this.s(m[1]) : m[1];
         } else {
             this._placeholder = pPlaceholder;
         }
@@ -169,6 +172,9 @@ class FieldDef {
 
     get errors() {
         var val = this.fieldValue;
+        if (!val) {
+            return null;
+        }
         return this.validators.reduce(function (memo, validator) {
             if (memo) {
                 return memo;

@@ -5,6 +5,7 @@ jest.dontMock('../../../decorators/withStyles');
 jest.dontMock('../FormDefField.css');
 jest.dontMock('react');
 jest.dontMock('react-dom');
+jest.dontMock('css-loader');
 jest.dontMock('react-addons-test-utils');
 
 import React from 'react';
