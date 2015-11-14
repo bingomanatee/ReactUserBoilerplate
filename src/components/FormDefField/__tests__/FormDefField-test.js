@@ -10,7 +10,7 @@ jest.dontMock('react-addons-test-utils');
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-
+import {Component} from 'react';
 const FormDefField = require('../FormDefField');
 const fieldDefModule = require('../../../utils/FieldDef');
 
