@@ -1,9 +1,9 @@
 var Firebase = require('firebase');
 var express = require('express');
-var FirebaseTokenGenerator = require("firebase-token-generator");
+var FirebaseTokenGenerator = require('firebase-token-generator');
 var options = require('./.auth/firebase.json');
 var tokenGenerator = new FirebaseTokenGenerator(options.secret);
-var token = tokenGenerator.createToken({ uid: "uniqueId1", some: "arbitrary", data: "here" });
+var token = tokenGenerator.createToken({uid: 'eatTheRich', a: 1, b: 2});
 
 var uri = 'https://' + options.host;
 
@@ -31,7 +31,7 @@ module.exports = (app) => {
                 email: email,
                 password: password,
                 bio: bio
-            }, function(error, userData) {
+            }, function (error, userData) {
                 if (error) {
                     console.log('Error creating user:', error);
                     res.status(400).send(error);

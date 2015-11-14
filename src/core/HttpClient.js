@@ -15,7 +15,7 @@ function getUrl(path) {
 
 const HttpClient = {
 
-    _finish: (request, resolve, reject) => request.accept('application/json').end((err, res) => {
+    _finish: (req, resolve, reject) => req.accept('application/json').end((err, res) => {
         if (err) {
             if (err.status === 404) {
                 resolve(null);

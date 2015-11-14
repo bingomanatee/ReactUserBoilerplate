@@ -147,7 +147,7 @@ class RegisterPage extends Component {
         if (this.state.password.length > MAX_PASSWORD_LENGTH) {
             return BOUNDS;
         }
-        if (this.state.password != this.state.password2) {
+        if (this.state.password !== this.state.password2) {
             return MISMATCH;
         }
         return true;
@@ -168,7 +168,7 @@ class RegisterPage extends Component {
             return MISSING;
         }
 
-        if (this.state.username && outOfbounds(this.state.username, MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)) {
+        if (this.state.username && outOfBounds(this.state.username, MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)) {
             return BOUNDS;
         }
         return true;
@@ -190,7 +190,7 @@ class RegisterPage extends Component {
     }
 
     _isValid() {
-        return (this._pwValid() === true) && (this._pw2valid() === true) && (this._emailValid() === true) && (this._unValid() === true)
+        return (this._pwValid() === true) && (this._pw2valid() === true) && (this._emailValid() === true) && (this._unValid() === true);
     }
 
     _register() {
@@ -216,7 +216,7 @@ class RegisterPage extends Component {
     }
 
     _handleGoodReg(result) {
-       console.log('result of registration: ', result);
+        console.log('result of registration: ', result);
         const s = strings('RegisterPage');
         this.setState({sendState: s('goodReg')});
     }
@@ -224,7 +224,7 @@ class RegisterPage extends Component {
     _handleRegError(err) {
         console.log('handling reg error: ', err);
         const s = strings('RegisterPage');
-        this.setState({sendState: ''})
+        this.setState({sendState: ''});
         if (err && err.response && err.response.body.code) {
             switch (err.response.body.code) {
                 case 'EMAIL_TAKEN':
