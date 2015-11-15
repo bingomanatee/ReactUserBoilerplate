@@ -186,7 +186,6 @@ class FieldDef extends Translatable {
     }
 
     get fieldValue() {
-        console.log('FieldDef name = ', this.name, 'value is ', this._fieldValue);
         return this._fieldValue;
     }
 

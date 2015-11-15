@@ -80,6 +80,19 @@ class LoginPage extends Component {
         };
 
         this._setFeedback('loggingIn');
+
+        const goodLogin = (result) => {
+            this._setFeedback('goodLogin');
+            console.log('login success: ', result);
+        }
+
+        const badLogin = (err) => {
+            this._setFeedback('badLogin', true);
+            console.log('login fail:', err);
+        }
+
+        html.post('/api/users/auth', data)
+            .then(goodLogin, badLogin);
     }
 
     _makeFieldDefs() {
@@ -133,7 +146,6 @@ class LoginPage extends Component {
     }
 
     render() {
-        console.log('state of Login Page:', this.state, this.s);
         if (this.state.locked) {
             return (
                 <div className="RegisterPage container-frame">
@@ -152,8 +164,6 @@ class LoginPage extends Component {
         if (ASK_USERNAME) {
             identity.push(<FormDefField ref="username" key={2} def={this.fieldDefs.get('username')}/>);
         }
-
-        console.log('formFeedback: ----------- ', this.state.formFeedback);
 
         return (
             <div className="RegisterPage container-frame">

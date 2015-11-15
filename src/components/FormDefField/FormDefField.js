@@ -26,14 +26,12 @@ class FormDefField extends Component {
     }
 
     _onChange(value) {
-        console.log('FormDefField value: ', value);
         this.props.def.fieldValue = value;
         this.forceUpdate();
     }
 
     render() {
         var def = this.props.def;
-        console.log(this.name, 'def value:', def.fieldValue);
         var valueLink = {
             value: def.fieldValue,
             requestChange: this._onChange.bind(this)

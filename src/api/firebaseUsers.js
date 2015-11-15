@@ -42,5 +42,28 @@ module.exports = (app) => {
             });
         }
     });
+
+    router.post('/auth', (req, res) => {
+        var email = req.body.email;
+        var password = req.body.password;
+
+        if (!(email && password)) {
+            res.status(400).send({error: 'email and password are required'});
+        } else {
+            root.authWithPassword({
+                email: email,
+                password: password
+            }, function (error, authData) {
+                if (error) {
+                    console.log("Login Failed!", error);
+                    res.status(400).send(error);
+                } else {
+                    req.session.authData = authData;
+                    res.send(authData);
+                }
+            });
+        }
+    });
+
     app.use('/api/users', router);
 };
