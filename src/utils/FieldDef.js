@@ -151,6 +151,10 @@ class FieldDef extends Translatable {
         this.fieldValue = value;
     }
 
+    destroy () {
+        this.ee.removeAllListeners();
+    }
+
     addVD(pTest, pMessage) {
         this.validators.push(new FieldDefValidator(this, pTest, pMessage, this.s));
     }
@@ -212,7 +216,7 @@ class FieldDef extends Translatable {
 
     get errors() {
         if (!this.hasValue()) {
-            return this.isOptional() ? null : this.requiredMessage;
+            return this.isOptional ? null : this.requiredMessage;
         }
         var val = this.fieldValue;
         return this.validators.reduce(function (memo, validator) {

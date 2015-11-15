@@ -1,8 +1,12 @@
-$buttonColor: #ffe853;
-$buttonColorHover: darken($buttonColor, 25%);
-$buttonColorSecondary: #a1e2e3;
-$buttonColorSecondaryHover: darken($buttonColorSecondary, 20%);
+$buttonColor: #fff897;
+$buttonColorHover: darken($buttonColor, 20%);
+$buttonColorSecondary: #d9deff;
+$buttonColorSecondaryHover: darken($buttonColorSecondary, 5%);
+$disabledButtonLabel: white;
+$disabledButtonColor: #ae97a6;
 $label: #654145;
+$inputBorderColor: #aeaeff;
+$inputBorderColorFocus: darken($inputBorderColor, 25%);
 
 .form-row {
     display: flex;
@@ -15,48 +19,43 @@ $label: #654145;
         justify-content: flex-end;
         min-height: initial;
         button {
+            outline: 0;
             -webkit-appearance: none;
+            border-radius: 0.75rem;
             background-color: $buttonColor;
+            border: 1px dotted ($buttonColor + $inputBorderColor)/2;
             font-weight: bold;
             font-size: 0.8rem;
             padding: 0.25rem 0.75rem;
             flex-grow: 1;
             flex-basis: 5rem;
             max-width: 12rem;
-            border: none;
             margin-left: 1rem;
             .last {
                 margin-left: 0;
             }
             &.secondary {
                 background-color:$buttonColorSecondary;
+                border: 1px dotted ($buttonColorSecondary + $inputBorderColor)/2;
                 &:hover {
                     background-color: $buttonColorSecondaryHover;
+                    border: 1px solid ($buttonColorSecondaryHover + $inputBorderColor)/2;
                 }
             }
             &:disabled {
-                background-color: lightgrey;
-                color: red;
+                background-color: $disabledButtonColor;
+                color: $disabledButtonLabel;
+                border: 1px dotted ($disabledButtonColor + $inputBorderColor)/2;
+                &:hover {
+                    background-color: $disabledButtonColor;
+                    color: $disabledButtonLabel;
+                    border: 1px solid ($disabledButtonColor + $inputBorderColor)/2;
+                }
             }
             &:hover {
-                background-color: $buttonColorHover
+                background-color: $buttonColorHover;
+                border: 1px solid ($buttonColorHover + $inputBorderColorFocus)/2;
             }
-        }
-    }
-    p {
-        margin: 0;
-        padding: 0;
-        margin-top: 0.15rem;
-        line-height: 105%;
-        small {
-            font-size: 0.66rem;
-            font-weight: 800;
-        }
-        &.errors {
-            color: red;
-        }
-        &.hide {
-            display: none;
         }
     }
     label {
@@ -76,13 +75,13 @@ $label: #654145;
         flex-grow: 0;
         input, textarea {
             -webkit-appearance: none;
-            border: 1px solid lightslategray;
+            border: 1px solid $inputBorderColor;
             padding: 0.25rem;
             width: 100%;
             box-sizing: border-box;
             font-weight: 400;
             &:focus {
-                border-color: black;
+                border-color: $inputBorderColorFocus;
                 outline: none;
             }
         }

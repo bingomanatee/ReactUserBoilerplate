@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import styles from './FormErrors.css';
+import styles from './FormFeedback.css';
 import withStyles from '../../decorators/withStyles';
 
 
@@ -11,7 +11,7 @@ class FormFeedback extends Component {
             classes += ' form-feedaback--error';
         }
         return (<p className={classes}>
-            <small>{this.props.text}&nbsp;</small>
+            {this.props.text}&nbsp;
         </p>);
     }
 }

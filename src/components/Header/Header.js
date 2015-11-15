@@ -18,10 +18,6 @@ class Header extends Component {
             <span className="Header-brandTxt">Your Company</span>
           </a>
           <Navigation className="Header-nav" />
-          <div className="Header-banner">
-            <h1 className="Header-bannerTitle">React</h1>
-            <p className="Header-bannerDesc">Complex web apps made easy</p>
-          </div>
         </div>
       </div>
     );

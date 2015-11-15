@@ -1,21 +1,19 @@
 $feedbackColor: #5b565b;
 $errorColor: red;
 
-.form-feedbak {
+.form-feedback {
     color: $feedbackColor;
-    p {
-        margin: 0;
-        padding: 0;
-        margin-top: 0.15rem;
-        line-height: 105%;
-        small {
-            font-size: 0.66rem;
-            font-weight: 800;
-        }
-        &.hide {
-            display: none;
-        }
+    margin: 0;
+    padding: 0;
+    margin-top: 0.15rem;
+    line-height: 105%;
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-align: center;
+    &.hide {
+        display: none;
     }
+
     &.form-feedback-error {
         color: $errorColor;
     }

@@ -1,16 +1,15 @@
-.form-feedbak {
-  color: #5b565b; }
-  .form-feedbak p {
-    margin: 0;
-    padding: 0;
-    margin-top: 0.15rem;
-    line-height: 105%; }
-    .form-feedbak p small {
-      font-size: 0.66rem;
-      font-weight: 800; }
-    .form-feedbak p.hide {
-      display: none; }
-  .form-feedbak.form-feedback-error {
+.form-feedback {
+  color: #5b565b;
+  margin: 0;
+  padding: 0;
+  margin-top: 0.15rem;
+  line-height: 105%;
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-align: center; }
+  .form-feedback.hide {
+    display: none; }
+  .form-feedback.form-feedback-error {
     color: red; }
 
 /*# sourceMappingURL=FormFeedback.css.map */

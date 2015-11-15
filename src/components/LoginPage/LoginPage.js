@@ -8,7 +8,7 @@ import FormDefField from '../FormDefField';
 import {FieldDef } from './../../utils/FieldDef';
 import {MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME, ASK_USERNAME } from '../../config';
 import html from '../../core/HttpClient';
-import FormErrors from '../FormErrors';
+import FormFeedback from '../FormFeedback';
 
 const MIN_SUBMIT_GAP = 1000;
 const MAX_TRIES = 5;
@@ -29,7 +29,10 @@ class LoginPage extends Component {
             submitTimeBuffer: []
         };
 
+        this.fieldDefs = new Map();
         this.s = strings('LoginPage');
+
+        this._makeFieldDefs();
     }
 
     componentWillUnmount() {
@@ -58,34 +61,18 @@ class LoginPage extends Component {
             clearTimeout(this.eto);
         }
         if (!dontEraseState) {
-            this.setState({formError: ''});
+            this.setState({formFeedback: ''});
         }
     }
 
     _save() {
-        if (this.state.submitTimeBuffer.length > MAX_TRIES) {
-            return this._lockUp();
-        }
-        var time = new Date().getTime();
-        var lastTime = this.state.submitTimeBuffer[this.state.submitTimeBuffer.length - 1] || 0;
-        if (time - lastTime < MIN_SUBMIT_GAP) {
-            return false;
-        }
-
-        this.state.submitTimeBuffer.push(time);
-
         const username = this.state.username || '';
         const password = this.state.password || '';
         const email = this.state.email || '';
 
-        if (REQUIRE_USERNAME && !username) {
-            return this._setFeedback('usernameRequired');
-        }
-        if (REQUIRE_EMAIL && !email) {
-            return this._setFeedback('emailRequired');
-        }
-        if (!password) {
-            return this._setFeedback('passwordRequired');
+        if (!this._isValid()) {
+            this._setFeedback('formIncomplete', true);
+            return
         }
         // call getValue() to get the values of the form
         var data = {
@@ -95,26 +82,54 @@ class LoginPage extends Component {
         this._setFeedback('loggingIn');
     }
 
+    _makeFieldDefs() {
+        this.fieldDefs.forEach(def => def.destroy());
+        this.fieldDefs.clear();
+
+        if (ASK_EMAIL) {
+            const emailDef = new FieldDef('email', this.state.email, 'text', {
+                s: this.s,
+                label: 's.email',
+                placeholder: 's.emailPlaceholder',
+                validators: [
+                    [{type: 'email'}, 's.emailError']
+                ]
+            });
+
+            emailDef.watch(email => this.setState({email}));
+            this.fieldDefs.set('email', emailDef);
+        }
+
+        if (ASK_USERNAME) {
+            const usernameDef = new FieldDef('username', this.state.username, 'text', {
+                s: this.s,
+                label: 's.username',
+                placeholder: 's.usernamePlaceholder',
+                validators: []
+            });
+            usernameDef.watch(username => this.setState({username}));
+            this.fieldDefs.set('username', usernameDef);
+        }
+
+        const passwordDef = new FieldDef('password', this.state.password, 'password', {
+            s: this.s,
+            label: 's.password',
+            placeholder: 's.passwordPlaceholder'
+        });
+        passwordDef.watch(password => this.setState({password}));
+        this.fieldDefs.set('password', passwordDef);
+    }
+
     _isValid() {
-        if (this.refs.password) {
-            if (this.refs.password.def.errors) {
-                return false;
-            }
-        }
+        var isValid = true;
 
-        if (this.refs.username) {
-            if (this.refs.username.def.errors) {
-                return false;
+        this.fieldDefs.forEach(fieldDef => {
+            if (isValid) {
+                isValid = !fieldDef.errors;
             }
-        }
+        });
 
-        if (this.refs.email) {
-            if (this.refs.email.def.errors) {
-                return false;
-            }
-        }
-
-        return true;
+        return isValid;
     }
 
     render() {
@@ -131,36 +146,14 @@ class LoginPage extends Component {
 
         var identity = [];
         if (ASK_EMAIL) {
-            const emailDef = new FieldDef('email', this.state.email, 'text', {
-                s: this.s,
-                label: 's.email',
-                placeholder: 's.emailPlaceholder',
-                validators: [
-                    [{type: 'email'}, 's.emailError']
-                ]
-            });
-
-            emailDef.watch(email => this.setState({email}));
-            identity.push(<FormDefField ref="email" key={1} def={emailDef}/>);
+            identity.push(<FormDefField ref="email" key={1} def={this.fieldDefs.get('email')}/>);
         }
 
         if (ASK_USERNAME) {
-            const usernameDef = new FieldDef('username', this.state.username, 'text', {
-                s: this.s,
-                label: 's.username',
-                placeholder: 's.usernamePlaceholder',
-                validators: []
-            });
-            usernameDef.watch(username => this.setState({username}));
-            identity.push(<FormDefField ref="username" key={2} def={usernameDef}/>);
+            identity.push(<FormDefField ref="username" key={2} def={this.fieldDefs.get('username')}/>);
         }
 
-        const passwordDef = new FieldDef('password', this.state.password, 'password', {
-            s: this.s,
-            label: 's.password',
-            placeholder: 's.passwordPlaceholder'
-        });
-        passwordDef.watch(password => this.setState({password}));
+        console.log('formFeedback: ----------- ', this.state.formFeedback);
 
         return (
             <div className="RegisterPage container-frame">
@@ -169,7 +162,7 @@ class LoginPage extends Component {
                     <p>{this.s('text')}</p>
                     <form className="form LoginPage__form">
                         {identity}
-                        <FormDefField ref="password" def={passwordDef}/>
+                        <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
                         <div className="form-row form-row-button-row">
                             <button className="secondary" type="Cancel">Cancel</button>
                             <button className="last" type="button" onClick={this._save.bind(this)}
@@ -177,7 +170,12 @@ class LoginPage extends Component {
                                 Register
                             </button>
                         </div>
-                        <FormErrors isError={this.state.isError} feedback={this.state.formFeedback}/>
+                        <div className="form-row">
+                            <label>&nbsp;</label>
+                            <div className="form-row__input">
+                                <FormFeedback isError={this.state.isError} text={this.state.formFeedback}/>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>);
