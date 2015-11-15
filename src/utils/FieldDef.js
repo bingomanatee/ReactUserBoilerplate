@@ -24,18 +24,34 @@ const regexFactory = (params) => (value) => (typeof value === 'string') && param
 
 const emailFactory = (params) => regexFactory({limit: /.+@.*\..*/});
 
-class FieldDefValidator {
+class Translatable {
+    constructor(s) {
+        this.s = s;
+        this._memos = {};
+    }
+
+    _translate(str) {
+        if (!this._memos.hasOwnProperty(str)) {
+            const m = sRE.exec(str);
+            if (m) {
+                this._memos[str] = this.s ? this.s(m[1]) : m[1];
+            } else {
+                this._memos[str] = str;
+            }
+        }
+        return this._memos[str];
+    }
+}
+
+class FieldDefValidator extends Translatable {
     constructor(pFieldDef, pTest, pMessage, pTranslation) {
-        this.s = pTranslation;
+        super(pTranslation);
         this.fieldDef = pFieldDef;
         this.test = pTest;
         this.message = pMessage;
         this.update();
     }
 
-    get message() {
-        return this._message;
-    }
 
     set test(pTest) {
         if (typeof pTest === 'function') {
@@ -73,17 +89,12 @@ class FieldDefValidator {
         return this._test;
     }
 
+    get message() {
+        return this._translate(this._message);
+    }
+
     set message(pMessage) {
-        if (!pMessage) {
-            this._message = '';
-            return;
-        }
-        let m = sRE.exec(pMessage);
-        if (m) {
-            this._message = this.s ? this.s(m[1]) : m[2];
-        } else {
-            this._message = pMessage;
-        }
+        this._message = pMessage;
     }
 
     update(newValue) {
@@ -91,9 +102,21 @@ class FieldDefValidator {
     }
 }
 
-class FieldDef {
+/**
+ * form-related metadata around a field value.
+ *
+ * note; fields are assumed to be required unless isOptional is true;
+ *
+ * when it comes to whether a value is set or not the hasValue field is polled;
+ * it can be overridden by a mixin from params. This is important because there are cases
+ * when a falsy value (false, '', 0) may actually be a valid option.
+ *
+ */
+class FieldDef extends Translatable {
     constructor(name, value, fieldType, params) {
+        super(params ? params.s : null);
         this.name = name;
+        this.requiredMessage = 's.required';
         this.label = '';
         this.placeholder = '';
         this.ee = new EventEmitter();
@@ -111,6 +134,18 @@ class FieldDef {
             if (params.validators) {
                 params.validators.forEach((v) => this.addVD.apply(this, v));
             }
+
+            if (params.hasOwnProperty('isOptional')) {
+                this.isOptional = params.isOptional;
+            }
+
+            if (params.hasValue) {
+                this.hasValue = params.hasValue;
+            }
+
+            if (params.requiredMessage) {
+                this.requiredMessage = params.requiredMessage;
+            }
         }
         this.fieldType = fieldType || 'text';
         this.fieldValue = value;
@@ -120,8 +155,27 @@ class FieldDef {
         this.validators.push(new FieldDefValidator(this, pTest, pMessage, this.s));
     }
 
+    hasValue() {
+        return this.fieldValue; // standard js truthiness;
+    }
+
+    set requiredMessage(pMessage) {
+        this._requiredMessage = pMessage;
+    }
+
+    get requiredMessage() {
+        return this._translate(this._requiredMessage);
+    }
+
+    get isOptional() {
+        return this._isOptional;
+    }
+
+    set isOptional(pValue) {
+        this._isOptional = !!pValue;
+    }
+
     set fieldValue(pValue) {
-        console.log('FieldDef name = ', this.name, 'value set to ', pValue);
         this._fieldValue = pValue;
         this.validators.forEach(val => val.update());
         this.ee.emit('change', this._fieldValue);
@@ -133,7 +187,7 @@ class FieldDef {
     }
 
     get label() {
-        return this._label;
+        return this._translate(this._label);
     }
 
     watch(handler) {
@@ -145,36 +199,22 @@ class FieldDef {
     }
 
     set label(pLabel) {
-        if (!pLabel) {
-            this._label = pLabel;
-            return;
-        }
-        var m = sRE.exec(pLabel);
-        if (m) {
-            this._label = this.s ? this.s(m[1]) : m[1];
-        } else {
-            this._label = pLabel;
-        }
+        this._label = pLabel;
     }
 
     get placeholder() {
-        return this._placeholder;
+        return this._translate(this._placeholder);
     }
 
     set placeholder(pPlaceholder) {
-        var m = sRE.exec(pPlaceholder);
-        if (m) {
-            this._placeholder = this.s? this.s(m[1]) : m[1];
-        } else {
-            this._placeholder = pPlaceholder;
-        }
+        this._placeholder = pPlaceholder;
     }
 
     get errors() {
-        var val = this.fieldValue;
-        if (!val) {
-            return null;
+        if (!this.hasValue()) {
+            return this.isOptional() ? null : this.requiredMessage;
         }
+        var val = this.fieldValue;
         return this.validators.reduce(function (memo, validator) {
             if (memo) {
                 return memo;
@@ -188,4 +228,4 @@ class FieldDef {
     }
 }
 
-export {FieldDef, FieldDefValidator};
+export {FieldDef, Translatable, FieldDefValidator};

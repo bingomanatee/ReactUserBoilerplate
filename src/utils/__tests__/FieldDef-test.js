@@ -4,6 +4,38 @@ const fieldDef = require('./../FieldDef');
 const strings = require('./../Strings');
 jest.dontMock('redux');
 
+describe('Translatable', function () {
+    class Tclass extends fieldDef.Translatable {
+
+        get foo() {
+            return this._translate(this._foo);
+        }
+
+        set foo(pFoo) {
+            this._foo = pFoo;
+        }
+    }
+
+    const TRANS_MAP = {
+        bar: 'barre'
+    };
+
+    var tclassInstance;
+    beforeEach(function () {
+        tclassInstance = new Tclass(field => TRANS_MAP[field] || field);
+    });
+
+    it('should translate foo', function () {
+        tclassInstance.foo = 's.bar';
+        expect(tclassInstance.foo).toBe('barre');
+    });
+
+    it('should pass unknown fields as is', function () {
+        tclassInstance.foo = 'vey';
+        expect(tclassInstance.foo).toBe('vey');
+    });
+});
+
 describe('FieldDef', function () {
     describe('base parameters', function () {
         var field;

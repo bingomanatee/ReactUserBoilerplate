@@ -3,7 +3,7 @@
 import React, { PropTypes, Component } from 'react';
 import withStyles from '../../decorators/withStyles';
 import styles from './FormDefField.css';
-
+import FormFeedback from './../FormFeedback';
 /**
  * This class doesn't show feedback for a second or so as
  * long as the feedback changes
@@ -58,9 +58,7 @@ class FormDefField extends Component {
                                 valueLink={valueLink}/>);
         }
 
-        const errors = def.errors ? ( <p className="errors">
-            <small>{def.errors}&nbsp;</small>
-        </p>) : '';
+        const errors = def.errors ? ( <FormFeedback message={def.errors} isError={1} />) : '';
 
         return (<div className="form-row">
             <label>{def.label}</label>

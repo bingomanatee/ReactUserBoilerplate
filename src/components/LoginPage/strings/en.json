@@ -7,5 +7,9 @@
     "username": "Username",
     "password": "Password",
     "passwordPlaceholder": "Password",
-    "badEmail": "That doesn't look like an email address."
+    "badEmail": "That doesn't look like an email address.",
+    "loggingIn": "Logging in; please wait...",
+    "usernameRequred": "Username Required",
+    "emailRequired": "Email Required",
+    "passwordRequired": "Password Required"
 }

@@ -1,0 +1,16 @@
+.form-feedbak {
+  color: #5b565b; }
+  .form-feedbak p {
+    margin: 0;
+    padding: 0;
+    margin-top: 0.15rem;
+    line-height: 105%; }
+    .form-feedbak p small {
+      font-size: 0.66rem;
+      font-weight: 800; }
+    .form-feedbak p.hide {
+      display: none; }
+  .form-feedbak.form-feedback-error {
+    color: red; }
+
+/*# sourceMappingURL=FormFeedback.css.map */
