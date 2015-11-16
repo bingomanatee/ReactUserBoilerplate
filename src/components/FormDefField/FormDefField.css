@@ -57,10 +57,12 @@
     display: block;
     padding-right: 1.5rem;
     padding-top: 0.25rem;
-    color: #654145; }
+    color: #654145;
+    white-space: nowrap; }
   .form-def-row .form-def-row__input {
     flex-basis: 20rem;
-    flex-grow: 0; }
+    flex-grow: 0;
+    flex-shrink: 0; }
     .form-def-row .form-def-row__input input, .form-def-row .form-def-row__input textarea {
       -webkit-appearance: none;
       border: 1px dotted #aeaeff;

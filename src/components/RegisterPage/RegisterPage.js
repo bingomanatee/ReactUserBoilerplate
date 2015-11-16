@@ -1,304 +1,270 @@
 /*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 import React, { PropTypes, Component } from 'react';
-import withStyles from '../../decorators/withStyles';
 import styles from './RegisterPage.css';
+import withStyles from '../../decorators/withStyles';
 import strings from './../../utils/Strings';
-import _ from 'lodash';
-import FormField from './../FormField';
-import http from './../../core/HttpClient';
+import FormDefField from '../FormDefField';
+import {FieldDef } from './../../utils/FieldDef';
 import {MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME, ASK_USERNAME } from '../../config';
+import  {
+    logIn,
+    logOff,
+    logInGood,
+    loginBad,
+    loginResetAnon,
+    overlay,
 
-const EMAIL_MISSING = 'email missing';
-const EMAIL_BAD = 'email bad';
+    USER_LOGIN,
+    USER_LOGOFF,
+    USER_LOGIN_VALID,
+    USER_LOGIN_INVALID,
+    USER_RESET_ANON,
 
-const MISSING = 'missing';
-const BOUNDS = 'bounds';
-const MISMATCH = 'mismatch';
+    USER_STATE_ANON,
+    USER_STATE_LOGIN_SUBMITTED,
+    USER_STATE_VALIDATED,
+    USER_STATE_LOGIN_REJECTED
+} from '../../actions';
+import html from '../../core/HttpClient';
+import FormFeedback from '../FormFeedback';
+import store from '../../stores/Store';
+import {setUserValidation, VALIDATION_METHOD_TYPE_PROMISE} from '../../stores/UserAuth';
 
-const boundsMessage = (value, min, max, name, label) => {
-    const length = value.length;
-    const s = strings('RegisterPage');
-    var msg = '';
+const MIN_SUBMIT_GAP = 1000;
+const MAX_TRIES = 5;
+const FEEDBACK_DURATION = 5 * 1000;
 
-    var fieldName = label || name;
-    if (length < min) {
-        msg = s('shortAlert', {FIELD: fieldName, LENGTH: length});
-        return {className: 'error', msg: msg};
-    }
-    if (length > max) {
-        msg = s('longAlert', {FIELD: fieldName, MAX: max, LENGTH: length});
-        return {className: 'error', msg: msg};
-    }
-    return {};
-};
+const userStateMessages = {};
 
-const outOfBounds = (str, min, max) => str.length < min || str.length > max;
-const emailRE = /[\w]+\@[\w]+\.[\w.]+/;
-const emailMessage = (value, name, label) => {
-    if (!emailRE.test(value)) {
-        const s = strings('RegisterPage');
-        return {
-            className: 'error',
-            msg: s('badEmail')
-        };
-    }
-    return {};
-};
+userStateMessages[USER_STATE_LOGIN_SUBMITTED] = 'registering';
+userStateMessages[USER_STATE_ANON] = '';
+userStateMessages[USER_STATE_VALIDATED] = 'goodRegistering';
+userStateMessages[USER_STATE_LOGIN_REJECTED] = 'badRegistering';
+
+// setUserValidation(user => html.post('/api/users/auth', user), VALIDATION_METHOD_TYPE_PROMISE);
+// @TODO: some equivalent for registration?
 
 @withStyles(styles)
 class RegisterPage extends Component {
 
     constructor() {
         super();
+
+        var storeState = store.getState();
+
         this.state = {
+            locked: false,
+            email: '',
             username: '',
             password: '',
             password2: '',
-            bio: ''
+            isError: false,
+            formFeedback: '',
+            submitTimeBuffer: [],
+            userState: storeState.userState
         };
+
+        this.fieldDefs = new Map();
+        this.s = strings('RegisterPage');
+
+        this._makeFieldDefs();
+
+        this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
-    handleFieldChange(value, name) {
-        var change = {};
-        change[name] = value;
-        this.setState(change);
+    _onStoreChange() {
+        const storeState = store.getState();
+        if (this.state.userState !== storeState.userState) {
+            this.setState({userState: storeState.userState});
+            const title = this.s('registeringTitle');
+            const text = this.s('registeringText');
+            const updateOverlay = () => {
+                switch (storeState.userState) {
+                    case USER_STATE_LOGIN_REJECTED:
+                        this._setFeedback('badRegistering', true);
+                        store.dispatch(overlay({}));
+                        break;
+
+                    case USER_STATE_LOGIN_SUBMITTED:
+                        store.dispatch(overlay({title: title, text: text, show: true}));
+                        break;
+                    default:
+                        store.dispatch(overlay({}));
+                }
+            };
+            setTimeout(updateOverlay, 1);
+        }
     }
 
-    _valueLink(fieldName) {
-        return {
-            value: this.state[fieldName],
-            requestChange: _.partial(this.handleFieldChange.bind(this), _, fieldName)
-        };
+    componentWillUnmount() {
+        this._clearFeedback(false);
+        this._unsubStore();
     }
 
-    usernameFeedback() {
-        const out = {className: '', msg: ''};
-
-        if (!this.state.username) { // if an item is blank assume the user hasn't gotten to it and don't provide feedback
-            return out;
-        }
-        return Object.assign(out, boundsMessage(this.state.username, MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, 'username'));
+    _lockUp() {
+        const locked = true;
+        this.setState({locked});
     }
 
-    emailFeedback() {
-        const out = {className: '', msg: ''};
-        if (!this.state.email) { // if an item is blank assume the user hasn't gotten to it and don't provide feedback
-            return out;
-        }
-        return Object.assign(out, emailMessage(this.state.email, 'email'));
-    }
-
-    _pwFeedback() {
-        let out = {className: '', msg: ''};
-
-        if (!this.state.password) { // if an item is blank assume the user hasn't gotten to it and don't provide feedback
-            return out;
-        }
-        out = Object.assign(out, boundsMessage(this.state.password, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, 'password'));
-
-        return out.msg ? out : this._passwordMatchFeedback(out);
-    }
-
-    _pw2feedback() {
-        let out = {className: '', msg: ''};
-
-        if (!this.state.password2) { // if an item is blank assume the user hasn't gotten to it and don't provide feedback
-            return out;
-        }
-        out = Object.assign(out, boundsMessage(this.state.password2, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, 'password2', 'second password'));
-        return out.msg ? out : this._passwordMatchFeedback(out);
-    }
-
-    _passwordMatchFeedback(out) {
-        if (!(this.state.password && this.state.password2)) { // if either item is blank assume the user hasn't gotten to it and don't provide feedback
-            return out;
-        }
-        if (this.state.password === this.state.password2) {
-            return out;
-        }
-        const s = strings('RegisterPage');
-        const message = s('pwMissmatch');
-
-        return Object.assign(out, {
-            className: 'error',
-            msg: message
-        });
-    }
-
-    _pwValid() {
-        if (!this.state.password) {
-            return MISSING;
-        }
-        if (this.state.password.length < MIN_PASSWORD_LENGTH) {
-            return BOUNDS;
-        }
-        if (this.state.password.length > MAX_PASSWORD_LENGTH) {
-            return BOUNDS;
-        }
-        if (this.state.password !== this.state.password2) {
-            return MISMATCH;
-        }
-        return true;
-    }
-
-    _pw2valid() {
-        if (!this.state.password2) {
-            return MISSING;
-        }
-        if (outOfBounds(this.state.password2, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)) {
-            return BOUNDS;
-        }
-        return true;
-    }
-
-    _unValid() {
-        if (REQUIRE_USERNAME && !this.state.username) {
-            return MISSING;
-        }
-
-        if (this.state.username && outOfBounds(this.state.username, MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH)) {
-            return BOUNDS;
-        }
-        return true;
-    }
-
-    _emailValid() {
-        if (REQUIRE_EMAIL && !this.state.email) {
-            return EMAIL_MISSING;
-        }
-        if (this.state.email) {
-            if (!emailRE.test(this.state.email)) {
-                return EMAIL_BAD;
+    _setFeedback(key, pIsError) {
+        this._clearFeedback(true);
+        const isError = !!pIsError;
+        const formFeedback = this.s(key);
+        this.setState({formFeedback, isError});
+        this.eto = setTimeout(() => {
+            if (this.state.formFeedback === formFeedback) {
+                this._clearFeedback();
             }
+        }, FEEDBACK_DURATION);
+    }
+
+    _clearFeedback(dontEraseState) {
+        if (this.eto) {
+            clearTimeout(this.eto);
         }
-        if (this.state.emailRegError) {
-            return this.state.emailRegError;
+        if (!dontEraseState) {
+            this.setState({formFeedback: ''});
         }
-        return true;
+    }
+
+    _save(event) {
+        const username = this.state.username || '';
+        const password = this.state.password || '';
+        const password2 = this.state.password2 || '';
+        const email = this.state.email || '';
+        event.preventDefault();
+        if (!this._isValid()) {
+            this._setFeedback('formIncomplete', true);
+            return
+        }
+        // call getValue() to get the values of the form
+        var data = {
+            username: username,
+            email: email,
+            password: password,
+            passwors2: password2
+        };
+
+      //  store.dispatch(logIn(data));
+    }
+
+    _makeFieldDefs() {
+        this.fieldDefs.forEach(def => def.destroy());
+        this.fieldDefs.clear();
+
+        if (ASK_EMAIL) {
+            const emailDef = new FieldDef('email', this.state.email, 'text', {
+                s: this.s,
+                label: 's.email',
+                placeholder: 's.emailPlaceholder',
+                validators: [
+                    [{type: 'email'}, 's.emailError']
+                ]
+            });
+
+            emailDef.watch(email => this.setState({email}));
+            this.fieldDefs.set('email', emailDef);
+        }
+
+        if (ASK_USERNAME) {
+            const usernameDef = new FieldDef('username', this.state.username, 'text', {
+                s: this.s,
+                label: 's.username',
+                placeholder: 's.usernamePlaceholder',
+                validators: []
+            });
+            usernameDef.watch(username => this.setState({username}));
+            this.fieldDefs.set('username', usernameDef);
+        }
+
+        const passwordDef = new FieldDef('password', this.state.password, 'password', {
+            s: this.s,
+            label: 's.password',
+            placeholder: 's.passwordPlaceholder'
+        });
+        passwordDef.watch(password => this.setState({password}));
+        this.fieldDefs.set('password', passwordDef);
+
+        const password2Def = new FieldDef('password2', this.state.password2, 'password2', {
+            s: this.s,
+            label: 's.password2',
+            placeholder: 's.password2Placeholder'
+        });
+        password2Def.watch(password2 => this.setState({password2}));
+        this.fieldDefs.set('password2', password2Def);
+
+        this.fieldDefs.set('registeredTitle', new FieldDef('registeredTitle', 's.registeredTitle', 'title', {s: this.s}));
+    }
+
+    _goHome() {
+        document.location = '/';
     }
 
     _isValid() {
-        return (this._pwValid() === true) && (this._pw2valid() === true) && (this._emailValid() === true) && (this._unValid() === true);
-    }
-
-    _register() {
-        if (!this._isValid()) {
-            console.log('this should never happen');
-            return false;
-        }
-
-        const s = strings('RegisterPage');
-        this.setState({
-            generalRegError: '',
-            emailRegError: '',
-            sendState: s('sendingReg')
+        var isValid = true;
+//@TODO: reduce?
+        this.fieldDefs.forEach(fieldDef => {
+            isValid = isValid && !fieldDef.errors;
         });
 
-        try {
-            http.post('/api/users', _.pick(this.state, 'username,password,email,bio'.split(',')))
-                .then(this._handleGoodReg.bind(this), this._handleRegError.bind(this));
-        } catch (err) {
-            console.log('error thrown in post: ', err);
-        }
-        return false;
-    }
-
-    _handleGoodReg(result) {
-        console.log('result of registration: ', result);
-        const s = strings('RegisterPage');
-        this.setState({sendState: s('goodReg')});
-    }
-
-    _handleRegError(err) {
-        console.log('handling reg error: ', err);
-        const s = strings('RegisterPage');
-        this.setState({sendState: ''});
-        if (err && err.response && err.response.body.code) {
-            switch (err.response.body.code) {
-                case 'EMAIL_TAKEN':
-                    this.setState({generalRegError: s('emailRegErrorTaken', {email: this.state.email})});
-                    break;
-
-                default:
-                    this.setState({generalRegError: s('generalRegError')});
-            }
-        } else {
-            this.setState({generalRegError: s('generalRegError')});
-        }
+        return isValid;
     }
 
     render() {
-        const s = strings('RegisterPage');
-        const pwValueLink = this._valueLink('password');
-        const pw2ValueLink = this._valueLink('password2');
-        const bioLink = this._valueLink(('bio'));
-        const pwFeedback = this._pwFeedback();
-        const pw2Feedback = this._pw2feedback();
-
-        const passwordPlaceholder = s('passwordPlaceholder', {MIN: MIN_PASSWORD_LENGTH, MAX: MAX_PASSWORD_LENGTH});
-        const password2Placeholder = s('password2Placeholder', {MIN: MIN_PASSWORD_LENGTH, MAX: MAX_PASSWORD_LENGTH});
-
-        const identity = [];
-
-        const STR_OPTIONAL = s('optional');
+        var identity = [];
+        if (ASK_EMAIL) {
+            identity.push(<FormDefField ref="email" key={1} def={this.fieldDefs.get('email')}/>);
+        }
 
         if (ASK_USERNAME) {
-            const unFeedback = this.usernameFeedback();
-            const unValueLink = this._valueLink('username');
-            const STR_USERNAME = s('username');
-            var unPlaceholder = REQUIRE_USERNAME ? s('usernameRange', {
-                MIN: MIN_USERNAME_LENGTH,
-                MAX: MAX_USERNAME_LENGTH
-            }) : s('usernameOptional');
-            identity.push(<FormField type="text" label={STR_USERNAME} name="username" valueLink={unValueLink} key={0}
-                                     placeholder={unPlaceholder} feedback={unFeedback}/>);
-        }
-        if (ASK_EMAIL) {
-            const emailFeedback = this.emailFeedback();
-            const emailValueLink = this._valueLink('email');
-            const STR_EMAIL = s('email');
-            var emailPlaceholder = REQUIRE_EMAIL ? `${STR_EMAIL}` : `${STR_EMAIL} (${STR_OPTIONAL})`;
-            identity.push(<FormField type="text" label={STR_EMAIL} name="email" valueLink={emailValueLink} key={1}
-                                     placeholder={emailPlaceholder} feedback={emailFeedback}/>);
+            identity.push(<FormDefField ref="username" key={2} def={this.fieldDefs.get('username')}/>);
         }
 
-        return (
-            <div className="RegisterPage">
-                <div className="RegisterPage-container">
-                    <h1>{s('title')}</h1>
-                    <p>{s('text')}</p>
-                    <form className="form LoginPage__form">
-                        {identity}
-                        <FormField type="password" label={s('password')} name={'password'} valueLink={pwValueLink}
-                                   placeholder={passwordPlaceholder}
-                                   feedback={pwFeedback}/>
-                        <FormField type="password" label={s('password2')} name={'password2'} valueLink={pw2ValueLink}
-                                   placeholder={password2Placeholder}
-                                   feedback={pw2Feedback}/>
-                        <FormField type="textarea" label={s('bio')} name={'bio'} valueLink={bioLink}
-                                   placeholder={s('bioPlaceholder')} feedback={false}/>
-                        <div className="form-row form-row-button-row">
-                            <button className="secondary" type="Cancel">Cancel</button>
-                            <button type="button" onClick={this._register.bind(this)} disabled={!this._isValid()}>
-                                Register
-                            </button>
-                        </div>
-                        <div className="form-row">
-                            <label>&nbsp;</label>
-                            <div className="form-row__input">
-                                <p className="form-status">
-                                    <small>{this.state.sendState}</small>
-                                </p>
-                                <p className="form-error error">
-                                    <small>{this.state.generalRegError}</small>
-                                </p>
-                            </div>
-                        </div>
-                    </form>
+        var inner = (<form className="form RegisterPage__form">
+            <h1>{this.s('title')}</h1>
+            <p>{this.s('text')}</p>
+            {identity}
+            <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
+            <FormDefField ref="password2" def={this.fieldDefs.get('password2')}/>
+            <div className="form-def-row form-def-row-button-row">
+                <button className="secondary" type="button" onClick={this._goHome.bind(this)}>
+                    {this.s('cancelButtonLabel')}
+                </button>
+                <button className="last" type="button" onClick={this._save.bind(this)}
+                        disabled={!this._isValid()}>
+                    {this.s('registeringButtonLabel')}
+                </button>
+            </div>
+            <div className="form-def-row">
+                <label>&nbsp;</label>
+                <div className="form-def-row__input">
+                    <FormFeedback isError={this.state.isError} text={this.state.formFeedback}/>
                 </div>
             </div>
-        );
+        </form>);
+
+        switch (this.state.userState) {
+            case USER_STATE_VALIDATED:
+                inner = (
+                    <form className="form RegisterPage__form">
+                        <FormDefField ref="registeredTitle" def={this.fieldDefs.get('registeredTitle')}></FormDefField>
+                        <div className="form-def-row form-def-row-button-row">
+                            <button className="last" type="button" onClick={this._goHome.bind(this)}>
+                                {this.s('goHomeButtonLabel')}
+                            </button>
+                        </div>
+                    </form>
+                );
+                break;
+        }
+
+        return (<div className="RegisterPage container-frame">
+            <div className="RegisterPage-container container-frame__inner">
+                {inner}
+            </div>
+        </div>);
+
     }
 
 }

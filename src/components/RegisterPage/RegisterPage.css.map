@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": ";AACQ,6BAAkB;AAE1B,uBAAwB;EACpB,MAAM,EAAE,MAAM;EACd,OAAO,EAAE,QAAQ;EACjB,SAAS,EAAE,wBAAwB;;AAGvC,YAAa;EACT,MAAM,EAAE,CAAC;EACT,OAAO,EAAE,CAAC;EACV,UAAU,EAAE,OAAO;EACnB,WAAW,EAAE,IAAI;EACjB,kBAAM;IACF,SAAS,EAAE,OAAO;IAClB,WAAW,EAAE,GAAG;EAEpB,kBAAQ;IACJ,KAAK,EAAE,GAAG",
-"sources": ["RegisterPage.scss"],
+"mappings": "",
+"sources": [],
 "names": [],
 "file": "RegisterPage.css"
 }

@@ -89,12 +89,14 @@ $inputBorderColorFocus: darken($inputBorderColor, 25%);
         display: block;
         padding-right: 1.5rem;
         padding-top: 0.25rem;
-        color: $label
+        color: $label;
+        white-space: nowrap;
     }
 
     .form-def-row__input {
         flex-basis: 20rem;
         flex-grow: 0;
+        flex-shrink: 0;
         input, textarea {
             -webkit-appearance: none;
             border: 1px dotted $inputBorderColor;

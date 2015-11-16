@@ -14,30 +14,47 @@ const METHODS = [VALIDATION_METHOD_TYPE_SYNC,
     VALIDATION_METHOD_TYPE_PROMISE];
 
 var methodType = VALIDATION_METHOD_TYPE_SYNC;
+var regMethodType = VALIDATION_METHOD_TYPE_SYNC;
 
-var validationMethod = () => {
+var injectedRegister = () => {
+    console.log('warning: validation method has not been overridden; ' +
+        'please inject an app-specific user validator via setUserValidation. ');
+    return false;
+};
+var injectedValidator = () => {
     console.log('warning: validation method has not been overridden; ' +
         'please inject an app-specific user validator via setUserValidation. ');
     return false;
 }; // until setUserValidation is called, no validation will happen.
 
 export const setUserValidation = (pValidationMethod, pMethodType) => {
-    validationMethod = pValidationMethod;
-    methodType = pMethodType;
     console.log('method: ', pValidationMethod, 'type:', pMethodType);
     if (!METHODS.includes(pMethodType)) {
         throw new Error('bad method type ' + (pMethodType || '(none)'));
     }
+    injectedValidator = pValidationMethod;
+    methodType = pMethodType;
 };
+
+export const setUserRegistration = (pRegMethod, pMethodType) => {
+    injectedRegister = pRegMethod;
+
+    console.log('method: ', pValidationMethod, 'type:', pMethodType);
+    if (!METHODS.includes(pMethodType)) {
+        throw new Error('bad method type ' + (pMethodType || '(none)'));
+    }
+    injectedRegister = pValidationMethod;
+    regMethodType = pMethodType;
+}
 
 /**
  * note - regardless of the actual method's response system,
  * ActionValidate always returns a promise.
  *
  * ASSUMPTIONS:
- *   PROMISE: the validationMethod takes one argument, the users' credentials; and it returns a promise.
- *   ASYNC: the validationMethod takes two arguments; the users' credentials, and a callback in the form (err, result).
- *   SYNC: the validationMethod takes one argument, the users' credentials; it returns true or false.
+ *   PROMISE: the injectedValidator takes one argument, the users' credentials; and it returns a promise.
+ *   ASYNC: the injectedValidator takes two arguments; the users' credentials, and a callback in the form (err, result).
+ *   SYNC: the injectedValidator takes one argument, the users' credentials; it returns true or false.
  *
  * @param userData
  */
@@ -45,15 +62,22 @@ export const auth = (userData) => {
     var response = null;
     switch (methodType) {
         case VALIDATION_METHOD_TYPE_PROMISE:
-            response = validationMethod(userData);
+            response = injectedValidator(userData);
             break;
 
         case VALIDATION_METHOD_TYPE_ASYNC:
-            response = new Promise((resolve, reject) => validationMethod(userData, (err, result) => err ? reject(err) : resolve(result)));
+            response = new Promise((resolve, reject) => injectedValidator(userData, (err, result) => err ? reject(err) : resolve(result)));
             break;
 
         case VALIDATION_METHOD_TYPE_SYNC:
-            response = new Promise((resolve, reject) => validationMethod(userData) ? resolve() : reject());
+            response = new Promise((resolve, reject) => {
+                try {
+                    let result = injectedRegister(userData);
+                    result ? resolve(result) : reject()
+                } catch (err) {
+                    reject(err);
+                }
+            });
             break;
 
         default:
@@ -61,3 +85,34 @@ export const auth = (userData) => {
     }
     return response;
 };
+
+
+export const reg = (userData) => {
+    var response = null;
+    switch (methodType) {
+        case VALIDATION_METHOD_TYPE_PROMISE:
+            response = injectedRegister(userData);
+            break;
+
+        case VALIDATION_METHOD_TYPE_ASYNC:
+            response = new Promise((resolve, reject) => injectedRegister(userData, (err, result) => err ? reject(err) : resolve(result)));
+            break;
+
+        case VALIDATION_METHOD_TYPE_SYNC:
+            response = new Promise((resolve, reject) => {
+                try {
+                    let result = injectedRegister(userData);
+                    result ? resolve(result) : reject()
+                } catch (err) {
+                    reject(err);
+                }
+            });
+            break;
+
+        default:
+            throw new Error('cannot understand methodType ' + methodType);
+    }
+    return response;
+};
+
+

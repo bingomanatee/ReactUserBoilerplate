@@ -2,22 +2,34 @@
  * Action Names
  * @type {string}
  */
-const USER_LOGIN = 'USER_LOGIN';
-const USER_LOGOFF = 'USER_LOGOFF';
-const USER_LOGIN_VALID = 'USER_LOGIN_VALID';
-const USER_LOGIN_INVALID = 'USER_LOGIN_INVALID';
+const USER_LOGIN = 'USER_LOGIN'; // submit user credentials
+const USER_LOGOFF = 'USER_LOGOFF'; // remove user session
+const USER_LOGGED_IN = 'USER_LOGGED_IN'; // injecting user in to state -- one-step
+
+const USER_LOGIN_VALID = 'USER_LOGIN_VALID'; // feedback from server
+const USER_LOGIN_INVALID = 'USER_LOGIN_INVALID'; // feedback from server
+
+const USER_REG = 'USER_REG'; // submit user credendials
+
+const USER_REG_VALID = 'USER_REG_VALID'; // feedback from server
+const USER_REG_INVALID = 'USER_REG_INVALID';// feedback from server
+
 const USER_RESET_ANON = 'USER_RESET_ANON';
 const OVERLAY = 'OVERLAY';
-const USER_LOGGED_IN = 'USER_LOGGED_IN'; // injecting user in to state -- one-step
 
 /**
  * State Names
  * @type {string}
  */
 const USER_STATE_ANON = 'USER_STATE_ANON'; // no logged in user
+
 const USER_STATE_LOGIN_SUBMITTED = 'USER_STATE_LOGIN_SUBMITTED'; // user credentials submtted to server
 const USER_STATE_VALIDATED = 'USER_STATE_VALIDATED'; // server validates user credentials
 const USER_STATE_LOGIN_REJECTED = 'USER_STATE_LOGIN_REJECTED'; // server rejects user credentials
+
+const USER_STATE_REG_SUBMITTED = 'USER_STATE_REG_SUBMITTED';
+const USER_STATE_REG_REJECTED = 'USER_STATE_REG_REJECTED';
+const USER_STATE_REG_ACCEPTED = 'USER_STATE_REG_ACCEPTED';
 
 /**
  * this action is called when a login attempt is submitted.
