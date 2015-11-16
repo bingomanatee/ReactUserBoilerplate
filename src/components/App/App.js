@@ -26,7 +26,7 @@ class App extends Component {
         }
         if ((typeof window !== 'undefined') && window.user) {
             console.log('alreadyLoggedIn: ', alreadyLoggedIn(user));
-            setTimeout(() => store(alreadyLoggedIn(window.user)), 1);
+            store.dispatch(alreadyLoggedIn(window.user));
         }
     }
 
