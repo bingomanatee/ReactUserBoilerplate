@@ -1,5 +1,5 @@
 var languages = ['en', 'lv'];
-var components = ['LoginPage', 'RegisterPage', 'StringsTest', 'Navigation'];
+var components = ['LoginPage', 'RegisterPage', 'LogoutPage', 'StringsTest', 'Navigation'];
 const _ = require('lodash');
 const translations = {};
 for (let lang of languages) {

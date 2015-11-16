@@ -223,6 +223,8 @@ class LoginPage extends Component {
         }
 
         var inner = (<form className="form LoginPage__form">
+            <h1>{this.s('title')}</h1>
+            <p>{this.s('text')}</p>
             {identity}
             <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
             <div className="form-def-row form-def-row-button-row">
@@ -259,8 +261,6 @@ class LoginPage extends Component {
 
         return (<div className="RegisterPage container-frame">
             <div className="RegisterPage-container container-frame__inner">
-                <h1>{this.s('title')}</h1>
-                <p>{this.s('text')}</p>
                 {inner}
             </div>
         </div>);
