@@ -189,6 +189,10 @@ class FieldDef extends Translatable {
         return this._fieldValue;
     }
 
+    get fieldValueT() {
+        return this._translate(this.fieldValue);
+    }
+
     get label() {
         return this._translate(this._label);
     }

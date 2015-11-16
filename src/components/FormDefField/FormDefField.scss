@@ -1,8 +1,20 @@
 $buttonColor: #fff698;
+$ButtonGradColorA: rgba(194, 194, 194, 0);
+$ButtonGradColorB: rgba(36, 50, 24, 0);
+$ButtonGradColor0: opacify($ButtonGradColorA, 0.01);
+$ButtonGradColor1: opacify($ButtonGradColorB, 0.05);
+$ButtonGradColor2: opacify($ButtonGradColorB, 0.1);
+$ButtonGradColor3: opacify($ButtonGradColorA, 0);
+$ButtonGradColor4: opacify($ButtonGradColorB, 0.05);
+$ButtonGradColor5: opacify($ButtonGradColorB, 0.2);
+$p1: 15%;
+$p2: 40%;
+$p3: 41%;
+$p4: 75%;
 $buttonBorderColor: darken($buttonColor, 50%);
 $buttonColorHover: darken($buttonColor, 10%);
 $buttonBorderColorHover: darken($buttonColorHover, 50%);
-$buttonColorSecondary: #d9deff;
+$buttonColorSecondary: #9acce6;
 $buttonColorSecondaryHover: darken($buttonColorSecondary, 10%);
 $buttonBorderColorSecondary: darken($buttonColorSecondary, 50%);
 $disabledButtonLabel: white;
@@ -11,13 +23,13 @@ $label: #654145;
 $inputBorderColor: #aeaeff;
 $inputBorderColorFocus: darken($inputBorderColor, 25%);
 
-.form-row {
+.form-def-row {
     display: flex;
     margin-bottom: 1rem;
     justify-content: space-between;
     min-height: 3rem;
 
-    &.form-row-button-row {
+    &.form-def-row-button-row {
         align-content: flex-end;
         justify-content: flex-end;
         min-height: initial;
@@ -35,17 +47,17 @@ $inputBorderColorFocus: darken($inputBorderColor, 25%);
             margin-left: 1rem;
 
             /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#848484+0,000000+65,ffffff+100&amp;0+0,0.1+47,0.25+66,0.25+66,0.1+100 */
-            background: -moz-linear-gradient(top,  rgba(132,132,132,0) 0%, rgba(37,37,37,0.1) 47%, rgba(0,0,0,0.24) 65%, rgba(7,7,7,0.25) 66%, rgba(255,255,255,0.1) 100%); /* FF3.6-15 */
-            background: -webkit-linear-gradient(top,  rgba(132,132,132,0) 0%,rgba(37,37,37,0.1) 47%,rgba(0,0,0,0.24) 65%,rgba(7,7,7,0.25) 66%,rgba(255,255,255,0.1) 100%); /* Chrome10-25,Safari5.1-6 */
-            background: linear-gradient(to bottom,  rgba(132,132,132,0) 0%,rgba(37,37,37,0.1) 47%,rgba(0,0,0,0.24) 65%,rgba(7,7,7,0.25) 66%,rgba(255,255,255,0.1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00848484', endColorstr='#1affffff',GradientType=0 ); /* IE6-9 */
+            background: -moz-linear-gradient(top, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(top, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to bottom, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00848484', endColorstr='#1affffff', GradientType=0); /* IE6-9 */
             background-color: $buttonColor;
 
             .last {
                 margin-left: 0;
             }
             &.secondary {
-                background-color:$buttonColorSecondary;
+                background-color: $buttonColorSecondary;
                 border: 1px dotted $buttonBorderColorSecondary;
                 &:hover {
                     background-color: $buttonColorSecondaryHover;
@@ -80,7 +92,7 @@ $inputBorderColorFocus: darken($inputBorderColor, 25%);
         color: $label
     }
 
-    .form-row__input {
+    .form-def-row__input {
         flex-basis: 20rem;
         flex-grow: 0;
         input, textarea {

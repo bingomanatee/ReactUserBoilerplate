@@ -29,7 +29,7 @@ const HttpClient = {
 
     get: path => new Promise((resolve, reject) => HttpClient._finish(request.get(getUrl(path)), resolve, reject)),
 
-    post: (path, params) => new Promise((resolve, rej) => HttpClient._finish(request.post(getUrl(path), params), resolve, rej))
+    post: (path, params) => new Promise((resolve, reject) => HttpClient._finish(request.post(getUrl(path), params), resolve, reject))
 
 };
 

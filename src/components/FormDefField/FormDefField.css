@@ -1,13 +1,13 @@
-.form-row {
+.form-def-row {
   display: flex;
   margin-bottom: 1rem;
   justify-content: space-between;
   min-height: 3rem; }
-  .form-row.form-row-button-row {
+  .form-def-row.form-def-row-button-row {
     align-content: flex-end;
     justify-content: flex-end;
     min-height: initial; }
-    .form-row.form-row-button-row button {
+    .form-def-row.form-def-row-button-row button {
       outline: 0;
       -webkit-appearance: none;
       border-radius: 0.75rem;
@@ -20,35 +20,35 @@
       max-width: 12rem;
       margin-left: 1rem;
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#848484+0,000000+65,ffffff+100&amp;0+0,0.1+47,0.25+66,0.25+66,0.1+100 */
-      background: -moz-linear-gradient(top, rgba(132, 132, 132, 0) 0%, rgba(37, 37, 37, 0.1) 47%, rgba(0, 0, 0, 0.24) 65%, rgba(7, 7, 7, 0.25) 66%, rgba(255, 255, 255, 0.1) 100%);
+      background: -moz-linear-gradient(top, rgba(194, 194, 194, 0.01) 0%, rgba(36, 50, 24, 0.05) 15%, rgba(36, 50, 24, 0.1) 40%, rgba(194, 194, 194, 0) 41%, rgba(36, 50, 24, 0.05) 75%, rgba(36, 50, 24, 0.2) 100%);
       /* FF3.6-15 */
-      background: -webkit-linear-gradient(top, rgba(132, 132, 132, 0) 0%, rgba(37, 37, 37, 0.1) 47%, rgba(0, 0, 0, 0.24) 65%, rgba(7, 7, 7, 0.25) 66%, rgba(255, 255, 255, 0.1) 100%);
+      background: -webkit-linear-gradient(top, rgba(194, 194, 194, 0.01) 0%, rgba(36, 50, 24, 0.05) 15%, rgba(36, 50, 24, 0.1) 40%, rgba(194, 194, 194, 0) 41%, rgba(36, 50, 24, 0.05) 75%, rgba(36, 50, 24, 0.2) 100%);
       /* Chrome10-25,Safari5.1-6 */
-      background: linear-gradient(to bottom, rgba(132, 132, 132, 0) 0%, rgba(37, 37, 37, 0.1) 47%, rgba(0, 0, 0, 0.24) 65%, rgba(7, 7, 7, 0.25) 66%, rgba(255, 255, 255, 0.1) 100%);
+      background: linear-gradient(to bottom, rgba(194, 194, 194, 0.01) 0%, rgba(36, 50, 24, 0.05) 15%, rgba(36, 50, 24, 0.1) 40%, rgba(194, 194, 194, 0) 41%, rgba(36, 50, 24, 0.05) 75%, rgba(36, 50, 24, 0.2) 100%);
       /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00848484', endColorstr='#1affffff',GradientType=0 );
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00848484', endColorstr='#1affffff', GradientType=0);
       /* IE6-9 */
       background-color: #fff698; }
-      .form-row.form-row-button-row button .last {
+      .form-def-row.form-def-row-button-row button .last {
         margin-left: 0; }
-      .form-row.form-row-button-row button.secondary {
-        background-color: #d9deff;
-        border: 1px dotted #001dd9; }
-        .form-row.form-row-button-row button.secondary:hover {
-          background-color: #a6b2ff;
-          border: 1px solid #001dd9; }
-      .form-row.form-row-button-row button:disabled {
+      .form-def-row.form-def-row-button-row button.secondary {
+        background-color: #9acce6;
+        border: 1px dotted #1a4d67; }
+        .form-def-row.form-def-row-button-row button.secondary:hover {
+          background-color: #71b7dc;
+          border: 1px solid #1a4d67; }
+      .form-def-row.form-def-row-button-row button:disabled {
         background-color: #ae97a6;
         color: white;
         border: 1px dotted gray; }
-        .form-row.form-row-button-row button:disabled:hover {
+        .form-def-row.form-def-row-button-row button:disabled:hover {
           background-color: #ae97a6;
           color: white;
           border: 1px solid gray; }
-      .form-row.form-row-button-row button:hover {
+      .form-def-row.form-def-row-button-row button:hover {
         background-color: #fff265;
         border: 1px solid #655c00; }
-  .form-row label {
+  .form-def-row label {
     flex-basis: 10rem;
     flex-grow: 1;
     flex-shrink: 1;
@@ -58,17 +58,17 @@
     padding-right: 1.5rem;
     padding-top: 0.25rem;
     color: #654145; }
-  .form-row .form-row__input {
+  .form-def-row .form-def-row__input {
     flex-basis: 20rem;
     flex-grow: 0; }
-    .form-row .form-row__input input, .form-row .form-row__input textarea {
+    .form-def-row .form-def-row__input input, .form-def-row .form-def-row__input textarea {
       -webkit-appearance: none;
       border: 1px dotted #aeaeff;
       padding: 0.25rem;
       width: 100%;
       box-sizing: border-box;
       font-weight: 400; }
-      .form-row .form-row__input input:focus, .form-row .form-row__input textarea:focus {
+      .form-def-row .form-def-row__input input:focus, .form-def-row .form-def-row__input textarea:focus {
         border: 1px solid #2f2fff;
         outline: none; }
 

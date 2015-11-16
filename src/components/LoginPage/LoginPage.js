@@ -7,18 +7,57 @@ import strings from './../../utils/Strings';
 import FormDefField from '../FormDefField';
 import {FieldDef } from './../../utils/FieldDef';
 import {MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME, ASK_USERNAME } from '../../config';
+import  {
+    logIn,
+    logOff,
+    logInGood,
+    loginBad,
+    loginResetAnon,
+    overlay,
+
+    USER_LOGIN,
+    USER_LOGOFF,
+    USER_LOGIN_VALID,
+    USER_LOGIN_INVALID,
+    USER_RESET_ANON,
+
+    USER_STATE_ANON,
+    USER_STATE_LOGIN_SUBMITTED,
+    USER_STATE_VALIDATED,
+    USER_STATE_LOGIN_REJECTED
+} from '../../actions';
 import html from '../../core/HttpClient';
 import FormFeedback from '../FormFeedback';
+import store from '../../stores/Store';
+import {setUserValidation, VALIDATION_METHOD_TYPE_PROMISE} from '../../stores/UserAuth';
 
 const MIN_SUBMIT_GAP = 1000;
 const MAX_TRIES = 5;
-const ERROR_DURATION = 5 * 1000;
+const FEEDBACK_DURATION = 5 * 1000;
+
+const userStateMessages = {};
+
+userStateMessages[USER_STATE_LOGIN_SUBMITTED] = 'loggingIn';
+userStateMessages[USER_STATE_ANON] = '';
+userStateMessages[USER_STATE_VALIDATED] = 'goodLogin';
+userStateMessages[USER_STATE_LOGIN_REJECTED] = 'badLogin';
+
+/*
+
+ html.post('/api/users/auth', data)
+ .then(goodLogin, badLogin);
+
+ */
+setUserValidation(user => html.post('/api/users/auth', user), VALIDATION_METHOD_TYPE_PROMISE);
 
 @withStyles(styles)
 class LoginPage extends Component {
 
     constructor() {
         super();
+
+        var storeState = store.getState();
+
         this.state = {
             locked: false,
             email: '',
@@ -26,17 +65,44 @@ class LoginPage extends Component {
             password: '',
             isError: false,
             formFeedback: '',
-            submitTimeBuffer: []
+            submitTimeBuffer: [],
+            userState: storeState.userState
         };
 
         this.fieldDefs = new Map();
         this.s = strings('LoginPage');
 
         this._makeFieldDefs();
+
+        this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
+    }
+
+    _onStoreChange() {
+        const storeState = store.getState();
+        console.log('store state', storeState);
+        if (this.state.userState === storeState.userState) {
+            console.log('store state is still ', storeState.userState);
+        } else {
+            console.log('store state changed to ', storeState.userState);
+            this.setState({userState: storeState.userState});
+            const title = this.s('loggingInTitle');
+            const text = this.s('loggingInText');
+            const updateOverlay = () => {
+                switch (storeState.userState) {
+                    case USER_STATE_LOGIN_SUBMITTED:
+                        store.dispatch(overlay({title: title, text: text, show: true}));
+                        break;
+                    default:
+                        store.dispatch(overlay({}));
+                }
+            };
+            setTimeout(updateOverlay, 1);
+        }
     }
 
     componentWillUnmount() {
         this._clearFeedback(false);
+        this._unsubStore();
     }
 
     _lockUp() {
@@ -53,7 +119,7 @@ class LoginPage extends Component {
             if (this.state.formFeedback === formFeedback) {
                 this._clearFeedback();
             }
-        }, ERROR_DURATION);
+        }, FEEDBACK_DURATION);
     }
 
     _clearFeedback(dontEraseState) {
@@ -79,20 +145,19 @@ class LoginPage extends Component {
             username, password, email
         };
 
-        this._setFeedback('loggingIn');
+        /*
+         this._setFeedback('loggingIn');
+         const goodLogin = (result) => {
+         this._setFeedback('goodLogin');
+         console.log('login success: ', result);
+         }
 
-        const goodLogin = (result) => {
-            this._setFeedback('goodLogin');
-            console.log('login success: ', result);
-        }
+         const badLogin = (err) => {
+         this._setFeedback('badLogin', true);
+         console.log('login fail:', err);
+         } */
 
-        const badLogin = (err) => {
-            this._setFeedback('badLogin', true);
-            console.log('login fail:', err);
-        }
-
-        html.post('/api/users/auth', data)
-            .then(goodLogin, badLogin);
+        store.dispatch(logIn(data));
     }
 
     _makeFieldDefs() {
@@ -131,6 +196,12 @@ class LoginPage extends Component {
         });
         passwordDef.watch(password => this.setState({password}));
         this.fieldDefs.set('password', passwordDef);
+
+        this.fieldDefs.set('loggedInTitle', new FieldDef('loggedInTitle', 'loggedInTitle', 'title', {s: this.s}));
+    }
+
+    _goHome() {
+        document.location = '/';
     }
 
     _isValid() {
@@ -146,16 +217,6 @@ class LoginPage extends Component {
     }
 
     render() {
-        if (this.state.locked) {
-            return (
-                <div className="RegisterPage container-frame">
-                    <div className="RegisterPage-container container-frame__inner">
-                        <h1>Maximum Tries Exceeded</h1>
-                        <p>Please reload the browser page and try again.</p>
-                    </div>
-                </div>);
-        }
-
         var identity = [];
         if (ASK_EMAIL) {
             identity.push(<FormDefField ref="email" key={1} def={this.fieldDefs.get('email')}/>);
@@ -165,30 +226,49 @@ class LoginPage extends Component {
             identity.push(<FormDefField ref="username" key={2} def={this.fieldDefs.get('username')}/>);
         }
 
-        return (
-            <div className="RegisterPage container-frame">
-                <div className="RegisterPage-container container-frame__inner">
-                    <h1>{this.s('title')}</h1>
-                    <p>{this.s('text')}</p>
+        var inner = (<form className="form LoginPage__form">
+            {identity}
+            <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
+            <div className="form-def-row form-def-row-button-row">
+                <button className="secondary" type="Cancel" onClick={this._goHome.bind(this)}>
+                    {this.s('cancelButtonLabel')}
+                </button>
+                <button className="last" type="button" onClick={this._save.bind(this)}
+                        disabled={!this._isValid()}>
+                    {this.s('loginButtonLabel')}
+                </button>
+            </div>
+            <div className="form-def-row">
+                <label>&nbsp;</label>
+                <div className="form-def-row__input">
+                    <FormFeedback isError={this.state.isError} text={this.state.formFeedback}/>
+                </div>
+            </div>
+        </form>);
+
+        switch (this.state.userState) {
+            case USER_STATE_VALIDATED:
+                inner = (
                     <form className="form LoginPage__form">
-                        {identity}
-                        <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
-                        <div className="form-row form-row-button-row">
-                            <button className="secondary" type="Cancel">Cancel</button>
-                            <button className="last" type="button" onClick={this._save.bind(this)}
-                                    disabled={!this._isValid()}>
-                                Register
+                        <FormDefField ref="loggedInTitle" def={this.fieldDefs.get('loggedInTitle')}></FormDefField>
+                        <div className="form-def-row form-def-row-button-row">
+                            <button className="last" type="button" onClick={this._goHome.bind(this)}>
+                                {this.s('goHomeButtonLabel')}
                             </button>
                         </div>
-                        <div className="form-row">
-                            <label>&nbsp;</label>
-                            <div className="form-row__input">
-                                <FormFeedback isError={this.state.isError} text={this.state.formFeedback}/>
-                            </div>
-                        </div>
                     </form>
-                </div>
-            </div>);
+                );
+                break;
+        }
+
+        return (<div className="RegisterPage container-frame">
+            <div className="RegisterPage-container container-frame__inner">
+                <h1>{this.s('title')}</h1>
+                <p>{this.s('text')}</p>
+                {inner}
+            </div>
+        </div>);
+
     }
 
 }

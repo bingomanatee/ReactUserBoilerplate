@@ -11,6 +11,4 @@ export const ASK_EMAIL = true;
 export const REQUIRE_USERNAME = false;
 export const ASK_USERNAME = false;
 
-export default {
-  googleAnalyticsId: 'UA-XXXXX-X',
-};
+export const googleAnalyticsId = 'UA-XXXXX-X';

@@ -7,6 +7,7 @@ const USER_LOGOFF = 'USER_LOGOFF';
 const USER_LOGIN_VALID = 'USER_LOGIN_VALID';
 const USER_LOGIN_INVALID = 'USER_LOGIN_INVALID';
 const USER_RESET_ANON = 'USER_RESET_ANON';
+const OVERLAY = 'OVERLAY';
 
 /**
  * State Names
@@ -16,6 +17,7 @@ const USER_STATE_ANON = 'USER_STATE_ANON'; // no logged in user
 const USER_STATE_LOGIN_SUBMITTED = 'USER_STATE_LOGIN_SUBMITTED'; // user credentials submtted to server
 const USER_STATE_VALIDATED = 'USER_STATE_VALIDATED'; // server validates user credentials
 const USER_STATE_LOGIN_REJECTED = 'USER_STATE_LOGIN_REJECTED'; // server rejects user credentials
+const USER_LOGGED_IN = 'USER_LOGGED_IN'; // injecting user in to state -- one-step
 
 /**
  * this action is called when a login attempt is submitted.
@@ -47,7 +49,11 @@ const loginResetAnon = () => ({type: USER_RESET_ANON});
  * it is assumed to be successful.
  */
 
+const alreadyLoggedIn = (user) => ({type: USER_LOGGED_IN, user: user});
+
 const logOff = () => ({type: USER_LOGOFF});
+
+const overlay = (olState) => ({type: OVERLAY, overlay: olState})
 
 export {
     logIn,
@@ -55,12 +61,16 @@ export {
     logInGood,
     loginBad,
     loginResetAnon,
+    overlay,
+    alreadyLoggedIn,
 
     USER_LOGIN,
     USER_LOGOFF,
     USER_LOGIN_VALID,
     USER_LOGIN_INVALID,
     USER_RESET_ANON,
+    USER_LOGGED_IN,
+    OVERLAY,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,

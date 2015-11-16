@@ -38,33 +38,41 @@ class FormDefField extends Component {
         };
         var input = null;
 
-        switch (def.fieldType) {
+        if (def.fieldType == 'title') {
+            var title = def.fieldValueT;
+            return (<div className="form-def-row">
+                <h3>{title}</h3>
+            </div>);
+        } else {
+            switch (def.fieldType) {
 
-            case 'password':
-                input = (<input type="password" name={def.name} placeholder={def.placeholder} autoComplete="off"
-                                valueLink={valueLink}/>);
-                break;
+                case 'password':
+                    input = (<input type="password" name={def.name} placeholder={def.placeholder} autoComplete="off"
+                                    valueLink={valueLink}/>);
+                    break;
 
-            case 'textarea':
-                var rows = this.props.rows || 4;
-                input = (<textarea name={def.name} placeholder={def.placeholder} value={def.fieldValue}
-                                   valueLink={valueLink}/>);
-                break;
+                case 'textarea':
+                    var rows = this.props.rows || 4;
+                    input = (<textarea name={def.name} placeholder={def.placeholder} value={def.fieldValue}
+                                       valueLink={valueLink}/>);
+                    break;
 
-            default:
-                input = (<input type={def.fieldType} name={def.name} placeholder={def.placeholder}
-                                valueLink={valueLink}/>);
+                default:
+                    input = (<input type={def.fieldType} name={def.name} placeholder={def.placeholder}
+                                    valueLink={valueLink}/>);
+            }
+
+            const errors = def.errors ? ( <FormFeedback message={def.errors} isError={1} />) : '';
+
+            return (<div className="form-def-row">
+                <label>{def.label}</label>
+                <div className="form-def-row__input">
+                    {input}
+                    {errors}
+                </div>
+            </div>);
         }
 
-        const errors = def.errors ? ( <FormFeedback message={def.errors} isError={1} />) : '';
-
-        return (<div className="form-row">
-            <label>{def.label}</label>
-            <div className="form-row__input">
-                {input}
-                {errors}
-            </div>
-        </div>);
     }
 }
 

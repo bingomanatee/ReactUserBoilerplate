@@ -4,6 +4,8 @@ import {
     USER_LOGIN_VALID,
     USER_LOGIN_INVALID,
     USER_RESET_ANON,
+    USER_LOGGED_IN,
+    OVERLAY,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,
@@ -17,9 +19,21 @@ const initialState = {
 };
 
 const state = (pState, action) => {
+    console.log('action....', action, USER_LOGGED_IN);
     let update = {};
 
     switch (action.type) {
+
+        case OVERLAY:
+            // note - an empty object will hide the overlay
+            var overlay = action.overlay ? action.overlay : {};
+            update = {overlay};
+            break;
+
+        case USER_LOGGED_IN:
+            update = {user: action.user, userState: USER_LOGGED_IN};
+            break;
+
         case USER_LOGIN:
             update = {user: action.user, userState: USER_STATE_LOGIN_SUBMITTED};
             break;
@@ -52,8 +66,7 @@ const state = (pState, action) => {
             throw new Error('cannot recognize action ', action);
     }
 
-    var start = pState || initialState;
-    return Object.assign({}, start, update);
+    return Object.assign({}, pState || initialState, update);
 };
 
 export default state;

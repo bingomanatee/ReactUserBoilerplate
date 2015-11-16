@@ -9,6 +9,10 @@ export const VALIDATION_METHOD_TYPE_SYNC = 'SYNC';
 export const VALIDATION_METHOD_TYPE_ASYNC = 'ASYNC';
 export const VALIDATION_METHOD_TYPE_PROMISE = 'PROMISE';
 
+const METHODS = [VALIDATION_METHOD_TYPE_SYNC,
+    VALIDATION_METHOD_TYPE_ASYNC,
+    VALIDATION_METHOD_TYPE_PROMISE];
+
 var methodType = VALIDATION_METHOD_TYPE_SYNC;
 
 var validationMethod = () => {
@@ -20,6 +24,10 @@ var validationMethod = () => {
 export const setUserValidation = (pValidationMethod, pMethodType) => {
     validationMethod = pValidationMethod;
     methodType = pMethodType;
+    console.log('method: ', pValidationMethod, 'type:', pMethodType);
+    if (!METHODS.includes(pMethodType)) {
+        throw new Error('bad method type ' + (pMethodType || '(none)'));
+    }
 };
 
 /**

@@ -38,7 +38,7 @@ const strings = (comp, lang = null, seed = null) => {
     const translate = (term, swap) => {
         var out = terms[term];
         if (!out) {
-            return `&laquo;${term}&raquo;`;
+            return `(: ${term} :)`;
         }
 
         while (out.indexOf('@^') >= 0) {
