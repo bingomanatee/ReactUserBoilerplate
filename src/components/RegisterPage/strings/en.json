@@ -28,5 +28,5 @@
     "___buttons___": "button strings",
     "registeringButtonLabel": "Register",
     "cancelButtonLabel": "Cancel",
-    "goHomeButtonLabel": "Continue to Home Page"
+    "logInButtonLabel": "Log In"
 }

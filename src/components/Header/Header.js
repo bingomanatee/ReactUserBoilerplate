@@ -10,7 +10,7 @@ import  {
     logOff,
     logInGood,
     loginBad,
-    loginResetAnon,
+    resetAnon,
 
     USER_LOGIN,
     USER_LOGOFF,

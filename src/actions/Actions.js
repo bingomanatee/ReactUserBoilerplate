@@ -55,16 +55,37 @@ const loginBad = (reason = false) => ({type: USER_LOGIN_INVALID, userInvalidReas
  * call this action after receiving login rejection to reset the state
  * to USER_STATE_ANON. Does not flush user data (call logoff for that).
  */
-const loginResetAnon = () => ({type: USER_RESET_ANON});
-/**
- * this action is called when a logoff attempt is submitted;
- * it is assumed to be successful.
- */
+const resetAnon = () => ({type: USER_RESET_ANON});
 
+/**
+ * this action is called to inject a user into the system from session.
+ * Useful if the user reloads the paage after having logged in successfully
+ */
 const alreadyLoggedIn = (user) => ({type: USER_LOGGED_IN, user: user});
 
 const logOff = () => ({type: USER_LOGOFF});
 
+/**
+ * this action is called when a user submits a new user dataset.
+ */
+const reg = (user) => ({type: USER_REG, user: user});
+
+/**
+ * this action is called if the user's reg dataset is accepted.
+ * The user is NOT immediately logged in; they still have to log in normally
+ */
+const regGood = () => ({type: USER_REG_VALID});
+
+/**
+ * call this action after the user's reg data is rejected.
+ * @param reason
+ */
+const regBad = (reason = false) => ({type: USER_REG_INVALID});
+
+/**
+ * call this action to show, change or hide the overlay that blocks pending action.
+ * @param olState
+ */
 const overlay = (olState) => ({type: OVERLAY, overlay: olState})
 
 export {
@@ -72,9 +93,14 @@ export {
     logOff,
     logInGood,
     loginBad,
-    loginResetAnon,
-    overlay,
+    resetAnon,
     alreadyLoggedIn,
+
+    reg,
+    regGood,
+    regBad,
+
+    overlay,
 
     USER_LOGIN,
     USER_LOGOFF,
@@ -82,11 +108,20 @@ export {
     USER_LOGIN_INVALID,
     USER_RESET_ANON,
     USER_LOGGED_IN,
+
+    USER_REG,
+    USER_REG_VALID,
+    USER_REG_INVALID,
+
     OVERLAY,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,
     USER_STATE_VALIDATED,
-    USER_STATE_LOGIN_REJECTED
+    USER_STATE_LOGIN_REJECTED,
+
+    USER_STATE_REG_SUBMITTED,
+    USER_STATE_REG_REJECTED,
+    USER_STATE_REG_ACCEPTED
 };
 

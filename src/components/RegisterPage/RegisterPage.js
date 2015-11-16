@@ -8,39 +8,35 @@ import FormDefField from '../FormDefField';
 import {FieldDef } from './../../utils/FieldDef';
 import {MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME, ASK_USERNAME } from '../../config';
 import  {
-    logIn,
-    logOff,
-    logInGood,
-    loginBad,
-    loginResetAnon,
+    reg,
+    regGood,
+    regBad,
+    resetAnon,
     overlay,
 
-    USER_LOGIN,
-    USER_LOGOFF,
-    USER_LOGIN_VALID,
-    USER_LOGIN_INVALID,
+    USER_REG,
+    USER_REG_VALID,
+    USER_REG_INVALID,
     USER_RESET_ANON,
 
     USER_STATE_ANON,
-    USER_STATE_LOGIN_SUBMITTED,
-    USER_STATE_VALIDATED,
-    USER_STATE_LOGIN_REJECTED
+    USER_STATE_REG_SUBMITTED,
+    USER_STATE_REG_REJECTED,
+    USER_STATE_REG_ACCEPTED
 } from '../../actions';
 import html from '../../core/HttpClient';
 import FormFeedback from '../FormFeedback';
 import store from '../../stores/Store';
-import {setUserValidation, VALIDATION_METHOD_TYPE_PROMISE} from '../../stores/UserAuth';
+import {setUserRegistration, VALIDATION_METHOD_TYPE_PROMISE} from '../../stores/UserAuth';
 
-const MIN_SUBMIT_GAP = 1000;
-const MAX_TRIES = 5;
 const FEEDBACK_DURATION = 5 * 1000;
 
 const userStateMessages = {};
 
-userStateMessages[USER_STATE_LOGIN_SUBMITTED] = 'registering';
 userStateMessages[USER_STATE_ANON] = '';
-userStateMessages[USER_STATE_VALIDATED] = 'goodRegistering';
-userStateMessages[USER_STATE_LOGIN_REJECTED] = 'badRegistering';
+userStateMessages[USER_STATE_REG_SUBMITTED] = 'registering';
+userStateMessages[USER_STATE_REG_REJECTED] = 'badRegistering';
+userStateMessages[USER_STATE_REG_ACCEPTED] = 'goodRegistering';
 
 // setUserValidation(user => html.post('/api/users/auth', user), VALIDATION_METHOD_TYPE_PROMISE);
 // @TODO: some equivalent for registration?
@@ -81,12 +77,12 @@ class RegisterPage extends Component {
             const text = this.s('registeringText');
             const updateOverlay = () => {
                 switch (storeState.userState) {
-                    case USER_STATE_LOGIN_REJECTED:
+                    case USER_STATE_REG_REJECTED:
                         this._setFeedback('badRegistering', true);
                         store.dispatch(overlay({}));
                         break;
 
-                    case USER_STATE_LOGIN_SUBMITTED:
+                    case USER_STATE_REG_SUBMITTED:
                         store.dispatch(overlay({title: title, text: text, show: true}));
                         break;
                     default:
@@ -146,7 +142,7 @@ class RegisterPage extends Component {
             passwors2: password2
         };
 
-      //  store.dispatch(logIn(data));
+        store.dispatch(reg(data));
     }
 
     _makeFieldDefs() {
@@ -201,6 +197,10 @@ class RegisterPage extends Component {
         document.location = '/';
     }
 
+    _goLogin () {
+        document.location = '/login';
+    }
+
     _isValid() {
         var isValid = true;
 //@TODO: reduce?
@@ -245,13 +245,13 @@ class RegisterPage extends Component {
         </form>);
 
         switch (this.state.userState) {
-            case USER_STATE_VALIDATED:
+            case USER_STATE_REG_ACCEPTED:
                 inner = (
                     <form className="form RegisterPage__form">
                         <FormDefField ref="registeredTitle" def={this.fieldDefs.get('registeredTitle')}></FormDefField>
                         <div className="form-def-row form-def-row-button-row">
-                            <button className="last" type="button" onClick={this._goHome.bind(this)}>
-                                {this.s('goHomeButtonLabel')}
+                            <button className="last" type="button" onClick={this._goLogin.bind(this)}>
+                                {this.s('logInButtonLabel')}
                             </button>
                         </div>
                     </form>
@@ -264,9 +264,7 @@ class RegisterPage extends Component {
                 {inner}
             </div>
         </div>);
-
     }
-
 }
 
 export default RegisterPage;

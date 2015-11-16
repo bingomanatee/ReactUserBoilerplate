@@ -12,7 +12,7 @@ import  {
     logOff,
     logInGood,
     loginBad,
-    loginResetAnon,
+    resetAnon,
     overlay,
 
     USER_LOGIN,
