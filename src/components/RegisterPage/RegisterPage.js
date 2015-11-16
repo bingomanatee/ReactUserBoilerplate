@@ -38,8 +38,7 @@ userStateMessages[USER_STATE_REG_SUBMITTED] = 'registering';
 userStateMessages[USER_STATE_REG_REJECTED] = 'badRegistering';
 userStateMessages[USER_STATE_REG_ACCEPTED] = 'goodRegistering';
 
-// setUserValidation(user => html.post('/api/users/auth', user), VALIDATION_METHOD_TYPE_PROMISE);
-// @TODO: some equivalent for registration?
+setUserRegistration(user => html.post('/api/users/reg', user), VALIDATION_METHOD_TYPE_PROMISE);
 
 @withStyles(styles)
 class RegisterPage extends Component {

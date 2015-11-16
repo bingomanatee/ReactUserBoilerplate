@@ -29,7 +29,7 @@ module.exports = (app) => {
         res.redirect(200, '/');
     });
 
-    router.post('/', (req, res) => {
+    router.post('/reg', (req, res) => {
         var email = req.body.email;
         var password = req.body.password;
         var bio = req.body.bio;
