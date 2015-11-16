@@ -5,12 +5,21 @@ import {
     USER_LOGIN_INVALID,
     USER_RESET_ANON,
     USER_LOGGED_IN,
+
+    USER_REG,
+    USER_REG_VALID,
+    USER_REG_INVALID,
+
     OVERLAY,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,
     USER_STATE_VALIDATED,
-    USER_STATE_LOGIN_REJECTED
+    USER_STATE_LOGIN_REJECTED,
+
+    USER_STATE_REG_SUBMITTED,
+    USER_STATE_REG_REJECTED,
+    USER_STATE_REG_ACCEPTED
 } from './../actions/Actions';
 import User from './../utils/User';
 
@@ -57,6 +66,18 @@ const state = (pState, action) => {
             if (action.userInvalidReason) {
                 update.userInvalidReason = action.userInvalidReason;
             }
+            break;
+
+        case USER_REG:
+            update = {user: action.user, userState: USER_STATE_REG_SUBMITTED};
+            break;
+
+        case USER_STATE_REG_ACCEPTED:
+            update = {user: null, userState: USER_STATE_REG_ACCEPTED};
+            break;
+
+        case USER_STATE_REG_REJECTED:
+            update = {userState: USER_STATE_REG_REJECTED};
             break;
 
         case '@@redux/INIT':
