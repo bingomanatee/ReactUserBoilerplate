@@ -19,6 +19,16 @@ import { Router } from 'express';
 
 module.exports = (app) => {
     var router = new Router();
+
+    router.get('/logout', (req, res) => {
+        try {
+            delete req.session.user;
+        } catch (err) {
+            req.session.user = null;
+        }
+        res.redirect(200, '/');
+    });
+
     router.post('/', (req, res) => {
         var email = req.body.email;
         var password = req.body.password;
@@ -44,22 +54,26 @@ module.exports = (app) => {
     });
 
     router.post('/auth', (req, res) => {
+        if (!req.body){
+            console.log('wierd req: ', req);
+        }
         var email = req.body.email;
         var password = req.body.password;
 
+        console.log('logging in with ', email, password);
         if (!(email && password)) {
             res.status(400).send({error: 'email and password are required'});
         } else {
             root.authWithPassword({
                 email: email,
                 password: password
-            }, function (error, authData) {
+            }, function (error, user) {
                 if (error) {
                     console.log("Login Failed!", error);
                     res.status(400).send(error);
                 } else {
-                    req.session.authData = authData;
-                    res.send(authData);
+                    req.session.user = user;
+                    res.send(user);
                 }
             });
         }

@@ -30,7 +30,7 @@ require('./api/firebaseUsers')(server);
 server.get('*', async (req, res, next) => {
     try {
         let statusCode = 200;
-        let user = req.session && req.session.authData ? req.session.authData : null;
+        let user = req.session && req.session.user ? req.session.user : null;
         console.log('user: =============== ', user);
         const data = {title: '', description: '', css: '', body: ''};
         const css = [];

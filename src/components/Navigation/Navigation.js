@@ -76,7 +76,6 @@ class Navigation extends Component {
 
         const links = linkData.links.map(info => Object.assign({}, info, labelLink(info))).map(linkToTag);
 
-        console.log('links: ', links);
         return (
             <nav className="Navigation-links" role="navigation">
                 {links}

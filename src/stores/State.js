@@ -68,7 +68,7 @@ const state = (pState, action) => {
     }
 
     var newState = Object.assign({lan: 'en'}, pState || initialState, update);
-    if (newState.user){
+    if (newState.user && newState.userState === USER_STATE_VALIDATED){
         if (!(newState.user instanceof User)){
             newState.user = new User(newState.user);
         }

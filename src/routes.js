@@ -10,6 +10,7 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
+import LogoutPage from './components/LogoutPage';
 
 const router = new Router(on => {
   on('*', async (state, next) => {
@@ -20,6 +21,8 @@ const router = new Router(on => {
   on('/contact', async () => <ContactPage />);
 
   on('/login', async () => <LoginPage />);
+
+    on ('/logout', async () => <LogoutPage />);
 
   on('/register', async () => <RegisterPage />);
 

@@ -89,6 +89,11 @@ class LoginPage extends Component {
             const text = this.s('loggingInText');
             const updateOverlay = () => {
                 switch (storeState.userState) {
+                    case USER_STATE_LOGIN_REJECTED:
+                        this._setFeedback('badLogin', true);
+                        store.dispatch(overlay({}));
+                        break;
+
                     case USER_STATE_LOGIN_SUBMITTED:
                         store.dispatch(overlay({title: title, text: text, show: true}));
                         break;
@@ -131,32 +136,23 @@ class LoginPage extends Component {
         }
     }
 
-    _save() {
+    _save(event) {
         const username = this.state.username || '';
         const password = this.state.password || '';
         const email = this.state.email || '';
-
+        event.preventDefault();
         if (!this._isValid()) {
             this._setFeedback('formIncomplete', true);
             return
         }
         // call getValue() to get the values of the form
         var data = {
-            username, password, email
+            username: username,
+            email: email,
+            password: password
         };
 
-        /*
-         this._setFeedback('loggingIn');
-         const goodLogin = (result) => {
-         this._setFeedback('goodLogin');
-         console.log('login success: ', result);
-         }
-
-         const badLogin = (err) => {
-         this._setFeedback('badLogin', true);
-         console.log('login fail:', err);
-         } */
-
+        console.log('logging in with ', data);
         store.dispatch(logIn(data));
     }
 
@@ -197,7 +193,7 @@ class LoginPage extends Component {
         passwordDef.watch(password => this.setState({password}));
         this.fieldDefs.set('password', passwordDef);
 
-        this.fieldDefs.set('loggedInTitle', new FieldDef('loggedInTitle', 'loggedInTitle', 'title', {s: this.s}));
+        this.fieldDefs.set('loggedInTitle', new FieldDef('loggedInTitle', 's.loggedInTitle', 'title', {s: this.s}));
     }
 
     _goHome() {
@@ -230,7 +226,7 @@ class LoginPage extends Component {
             {identity}
             <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
             <div className="form-def-row form-def-row-button-row">
-                <button className="secondary" type="Cancel" onClick={this._goHome.bind(this)}>
+                <button className="secondary" type="button" onClick={this._goHome.bind(this)}>
                     {this.s('cancelButtonLabel')}
                 </button>
                 <button className="last" type="button" onClick={this._save.bind(this)}
