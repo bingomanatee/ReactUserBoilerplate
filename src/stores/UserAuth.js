@@ -28,7 +28,6 @@ var injectedValidator = () => {
 }; // until setUserValidation is called, no validation will happen.
 
 export const setUserValidation = (pValidationMethod, pMethodType) => {
-    console.log('method: ', pValidationMethod, 'type:', pMethodType);
     if (!METHODS.includes(pMethodType)) {
         throw new Error('bad method type ' + (pMethodType || '(none)'));
     }
@@ -37,13 +36,10 @@ export const setUserValidation = (pValidationMethod, pMethodType) => {
 };
 
 export const setUserRegistration = (pRegMethod, pMethodType) => {
-    injectedRegister = pRegMethod;
-
-    console.log('method: ', pValidationMethod, 'type:', pMethodType);
     if (!METHODS.includes(pMethodType)) {
         throw new Error('bad method type ' + (pMethodType || '(none)'));
     }
-    injectedRegister = pValidationMethod;
+    injectedRegister = pRegMethod;
     regMethodType = pMethodType;
 }
 

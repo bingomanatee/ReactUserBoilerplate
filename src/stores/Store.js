@@ -1,10 +1,16 @@
 import { createStore } from 'redux';
 import state from './State';
-import { auth } from './UserAuth';
+import { reg, auth } from './UserAuth';
 
 import {
     logInGood,
     loginBad,
+    regGood,
+    regBad,
+
+    USER_STATE_REG_SUBMITTED,
+    USER_STATE_REG_REJECTED,
+    USER_STATE_REG_ACCEPTED,
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,
     USER_STATE_VALIDATED,
@@ -22,18 +28,26 @@ var userState = null;
  */
 let authSubscribe = store.subscribe(() => {
     var newState = store.getState();
-    if (newState.userState === userState) {
-        return;
+    if (newState.userState !== userState) { // prevent duplicate auth/reg calls
+        if (newState.userState === USER_STATE_LOGIN_SUBMITTED) {
+            auth(newState.user)
+                .then(
+                    () => store.dispatch(logInGood()),
+                    (result) => store.dispatch(loginBad(result))
+                );
+        }
+
+        if (newState.userState === USER_STATE_REG_SUBMITTED) {
+            reg(newState.user)
+                .then(
+                    () => store.dispatch(regGood(),
+                        (result) => store.dispatch(regBad(result)))
+                );
+        }
+
+        userState = newState.userState;
     }
 
-    if (newState.userState === USER_STATE_LOGIN_SUBMITTED) {
-        var user = newState.user;
-        auth(user)
-            .then(
-                () => store.dispatch(logInGood()),
-                (result) => store.dispatch(loginBad(result))
-            );
-    }
 });
 
 export default store;

@@ -72,11 +72,11 @@ const state = (pState, action) => {
             update = {user: action.user, userState: USER_STATE_REG_SUBMITTED};
             break;
 
-        case USER_STATE_REG_ACCEPTED:
+        case USER_REG_VALID:
             update = {user: null, userState: USER_STATE_REG_ACCEPTED};
             break;
 
-        case USER_STATE_REG_REJECTED:
+        case USER_REG_INVALID:
             update = {userState: USER_STATE_REG_REJECTED};
             break;
 

@@ -29,7 +29,7 @@ class Navigation extends Component {
             user: storeState.user || null
         };
 
-        setTimeout(() => this._unsubStore = store.subscribe(this._onStoreChange.bind(this)), 1)
+        this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
     componentWillUnmount() {
