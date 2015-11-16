@@ -10,10 +10,17 @@ import Header from '../Header';
 import Feedback from '../Feedback';
 import Footer from '../Footer';
 import store from '../../stores/Store';
-import { alreadyLoggedIn } from '../../actions/Actions';
+import { alreadyLoggedIn, resize } from '../../actions/Actions';
+import _ from 'lodash';
+import withViewport from '../../decorators/withViewport';
 
-const MIN_TICS = 3 * 1000;
+var lastWidth = 0, lastHeight = 0;
+const BROADCAST_SIZE_DELAY = 0.8 * 1000;
+const MIN_HEIGHT_FOR_FOOTER = 800;
 
+const broadcastSize = _.debounce((width, height) => store.dispatch(resize(width, height)), BROADCAST_SIZE_DELAY);
+
+@withViewport
 @withContext
 @withStyles(styles)
 class App extends Component {
@@ -21,22 +28,57 @@ class App extends Component {
     constructor() {
         super();
         this._unstore = store.subscribe(this._storeChange.bind(this));
-        this.state = {
-            overlay: {}
+        this.state = {overlay: {}};
+        if ((typeof window !== 'undefined')) {
+            if (window.user) {
+                console.log('alreadyLoggedIn: ', alreadyLoggedIn(user));
+                store.dispatch(alreadyLoggedIn(window.user));
+            }
+            this._updateSize(this.props);
         }
-        if ((typeof window !== 'undefined') && window.user) {
-            console.log('alreadyLoggedIn: ', alreadyLoggedIn(user));
-            store.dispatch(alreadyLoggedIn(window.user));
-        }
+    }
+
+    componentWillUpdate(props, state) {
+        this._updateSize(props);
     }
 
     onWillUnmount() {
         this._unstore();
     }
 
+    _updateSize(props) {
+        if (props) {
+            console.log('########## SIZE props: ', props.width, props.height);
+        } else {
+            console.log('############# SIZE no props');
+        }
+        if ((typeof window !== 'undefined') && props && ((props.viewport.width != lastWidth) || (props.viewport.height != lastHeight))) {
+            console.log('########## SIZE props: ', props.viewport.width, props.viewport.height);
+            const wasTall = this._isTall();
+            lastWidth = props.viewport.width;
+            lastHeight = props.viewport.height;
+            broadcastSize(lastWidth, lastHeight);
+            if (wasTall !== this._isTall()) {
+                this.forceUpdate();
+            }
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return this._isTall() !== this._isTall(nextProps.viewport.height);
+    }
+
+    _isTall(height) {
+        return (height || lastHeight) > MIN_HEIGHT_FOR_FOOTER;
+    }
+
     static propTypes = {
         children: PropTypes.element.isRequired,
         error: PropTypes.object,
+        viewport: PropTypes.shape({
+            width: PropTypes.number.isRequired,
+            height: PropTypes.number.isRequired,
+        }).isRequired
     };
 
     _storeChange() {
@@ -62,12 +104,17 @@ class App extends Component {
             </div>
         </Modal>) : '';
 
+        const feedback = this._isTall() ? <Feedback /> : '';
+        console.log('props:', this.props);
+
         return !this.props.error ? (
-            <div>
+            <div id="app-inner">
                 {modal}
                 <Header />
-                {this.props.children}
-                <Feedback />
+                <div id="main">
+                    {this.props.children}
+                </div>
+                {feedback}
                 <Footer />
             </div>
         ) : this.props.children;

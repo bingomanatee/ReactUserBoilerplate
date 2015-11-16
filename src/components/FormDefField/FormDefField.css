@@ -1,3 +1,16 @@
+/* -------------------------------------------------------------
+  Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library
+  By: Matthieu Aussaguel, http://www.mynameismatthieu.com, @matthieu_tweets
+
+  List of CSS3 Sass Mixins File to be @imported and @included as you need
+
+  The purpose of this library is to facilitate the use of CSS3 on different browsers avoiding HARD TO READ and NEVER
+  ENDING css files
+
+  note: All CSS3 Properties are being supported by Safari 5
+  more info: http://www.findmebyip.com/litmus/#css3-properties
+
+------------------------------------------------------------- */
 .form-def-row {
   display: flex;
   margin-bottom: 1rem;
@@ -19,6 +32,12 @@
       flex-basis: 5rem;
       max-width: 12rem;
       margin-left: 1rem;
+      -webkit-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
+      -khtml-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
+      -moz-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
+      -ms-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
+      -o-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
+      box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#848484+0,000000+65,ffffff+100&amp;0+0,0.1+47,0.25+66,0.25+66,0.1+100 */
       background: -moz-linear-gradient(top, rgba(194, 194, 194, 0.01) 0%, rgba(36, 50, 24, 0.05) 15%, rgba(36, 50, 24, 0.1) 40%, rgba(194, 194, 194, 0) 41%, rgba(36, 50, 24, 0.05) 75%, rgba(36, 50, 24, 0.2) 100%);
       /* FF3.6-15 */

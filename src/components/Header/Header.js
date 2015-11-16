@@ -49,12 +49,16 @@ class Header extends Component {
         return (
             <div className="Header">
                 <div className="Header-container">
-                    <a className="Header-brand" href="/" onClick={Link.handleClick}>
-                        <img className="Header-brandImg" src={require('./logo-small.png')} width="38" height="38"
-                             alt="React"/>
-                        <span className="Header-brandTxt">Reactor </span>
-                    </a>
-                    <Navigation className="Header-nav"/>
+                    <div className="Header-container__item">
+                        <a className="Header-brand" href="/" onClick={Link.handleClick}>
+                            <img className="Header-brandImg" src={require('./logo-small.png')} width="38" height="38"
+                                 alt="React"/>
+                            <span className="Header-brandTxt">Reactor </span>
+                        </a>
+                    </div>
+                    <div className="Header-container__item Header-container__item--nav">
+                        <Navigation className="Header-nav"/>
+                    </div>
                 </div>
                 <p className="user-state">
                     <small>(userState = {this.state.userState} )</small>

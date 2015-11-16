@@ -16,6 +16,7 @@ const USER_REG_INVALID = 'USER_REG_INVALID';// feedback from server
 
 const USER_RESET_ANON = 'USER_RESET_ANON';
 const OVERLAY = 'OVERLAY';
+const RESIZE = 'RESIZE';
 
 /**
  * State Names
@@ -86,7 +87,9 @@ const regBad = (reason = false) => ({type: USER_REG_INVALID});
  * call this action to show, change or hide the overlay that blocks pending action.
  * @param olState
  */
-const overlay = (olState) => ({type: OVERLAY, overlay: olState})
+const overlay = (olState) => ({type: OVERLAY, overlay: olState});
+
+const resize = (width, height) => ({type: RESIZE, width: width, height: height});
 
 export {
     logIn,
@@ -95,6 +98,7 @@ export {
     loginBad,
     resetAnon,
     alreadyLoggedIn,
+    resize,
 
     reg,
     regGood,
@@ -114,6 +118,7 @@ export {
     USER_REG_INVALID,
 
     OVERLAY,
+    RESIZE,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,

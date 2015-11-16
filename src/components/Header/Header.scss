@@ -1,0 +1,68 @@
+$headerColor: cyan;
+
+:root {
+    --brand-color: #61dafb;
+}
+
+.Header {
+    background: #373277;
+    color: #fff;
+}
+
+.Header-container {
+    width: 100%;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Header-container__item {
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+.Header-container__item--nav {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+.Header-brand {
+    color: $headerColor;
+    text-decoration: none;
+    font-size: 1.75em; /* ~28px */
+    display: flex;
+    white-space: nowrap;
+}
+
+.Header-brandTxt {
+    margin-left: 10px;
+    display: block;
+}
+
+.Header-nav {
+    float: right;
+    margin-top: 6px;
+}
+
+.Header-banner {
+    text-align: center;
+}
+
+.Header-bannerTitle {
+    margin: 0;
+    padding: 10px;
+    font-weight: normal;
+    font-size: 4em;
+    line-height: 1em;
+}
+
+.Header-bannerDesc {
+    padding: 0;
+    color: rgba(255, 255, 255, .5);
+    font-size: 1.25em;
+    margin: 0;
+}
+
+.user-state {
+    text-align: center;
+    color: grey;
+}

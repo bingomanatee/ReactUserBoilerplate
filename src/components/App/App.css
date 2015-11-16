@@ -262,4 +262,22 @@ h1 {
   background-color: rgba(0, 0, 0, 0.5);
   /*dim the background*/ }
 
+/* ********** OVERALL PAGE FRAME ********** */
+html, body, #app, #app-inner {
+  height: 100%;
+  overflow: hidden; }
+
+#app-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; }
+  #app-inner > * {
+    flex-grow: 0;
+    flex-shrink: 0; }
+  #app-inner #main {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
+    overflow-x: hidden; }
+
 /*# sourceMappingURL=App.css.map */

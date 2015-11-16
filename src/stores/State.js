@@ -11,6 +11,7 @@ import {
     USER_REG_INVALID,
 
     OVERLAY,
+    RESIZE,
 
     USER_STATE_ANON,
     USER_STATE_LOGIN_SUBMITTED,
@@ -33,6 +34,10 @@ const state = (pState, action) => {
     let update = {};
 
     switch (action.type) {
+
+        case RESIZE: {
+            update = {width: action.width, height: action.height};
+        }
 
         case OVERLAY:
             // note - an empty object will hide the overlay
