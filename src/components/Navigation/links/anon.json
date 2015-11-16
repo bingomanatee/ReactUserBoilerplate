@@ -1,0 +1,23 @@
+{
+    "links": [
+        {
+            "href": "/about",
+            "label": "about"
+        },
+        {
+            "href": "/contact",
+            "label": "contact"
+        },
+        {
+            "spacer": true
+        },
+        {
+            "href": "/login",
+            "label": "login"
+        },
+        {
+            "href": "/register",
+            "label": "register"
+        }
+    ]
+}

@@ -12,6 +12,7 @@ import {
     USER_STATE_VALIDATED,
     USER_STATE_LOGIN_REJECTED
 } from './../actions/Actions';
+import User from './../utils/User';
 
 const initialState = {
     user: null,
@@ -31,7 +32,7 @@ const state = (pState, action) => {
             break;
 
         case USER_LOGGED_IN:
-            update = {user: action.user, userState: USER_LOGGED_IN};
+            update = {user: action.user, userState: USER_STATE_VALIDATED};
             break;
 
         case USER_LOGIN:
@@ -66,7 +67,14 @@ const state = (pState, action) => {
             throw new Error('cannot recognize action ', action);
     }
 
-    return Object.assign({}, pState || initialState, update);
+    var newState = Object.assign({lan: 'en'}, pState || initialState, update);
+    if (newState.user){
+        if (!(newState.user instanceof User)){
+            newState.user = new User(newState.user);
+        }
+    }
+
+    return newState;
 };
 
 export default state;

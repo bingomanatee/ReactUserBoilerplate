@@ -1,5 +1,5 @@
 var languages = ['en', 'lv'];
-var components = ['LoginPage', 'RegisterPage', 'StringsTest'];
+var components = ['LoginPage', 'RegisterPage', 'StringsTest', 'Navigation'];
 const _ = require('lodash');
 const translations = {};
 for (let lang of languages) {
@@ -27,7 +27,7 @@ for (let lang of languages) {
  *
  * @returns {Object} a map of key/value strings.
  */
-const strings = (comp, lang = null, seed = null) => {
+const strings = (comp, lang = 'en', seed = null) => {
     var terms;
     if (seed) {
         translations[`${comp}.${lang}`] = seed;
@@ -36,6 +36,12 @@ const strings = (comp, lang = null, seed = null) => {
         terms = translations[`${comp}.${lang || 'en'}`];
     }
     const translate = (term, swap) => {
+        if (!term) {
+            return '';
+        }
+        if (!terms) {
+            return `(:: ${term} ::}`;
+        }
         var out = terms[term];
         if (!out) {
             return `(: ${term} :)`;
