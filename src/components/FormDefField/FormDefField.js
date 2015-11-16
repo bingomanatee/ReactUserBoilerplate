@@ -62,7 +62,7 @@ class FormDefField extends Component {
                                     valueLink={valueLink}/>);
             }
 
-            const errors = def.errors ? ( <FormFeedback message={def.errors} isError={1} />) : '';
+            const errors = def.errors ? ( <FormFeedback text={def.errors} isError={1} />) : '';
 
             return (<div className="form-def-row">
                 <label>{def.label}</label>

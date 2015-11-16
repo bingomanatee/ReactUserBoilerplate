@@ -4,6 +4,7 @@
     "loggingInText": "Please wait...",
     "loggingInTitle": "Logging In",
     "loggedInTitle": "Logged In",
+    "required": "required",
     "___email____" : "emai strings",
     "email": "E-mail",
     "emailError": "Please enter a well formed email address",
