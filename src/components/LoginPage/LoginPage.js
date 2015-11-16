@@ -156,42 +156,39 @@ class LoginPage extends Component {
         store.dispatch(logIn(data));
     }
 
+    _makeFieldDef(name, type, validators) {
+        const value = this.state[name];
+        const def = new FieldDef(name, value, type, {
+            s: this.s,
+            label: `s.${name}`,
+            placeholder: `s.${name}Placeholder`,
+            validators: validators
+        });
+
+        def.watch(value => {
+            let newState = {};
+            newState[name] = value;
+            this.setState(newState);
+        });
+
+        this.fieldDefs.set(name, def);
+    }
+
     _makeFieldDefs() {
         this.fieldDefs.forEach(def => def.destroy());
         this.fieldDefs.clear();
 
         if (ASK_EMAIL) {
-            const emailDef = new FieldDef('email', this.state.email, 'text', {
-                s: this.s,
-                label: 's.email',
-                placeholder: 's.emailPlaceholder',
-                validators: [
-                    [{type: 'email'}, 's.emailError']
-                ]
-            });
-
-            emailDef.watch(email => this.setState({email}));
-            this.fieldDefs.set('email', emailDef);
+            this._makeFieldDef('email', 'text', [
+                [{type: 'email'}, 's.emailError']
+            ]);
         }
 
         if (ASK_USERNAME) {
-            const usernameDef = new FieldDef('username', this.state.username, 'text', {
-                s: this.s,
-                label: 's.username',
-                placeholder: 's.usernamePlaceholder',
-                validators: []
-            });
-            usernameDef.watch(username => this.setState({username}));
-            this.fieldDefs.set('username', usernameDef);
+            this._makeFieldDef('username', 'text', []);
         }
 
-        const passwordDef = new FieldDef('password', this.state.password, 'password', {
-            s: this.s,
-            label: 's.password',
-            placeholder: 's.passwordPlaceholder'
-        });
-        passwordDef.watch(password => this.setState({password}));
-        this.fieldDefs.set('password', passwordDef);
+        this._makeFieldDef('password', 'password', []);
 
         this.fieldDefs.set('loggedInTitle', new FieldDef('loggedInTitle', 's.loggedInTitle', 'title', {s: this.s}));
     }
