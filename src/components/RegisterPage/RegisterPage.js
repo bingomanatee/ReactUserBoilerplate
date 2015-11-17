@@ -61,7 +61,7 @@ class RegisterPage extends Component {
         };
 
         this.fieldDefs = new Map();
-        this.s = strings('RegisterPage');
+        this.s = strings('RegisterPage', storeState.lang);
 
         this._makeFieldDefs();
 

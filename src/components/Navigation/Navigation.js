@@ -30,7 +30,7 @@ class Navigation extends Component {
         super();
 
         var storeState = store.getState();
-        this.s = strings('Navigation', storeState.lang || 'en');
+        this.s = strings('Navigation', storeState.lang);
 
         this.state = {
             userState: storeState.userState || USER_STATE_ANON,

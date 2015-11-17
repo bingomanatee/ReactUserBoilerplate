@@ -1,15 +1,20 @@
 ---
-title: React.js Starter Kit
+title: React User Boilerplage
 component: ContentPage
 ---
+h1 Welcome to the React User Boilerplate
+
+p This opinionated expansion of the React Starter Kit has an opinionated, flexable user
+  registration system to better jumpstart and demonstrate React.
+
 div.row
   div.col-sm-4
     h3 Runtime Components
     dl
       dt <a href="https://facebook.github.io/react/">React</a>
       dd A JavaScript library for building user interfaces, developed by Facebook
-      dt <a href="http://facebook.github.io/flux/">Flux</a>
-      dd Application architecture for building user interfaces
+      dt <a href="http://redux.js.org/">Redux</a>
+      dd an advanced Flux implementation for state management
   div.col-sm-4
     h3 Development Tools
     dl
@@ -19,4 +24,37 @@ div.row
       dd A lightweight HTTP server for development
   div.col-sm-4
     h3 Fork me on GitHub
-    p <a href="https://github.com/kriasoft/react-starter-kit">github.com/kriasoft/react-starter-kit</a>
+    p <a href="https://github.com/bingomanatee/ReactUserBoilerplate</a>
+
+p This is an estension of the <a href="https://github.com/kriasoft/react-starter-kit">React Starter Kit</a> that is
+  a deeper step into app development.
+
+h2 Features
+
+ul
+    li A more mobile-friendly flexbox based outer layout frame
+
+    li The store/dispatcher system is strongly integrated and an extensible user/login system allows for interaction between state and user login status.
+
+    li Fully integrated with i18n files to provide an up-front translation system. This allows not only
+       easily translatable sites, but easily customizable terms in a file-based model.
+
+    li A fairly deep form abstractionn featuring validation and feedback messages is provided for quick form development and adaption.
+
+    li Roboto is embedded locally for faster fonting :D
+
+    li A feeble stab at TDD; really tried but it got tedious. Jade feels not that solid.
+
+h2 Technologies
+
+p This site uses most of the technologies from React Starter Kit: React, webkit, etc.
+
+p The biggest diference is that it uses Redux rather than Flux, for a more developed store-based expereience.
+
+p SCSS is used for most of the stylesheets
+
+p This site uses Firebase as the backend for user storage, as Firebase provides quick ramp-up for social login
+  as well as a localized store for simple signup. However the auth system is "pluggable" and the Firebase code can
+  easily be swapped out for whatever backend you prefer to use.
+
+p The backend in this system, as with React Starter Kit, is Express.

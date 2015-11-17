@@ -26,6 +26,7 @@ import User from './../utils/User';
 
 const initialState = {
     user: null,
+    lang: 'en',
     userState: USER_STATE_ANON
 };
 

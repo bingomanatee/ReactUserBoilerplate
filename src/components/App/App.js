@@ -32,16 +32,16 @@ class App extends Component {
                 console.log('alreadyLoggedIn: ', alreadyLoggedIn(user));
                 setTimeout(() => store.dispatch(alreadyLoggedIn(window.user)), 1);
             }
-            // setTimeout(() => this._updateSize(this.props), 1);
         }
     }
 
     componentDidMount() {
         this._unstore = store.subscribe(this._storeChange.bind(this));
+       // this._updateSize(this.props);
     }
 
     componentWillUpdate(props, state) {
-        //  this._updateSize(props);
+       // this._updateSize(props);
     }
 
     onWillUnmount() {

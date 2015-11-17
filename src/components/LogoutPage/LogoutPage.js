@@ -9,18 +9,20 @@ class LogoutPage extends Component {
 
     constructor() {
         super();
-        this.s = strings('LogoutPage', 'en');
+        this.s = strings('LogoutPage', store.getState().lang);
 
         const done = () => {
             store.dispatch(overlay({}));
             document.location = '/';
         }
-        setTimeout(() => {
-            store.dispatch(logOff());
-            store.dispatch(overlay({title: this.s('title'), text: this.s('text'), show: true}))
-            html.get('/api/users/logout')
-                .then(done, done);
-        });
+    }
+
+    componentDidMount(){
+
+        store.dispatch(logOff());
+        store.dispatch(overlay({title: this.s('title'), text: this.s('text'), show: true}))
+        html.get('/api/users/logout')
+            .then(done, done);
     }
 
     render() {

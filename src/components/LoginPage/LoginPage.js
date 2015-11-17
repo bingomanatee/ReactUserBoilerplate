@@ -70,7 +70,7 @@ class LoginPage extends Component {
         };
 
         this.fieldDefs = new Map();
-        this.s = strings('LoginPage');
+        this.s = strings('LoginPage', storeState.lang);
 
         this._makeFieldDefs();
 

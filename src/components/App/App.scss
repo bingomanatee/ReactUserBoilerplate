@@ -180,6 +180,12 @@ h1 {
     line-height: 3rem;
 }
 
+h2 {
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
 /*
  * Browser upgrade prompt
  * ========================================================================== */
@@ -345,8 +351,7 @@ html, body, #app, #app-inner {
         flex-shrink: 0;
     }
     #main {
-        flex-grow: 1;
-        flex-shrink: 1;
+        flex: auto;
         overflow-y: auto;
         overflow-x: hidden;
     }
