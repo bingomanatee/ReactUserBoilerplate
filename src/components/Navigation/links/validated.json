@@ -1,18 +1,18 @@
 {
     "links": [
         {
-            "href": "/about",
+            "href": "/about/",
             "label": "about"
         },
         {
-            "href": "/contact",
+            "href": "/contact/",
             "label": "contact"
         },
         {
             "spacer": true
         },
         {
-            "href": "/logout",
+            "href": "/logout/",
             "label": "logout"
         }
     ]

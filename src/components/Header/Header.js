@@ -39,13 +39,34 @@ class Header extends Component {
 
     _onStoreChange() {
         const storeState = store.getState();
+
         this.setState({
-            userState: storeState.userState
+            userState: storeState.userState,
+            user: storeState.user
         });
+
     }
 
     render() {
-        console.log('state: ', this.state);
+        console.log('Header: state: ', this.state);
+
+        var userIcon = '';
+
+        if (this.state.user && this.state.user.image) {
+            var iconStyle = {
+                backgroundImage: `url(${this.state.user.image})`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                width: '3.5rem',
+                height: '3.5rem'
+            };
+
+            userIcon = (<div className="Header-container__item">
+                <div style={iconStyle}></div>
+            </div>);
+        } else {
+            console.log('no image in ', this.state.user);
+        }
         return (
             <div className="Header">
                 <div className="Header-container">
@@ -59,6 +80,7 @@ class Header extends Component {
                     <div className="Header-container__item Header-container__item--nav">
                         <Navigation className="Header-nav"/>
                     </div>
+                    {userIcon}
                 </div>
                 <p className="user-state">
                     <small>(userState = {this.state.userState} )</small>

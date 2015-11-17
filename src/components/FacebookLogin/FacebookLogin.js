@@ -1,0 +1,35 @@
+import React, { PropTypes, Component } from 'react';
+import Link from '../Link';
+import { USER_STATE_ANON, USER_STATE_VALIDATED } from '../../actions/Actions';
+import strings from '../../utils/Strings';
+import store from '../../stores/Store';
+import html from '../../core/HttpClient';
+import Firebase from 'firebase';
+import { alreadyLoggedIn } from '../../actions/Actions';
+
+class FacebookLogin extends Component {
+    auth (event){
+        event.stopPropagation();
+        const ref = new Firebase("https://eatyourfriends2.firebaseio.com");
+        ref.authWithOAuthPopup("facebook", (error, authData) => {
+            if (error) {
+                console.log("Login Failed!", error);
+            } else {
+                console.log("Authenticated successfully with payload:", authData);
+                html.post('/api/users/facebook', authData)
+                .then(result => {
+                    console.log('result from auth: ', result);
+                    store.dispatch(alreadyLoggedIn(authData));
+                    //@TODO: set logged in to state
+                }, (err) => console.log('error logging into facebook:', err));
+            }
+        });
+        return false;
+    }
+
+    render () {
+        return (<a className="Navigation-link" type="button" onClick={this.auth}>{this.props.info.label}</a>);
+    }
+}
+
+export default FacebookLogin;

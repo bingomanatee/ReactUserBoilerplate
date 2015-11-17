@@ -1,5 +1,3 @@
-/*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
-
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import styles from './Navigation.css';
@@ -8,12 +6,22 @@ import Link from '../Link';
 import { USER_STATE_ANON, USER_STATE_VALIDATED } from '../../actions/Actions';
 import strings from '../../utils/Strings';
 import store from '../../stores/Store';
+import FacebookLogin from '../FacebookLogin';
 
 const USER_STATE_ANON_LINKS = require('./links/anon.json');
 const USER_STATE_VALIDATED_LINKS = require('./links/validated.json');
 
-const linkToTag = (info, i) => info.spacer ? (<span key={i} className="Navigation-spacer"> | </span>) : (
-    <a key={i} className="Navigation-link" href={info.href} onClick={Link.handleClick}>{info.label}</a>);
+const linkToTag = (info, i) => {
+    if (info.spacer) {
+        return (<span key={i} className="Navigation-spacer"> | </span>)
+    } else if (info.href === '^facebook') {
+        return <FacebookLogin key={i} info={info}/>
+    }
+    else {
+        return (<a key={i} className="Navigation-link" href={info.href} onClick={Link.handleClick}>{info.label}</a>);
+    }
+
+}
 
 @withStyles(styles)
 class Navigation extends Component {

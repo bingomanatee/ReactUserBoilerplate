@@ -33,3 +33,9 @@
 .Navigation-spacer {
   color: rgba(255, 255, 255, .3);
 }
+
+button.Navigation-link {
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: none;
+}

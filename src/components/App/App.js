@@ -20,26 +20,25 @@ const MIN_HEIGHT_FOR_FOOTER = 800;
 
 const broadcastSize = _.debounce((width, height) => store.dispatch(resize(width, height)), BROADCAST_SIZE_DELAY);
 
-@withViewport
 @withContext
 @withStyles(styles)
 class App extends Component {
 
     constructor() {
         super();
-        this._unstore = store.subscribe(this._storeChange.bind(this));
         this.state = {overlay: {}};
         if ((typeof window !== 'undefined')) {
             if (window.user) {
                 console.log('alreadyLoggedIn: ', alreadyLoggedIn(user));
-                store.dispatch(alreadyLoggedIn(window.user));
+                setTimeout(() => store.dispatch(alreadyLoggedIn(window.user)), 1);
             }
-            this._updateSize(this.props);
+            // setTimeout(() => this._updateSize(this.props), 1);
         }
+        setTimeout(() => this._unstore = store.subscribe(this._storeChange.bind(this)), 1);
     }
 
     componentWillUpdate(props, state) {
-        this._updateSize(props);
+        //  this._updateSize(props);
     }
 
     onWillUnmount() {
@@ -51,8 +50,11 @@ class App extends Component {
             console.log('########## SIZE props: ', props.width, props.height);
         } else {
             console.log('############# SIZE no props');
+            return;
         }
-        if ((typeof window !== 'undefined') && props && ((props.viewport.width != lastWidth) || (props.viewport.height != lastHeight))) {
+        if (isNaN(props.width)) {
+            return;
+        } else if ((typeof window !== 'undefined') && props && ((props.viewport.width != lastWidth) || (props.viewport.height != lastHeight))) {
             console.log('########## SIZE props: ', props.viewport.width, props.viewport.height);
             const wasTall = this._isTall();
             lastWidth = props.viewport.width;
@@ -64,22 +66,23 @@ class App extends Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return this._isTall() !== this._isTall(nextProps.viewport.height);
-    }
+    /*   shouldComponentUpdate(nextProps, nextState) {
+     return this._isTall() !== this._isTall(nextProps.viewport.height);
+     }*/
 
     _isTall(height) {
-        return (height || lastHeight) > MIN_HEIGHT_FOR_FOOTER;
+        return true; // (height || lastHeight) > MIN_HEIGHT_FOR_FOOTER;
     }
 
-    static propTypes = {
-        children: PropTypes.element.isRequired,
-        error: PropTypes.object,
-        viewport: PropTypes.shape({
-            width: PropTypes.number.isRequired,
-            height: PropTypes.number.isRequired,
-        }).isRequired
-    };
+    /*
+     static propTypes = {
+     children: PropTypes.element.isRequired,
+     error: PropTypes.object,
+     viewport: PropTypes.shape({
+     width: PropTypes.number.isRequired,
+     height: PropTypes.number.isRequired,
+     }).isRequired
+     }; */
 
     _storeChange() {
         /**
@@ -88,13 +91,13 @@ class App extends Component {
          */
         var state = store.getState();
         var overlay = state.overlay || {};
-        this.setState({overlay: overlay})
+        setTimeout(() => this.setState({overlay: overlay}), 1);
     }
 
     render() {
-        var modal = this.state && this.state.overlay && this.state.overlay.show ? (<Modal
+        var modal = this.state && this.state.overlay ? (<Modal
             backdropClassName="overlay-background"
-            show={true}
+            show={this.state.overlay.show}
         >
             <div className="overlay-dialog">
                 <div className="overlay-dialog__inner">
@@ -105,7 +108,6 @@ class App extends Component {
         </Modal>) : '';
 
         const feedback = this._isTall() ? <Feedback /> : '';
-        console.log('props:', this.props);
 
         return !this.props.error ? (
             <div id="app-inner">

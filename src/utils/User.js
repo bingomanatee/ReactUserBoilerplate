@@ -1,5 +1,6 @@
 const PROVIDER_UNKNOWN = 'unknown';
 const PROVIDER_PASSWORD = 'password';
+const PROVIDER_FACEBOOK = 'facebook';
 
 const emailToName = email => email.replace(/\.[\w]{2,4}$/, '').replace('@', ' from ');
 
@@ -9,6 +10,8 @@ class User {
         this.provider = PROVIDER_UNKNOWN;
         this.image = null;
         this.email = null;
+        this.facebookToken = null;
+        this.facebookAccessToken = null;
 
         if (data) {
             if (data.uuid) {
@@ -26,13 +29,35 @@ class User {
     }
 
     setIdentity(identity) {
-        if (identity.email) {
-            this.email = identity.email;
+        switch (this.provider) {
+            case PROVIDER_PASSWORD:
+                if (identity.email) {
+                    this.email = identity.email;
+                }
+
+                if (identity.profileImageURL) {
+                    this.image = identity.profileImageURL;
+                }
+                break;
+
+            case PROVIDER_FACEBOOK:
+
+                if (identity.profileImageURL) {
+                    this.image = identity.profileImageURL
+                }
+
+                if (identity.displayName) {
+                    this.name = identity.displayName;
+                }
+
+                if (identity.accessToken){
+                    this.facebookAccessToken = identity.accessToken;
+                }
+                if (identity.token) {
+                    this.facebookToken = identity.token;
+                }
         }
 
-        if (identity.profileImageURL) {
-            this.image = identity.profileImageURL;
-        }
     }
 
     set name(pName) {
@@ -70,6 +95,10 @@ class User {
                 break;
 
             case PROVIDER_PASSWORD:
+                this._provider = pProv;
+                break;
+
+            case PROVIDER_FACEBOOK:
                 this._provider = pProv;
                 break;
 
