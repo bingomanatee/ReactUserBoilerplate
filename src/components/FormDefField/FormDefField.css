@@ -24,7 +24,8 @@
       outline: 0;
       -webkit-appearance: none;
       border-radius: 0.75rem;
-      border: 1px solid #988b00;
+      border: none;
+      border-top: 1px solid rgba(0, 255, 255, 0.5);
       font-weight: bold;
       font-size: 0.8rem;
       padding: 0.25rem 0.75rem;
@@ -32,12 +33,9 @@
       flex-basis: 5rem;
       max-width: 12rem;
       margin-left: 1rem;
-      -webkit-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
-      -khtml-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
-      -moz-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
-      -ms-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
-      -o-box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
-      box-shadow: inset 5px rgba(0, 0, 0, 0.2) 2px 5px rgba(0, 0, 0, 0.4);
+      -webkit-box-shadow: inset 0 0 0.25rem 0.125rem rgba(0, 0, 0, 0.25);
+      -moz-box-shadow: inset 0 0 0.25rem 0.125rem rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0 0 0.25rem 0.125rem rgba(0, 0, 0, 0.25);
       /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#848484+0,000000+65,ffffff+100&amp;0+0,0.1+47,0.25+66,0.25+66,0.1+100 */
       background: -moz-linear-gradient(top, rgba(194, 194, 194, 0.01) 0%, rgba(36, 50, 24, 0.05) 15%, rgba(36, 50, 24, 0.1) 40%, rgba(194, 194, 194, 0) 41%, rgba(36, 50, 24, 0.05) 75%, rgba(36, 50, 24, 0.2) 100%);
       /* FF3.6-15 */
@@ -51,22 +49,18 @@
       .form-def-row.form-def-row-button-row button .last {
         margin-left: 0; }
       .form-def-row.form-def-row-button-row button.secondary {
-        background-color: #9acce6;
-        border: 1px dotted #1a4d67; }
+        background-color: #9acce6; }
         .form-def-row.form-def-row-button-row button.secondary:hover {
           background-color: #71b7dc;
           border: 1px solid #1a4d67; }
       .form-def-row.form-def-row-button-row button:disabled {
         background-color: #ae97a6;
-        color: white;
-        border: 1px dotted gray; }
+        color: white; }
         .form-def-row.form-def-row-button-row button:disabled:hover {
           background-color: #ae97a6;
-          color: white;
-          border: 1px solid gray; }
+          color: white; }
       .form-def-row.form-def-row-button-row button:hover {
-        background-color: #fff265;
-        border: 1px solid #655c00; }
+        background-color: #fff265; }
   .form-def-row label {
     flex-basis: 10rem;
     flex-grow: 1;
