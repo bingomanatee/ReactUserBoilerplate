@@ -34,6 +34,9 @@ class Header extends Component {
         this.state = {
             userState: userState
         };
+    }
+
+    componentDidMount(){
         this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
@@ -48,8 +51,6 @@ class Header extends Component {
     }
 
     render() {
-        console.log('Header: state: ', this.state);
-
         var userIcon = '';
 
         if (this.state.user && this.state.user.image) {

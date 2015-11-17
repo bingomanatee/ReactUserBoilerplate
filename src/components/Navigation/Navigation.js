@@ -37,11 +37,14 @@ class Navigation extends Component {
             user: storeState.user || null
         };
 
-        this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
     componentWillUnmount() {
         this._unsubStore();
+    }
+
+    componentDidMount(){
+        this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
     _onStoreChange() {
@@ -58,8 +61,6 @@ class Navigation extends Component {
 
     render() {
         var linkData = {links: []}
-
-        console.log('######### userState:', this.state.userState);
 
         switch (this.state.userState) {
             case USER_STATE_ANON:

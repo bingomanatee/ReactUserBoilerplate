@@ -65,6 +65,9 @@ class RegisterPage extends Component {
 
         this._makeFieldDefs();
 
+    }
+
+    componentDidMount(){
         this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 

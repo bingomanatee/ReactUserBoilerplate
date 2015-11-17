@@ -34,7 +34,10 @@ class App extends Component {
             }
             // setTimeout(() => this._updateSize(this.props), 1);
         }
-        setTimeout(() => this._unstore = store.subscribe(this._storeChange.bind(this)), 1);
+    }
+
+    componentDidMount() {
+        this._unstore = store.subscribe(this._storeChange.bind(this));
     }
 
     componentWillUpdate(props, state) {
