@@ -24,7 +24,7 @@ const linkToTag = (info, i, user) => {
         return <UserLink key={i * 20} user={user} label={info.label} />
     }
     else {
-        return (<div key={i} className="Navigation-link" href={info.href} user={user} onClick={Link.handleClick}>{info.label}</div>);
+        return (<a key={i} className="Navigation-link" href={info.href} user={user} onClick={Link.handleClick}>{info.label}</a>);
     }
 
 }
