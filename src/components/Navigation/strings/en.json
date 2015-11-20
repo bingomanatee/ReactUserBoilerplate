@@ -4,5 +4,6 @@
     "logout": "Sign Out",
     "contact": "Contact Us",
     "register": "Register",
-    "logInWithFacebook": "Log In With Facebook"
+    "logInWithFacebook": "Log In With Facebook",
+    "logInWithTwitter": "Log In With Twitter"
 }

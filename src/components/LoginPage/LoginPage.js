@@ -5,8 +5,14 @@ import styles from './LoginPage.css';
 import withStyles from '../../decorators/withStyles';
 import strings from './../../utils/Strings';
 import FormDefField from '../FormDefField';
-import {FieldDef } from './../../utils/FieldDef';
-import {MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME, ASK_USERNAME } from '../../config';
+import { FieldDef } from './../../utils/FieldDef';
+import {
+    MIN_USERNAME_LENGTH,
+    MAX_USERNAME_LENGTH,
+    MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH,
+    REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME,
+    ASK_USERNAME
+} from '../../config';
 import  {
     logIn,
     logOff,

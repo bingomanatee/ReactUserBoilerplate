@@ -1,41 +1,59 @@
-.Navigation-links{
-    display: flex;
-}
+.Navigation-links {
+  display: flex; }
+
 .Navigation-link {
   display: inline-block;
-  padding: 3px 8px;
+  padding: 4px 8px;
   text-decoration: none;
-  font-size: 1.125em; /* ~18px */
-}
+  font-size: 1.125em;
+  /* ~18px */ }
+
+.Navigation-link__small {
+  padding: 0;
+  padding-top: 4px;
+  font-size: 0.8rem;
+  display: block;
+  text-align: right; }
 
 .Navigation-link,
 .Navigation-link:active,
 .Navigation-link:visited {
-  color: rgba(255, 255, 255, .6);
-}
+  color: rgba(255, 255, 255, 0.6); }
 
 .Navigation-link:hover {
-  color: rgba(255, 255, 255, 1);
-}
+  color: white; }
 
 .Navigation-link--highlight {
   margin-right: 8px;
   margin-left: 8px;
   border-radius: 3px;
-  background: rgba(0, 0, 0, .15);
-  color: #fff;
-}
+  background: rgba(0, 0, 0, 0.15);
+  color: #fff; }
 
 .Navigation-link--highlight:hover {
-  background: rgba(0, 0, 0, .3);
-}
+  background: rgba(0, 0, 0, 0.3); }
 
 .Navigation-spacer {
-  color: rgba(255, 255, 255, .3);
-}
+  color: rgba(255, 255, 255, 0.3); }
 
 button.Navigation-link {
-    -webkit-appearance: none;
-    background-color: transparent;
-    border: none;
-}
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none; }
+
+.User-link {
+  display: flex; }
+  .User-link div {
+    font-size: 0.8rem;
+    padding: 3px 8px; }
+  .User-link h3, .User-link h4 {
+    font-size: 0.8rem;
+    color: #71b7dc;
+    line-height: 25px;
+    font-weight: 300;
+    text-align: right;
+    white-space: nowrap; }
+  .User-link h4 {
+    line-height: 100%; }
+
+/*# sourceMappingURL=Navigation.css.map */

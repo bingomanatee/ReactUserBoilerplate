@@ -30,8 +30,6 @@ require('./api/firebaseUsers')(server);
 server.get('*', async (req, res, next) => {
     try {
         let statusCode = 200;
-        let user = req.session && req.session.user ? req.session.user : null;
-        console.log('user: =============== ', user);
         const data = {title: '', description: '', css: '', body: ''};
         const css = [];
         const context = {
@@ -41,17 +39,8 @@ server.get('*', async (req, res, next) => {
             onPageNotFound: () => statusCode = 404,
         };
 
-        let userJS = '';
-
-        if (user){
-            userJS = `<script language="javascript">
-            /${'* --------------- INJECTING USER ----------------- *'}/
-                    window.user = ${JSON.stringify(user)};
-                </script>`;
-        }
-
         await Router.dispatch({path: req.path, context}, (state, component) => {
-            data.body = userJS + ReactDOM.renderToString(component);
+      data.body = ReactDOM.renderToString(component);
             data.css = css.join('');
         });
 

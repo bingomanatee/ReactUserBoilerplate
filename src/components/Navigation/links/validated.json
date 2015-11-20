@@ -12,7 +12,7 @@
             "spacer": true
         },
         {
-            "href": "/logout/",
+            "href": "^user",
             "label": "logout"
         }
     ]

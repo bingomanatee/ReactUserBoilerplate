@@ -60,6 +60,7 @@ const state = (pState, action) => {
             break;
 
         case USER_LOGOFF:
+            console.log('------ logging off------- ')
             update = {user: null, userState: USER_STATE_ANON};
             break;
 

@@ -11,17 +11,18 @@ class LogoutPage extends Component {
         super();
         this.s = strings('LogoutPage', store.getState().lang);
 
-        const done = () => {
-            store.dispatch(overlay({}));
-            document.location = '/';
-        }
     }
 
     componentDidMount(){
 
+        const done = (result) => {
+            console.log('result of logging off: ', result);
+            store.dispatch(overlay({}));
+            document.location = '/';
+        }
         store.dispatch(logOff());
-        store.dispatch(overlay({title: this.s('title'), text: this.s('text'), show: true}))
-        html.get('/api/users/logout')
+        store.dispatch(overlay({title: this.s('title'), text: this.s('text'), show: true}));
+        html.get('/api/users/logout/')
             .then(done, done);
     }
 

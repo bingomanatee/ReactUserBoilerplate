@@ -22,83 +22,78 @@ module.exports = (app) => {
     router.get('/logout', (req, res) => {
         console.log('logging out!!!!');
         try {
-            try {
-                delete req.session.user;
-            } catch (err) {
-                console.log('error in logout: ', err);
-                req.session.user = null;
-            }
-            console.log('POST LOGOUT session: ', req.session);
-            res.redirect(200, '/');
+          req.session.destroy(err => err ? res.status(400).send(err) : res.send({loggedOff: true}));
         } catch (err2) {
             console.log('err 2: ', err2);
+            rs.status(400).send(err);
         }
-});
+    });
 
-router.post('/facebook', (req, res) => {
-    console.log('req.body: ', req.body);
-    try {
-        root.child('users/' + req.body.uid).set(req.body);
-        // a little fast and loose -- writing without waiting for validation
-        req.session.user = req.body;
-        res.send({saved: req.body.uid});
-    } catch (err){
-        console.log('error in send: ', err);
-        res.status(400).send(err);
-    }
-});
+    router.get('/', (req, res) => res.send(req.session.user ? {user: req.session.user} : {user: false}));
 
-router.post('/reg', (req, res) => {
-    var email = req.body.email;
-    var password = req.body.password;
-    var bio = req.body.bio;
+    router.post('/facebook', (req, res) => {
+        console.log('req.body: ', req.body);
+        try {
+            root.child('users/' + req.body.uid).set(req.body);
+            // a little fast and loose -- writing without waiting for validation
+            req.session.user = req.body;
+            res.send({saved: req.body.uid});
+        } catch (err) {
+            console.log('error in send: ', err);
+            res.status(400).send(err);
+        }
+    });
 
-    if (!(email && password)) {
-        res.status(400).send({error: 'email and password are required'});
-    } else {
-        root.createUser({
-            email: email,
-            password: password,
-            bio: bio
-        }, function (error, userData) {
-            if (error) {
-                console.log('Error creating user:', error);
-                res.status(400).send(error);
-            } else {
-                console.log('Successfully created user account with uid:', userData.uid);
-                root.child('users/' + userData.uid).set(userData); // copy to app data.
-                res.send(userData);
-            }
-        });
-    }
-});
+    router.post('/reg', (req, res) => {
+        var email = req.body.email;
+        var password = req.body.password;
+        var bio = req.body.bio;
 
-router.post('/auth', (req, res) => {
-    if (!req.body) {
-        console.log('wierd req: ', req);
-    }
-    var email = req.body.email;
-    var password = req.body.password;
+        if (!(email && password)) {
+            res.status(400).send({error: 'email and password are required'});
+        } else {
+            root.createUser({
+                email: email,
+                password: password,
+                bio: bio
+            }, function (error, userData) {
+                if (error) {
+                    console.log('Error creating user:', error);
+                    res.status(400).send(error);
+                } else {
+                    console.log('Successfully created user account with uid:', userData.uid);
+                    root.child('users/' + userData.uid).set(userData); // copy to app data.
+                    res.send(userData);
+                }
+            });
+        }
+    });
 
-    console.log('logging in with ', email, password);
-    if (!(email && password)) {
-        res.status(400).send({error: 'email and password are required'});
-    } else {
-        root.authWithPassword({
-            email: email,
-            password: password
-        }, function (error, user) {
-            if (error) {
-                console.log("Login Failed!", error);
-                res.status(400).send(error);
-            } else {
-                req.session.user = user;
-                res.send(user);
-            }
-        });
-    }
-});
+    router.post('/auth', (req, res) => {
+        if (!req.body) {
+            console.log('wierd req: ', req);
+        }
+        var email = req.body.email;
+        var password = req.body.password;
 
-app.use('/api/users', router);
-}
-;
+        console.log('logging in with ', email, password);
+        if (!(email && password)) {
+            res.status(400).send({error: 'email and password are required'});
+        } else {
+            root.authWithPassword({
+                email: email,
+                password: password
+            }, function (error, user) {
+                if (error) {
+                    console.log("Login Failed!", error);
+                    res.status(400).send(error);
+                } else {
+                    req.session.user = user;
+                    res.send(user);
+                }
+            });
+        }
+    });
+
+    app.use('/api/users', router);
+};

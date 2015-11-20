@@ -1,4 +1,3 @@
-/*! React Starter Kit | MIT License | http://www.reactstarterkit.com/ */
 
 export const MIN_USERNAME_LENGTH = 4;
 export const MAX_USERNAME_LENGTH = 12;

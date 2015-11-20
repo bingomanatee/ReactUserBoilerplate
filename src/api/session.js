@@ -6,7 +6,8 @@ module.exports = (app) => {
     app.use(session({
         store: new FirebaseStore(options),
         secret: options.sessionSecret,
-        resave: true,
+        resave: false,
+        unset: 'destroy',
         saveUninitialized: true
     }));
 };

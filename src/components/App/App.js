@@ -2,7 +2,7 @@
 
 import React, { PropTypes, Component } from 'react';
 import { Modal } from 'react-overlays';
-
+import http from '../../core/HttpClient';
 import styles from './App.css';
 import withContext from '../../decorators/withContext';
 import withStyles from '../../decorators/withStyles';
@@ -27,21 +27,26 @@ class App extends Component {
     constructor() {
         super();
         this.state = {overlay: {}};
-        if ((typeof window !== 'undefined')) {
-            if (window.user) {
-                console.log('alreadyLoggedIn: ', alreadyLoggedIn(user));
-                setTimeout(() => store.dispatch(alreadyLoggedIn(window.user)), 1);
-            }
-        }
     }
 
     componentDidMount() {
         this._unstore = store.subscribe(this._storeChange.bind(this));
-       // this._updateSize(this.props);
+        if ((typeof window !== 'undefined')) {
+            http.get('/api/users/')
+                .then(result => {
+                    console.log('---------------- api users result: ', result);
+                    if (result && result.user) {
+                       store.dispatch(alreadyLoggedIn(result.user));
+                    }
+                }, (err) => {
+                    console.log('user poll error: ', err);
+                });
+        }
+        // this._updateSize(this.props);
     }
 
     componentWillUpdate(props, state) {
-       // this._updateSize(props);
+        // this._updateSize(props);
     }
 
     onWillUnmount() {

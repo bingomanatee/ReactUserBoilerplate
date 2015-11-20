@@ -7,18 +7,24 @@ import { USER_STATE_ANON, USER_STATE_VALIDATED } from '../../actions/Actions';
 import strings from '../../utils/Strings';
 import store from '../../stores/Store';
 import FacebookLogin from '../FacebookLogin';
+import TwitterLogin from '../TwitterLogin';
+import UserLink from '../UserLink';
 
 const USER_STATE_ANON_LINKS = require('./links/anon.json');
 const USER_STATE_VALIDATED_LINKS = require('./links/validated.json');
 
-const linkToTag = (info, i) => {
+const linkToTag = (info, i, user) => {
     if (info.spacer) {
         return (<span key={i} className="Navigation-spacer"> | </span>)
     } else if (info.href === '^facebook') {
         return <FacebookLogin key={i} info={info}/>
+    } else if (info.href === '^twitter') {
+        return <TwitterLogin key={i} info={info} />
+    } else if (info.href=== '^user'){
+        return <UserLink key={i * 20} user={user} label={info.label} />
     }
     else {
-        return (<a key={i} className="Navigation-link" href={info.href} onClick={Link.handleClick}>{info.label}</a>);
+        return (<div key={i} className="Navigation-link" href={info.href} user={user} onClick={Link.handleClick}>{info.label}</div>);
     }
 
 }
@@ -43,7 +49,7 @@ class Navigation extends Component {
         this._unsubStore();
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
@@ -75,6 +81,8 @@ class Navigation extends Component {
                 linkData = {links: []};
         }
 
+        const user = this.state.user;
+
         const labelLink = info => {
             var out = {};
             if (info.label) {
@@ -83,7 +91,7 @@ class Navigation extends Component {
             return out;
         }
 
-        const links = linkData.links.map(info => Object.assign({}, info, labelLink(info))).map(linkToTag);
+        const links = linkData.links.map(info => Object.assign({}, info, labelLink(info))).map((link, i) => linkToTag(link, i, user));
 
         return (
             <div className="Navigation-links" role="navigation">

@@ -22,6 +22,10 @@
         {
             "label": "logInWithFacebook",
             "href": "^facebook"
+        },
+        {
+            "label": "logInWithTwitter",
+            "href": "^twitter"
         }
     ]
 }

@@ -7,11 +7,11 @@ import html from '../../core/HttpClient';
 import Firebase from 'firebase';
 import { alreadyLoggedIn } from '../../actions/Actions';
 
-class FacebookLogin extends Component {
+class TwitterLogin extends Component {
     auth (event){
         event.stopPropagation();
         const ref = new Firebase("https://eatyourfriends2.firebaseio.com");
-        ref.authWithOAuthPopup("facebook", (error, authData) => {
+        ref.authWithOAuthPopup("twitter", (error, authData) => {
             if (error) {
                 console.log("Login Failed!", error);
             } else {
@@ -35,4 +35,4 @@ class FacebookLogin extends Component {
     }
 }
 
-export default FacebookLogin;
+export default TwitterLogin;
