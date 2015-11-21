@@ -31,7 +31,6 @@ const initialState = {
 };
 
 const state = (pState, action) => {
-    console.log('action....', action, USER_LOGGED_IN);
     let update = {};
 
     switch (action.type) {
@@ -85,6 +84,7 @@ const state = (pState, action) => {
 
         case USER_REG_INVALID:
             update = {userState: USER_STATE_REG_REJECTED};
+            if (action.regInvalidReason) update.regInvalidReason = action.regInvalidReason;
             break;
 
         case '@@redux/INIT':
@@ -95,7 +95,7 @@ const state = (pState, action) => {
             throw new Error('cannot recognize action ', action);
     }
 
-    var newState = Object.assign({lan: 'en'}, pState || initialState, update);
+    var newState = Object.assign({}, pState || initialState, update);
     if (newState.user && newState.userState === USER_STATE_VALIDATED){
         if (!(newState.user instanceof User)){
             newState.user = new User(newState.user);

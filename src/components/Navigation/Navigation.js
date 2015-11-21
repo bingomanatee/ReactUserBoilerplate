@@ -55,7 +55,6 @@ class Navigation extends Component {
 
     _onStoreChange() {
         const storeState = store.getState();
-        console.log('store state', storeState);
         if (this.state.userState !== storeState.userState) {
             this.setState({userState: storeState.userState, user: storeState.user});
         }

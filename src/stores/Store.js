@@ -40,8 +40,10 @@ let authSubscribe = store.subscribe(() => {
         if (newState.userState === USER_STATE_REG_SUBMITTED) {
             reg(newState.user)
                 .then(
-                    () => store.dispatch(regGood(),
-                        (result) => store.dispatch(regBad(result)))
+                    () => store.dispatch(regGood()),
+                    (result) => {
+                        store.dispatch(regBad(result))
+                    }
                 );
         }
 

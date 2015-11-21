@@ -55,6 +55,7 @@ class RegisterPage extends Component {
             password: '',
             password2: '',
             isError: false,
+            pwMatch: true,
             formFeedback: '',
             submitTimeBuffer: [],
             userState: storeState.userState
@@ -67,8 +68,27 @@ class RegisterPage extends Component {
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
+    }
+
+    _regInvalid(regInvalidReason) {
+        var reason = 'badRegistering';
+        var res = regInvalidReason && regInvalidReason.response;
+        if (res && res.body) {
+            const body = res.body;
+            if (body.code) {
+                switch (body.code) {
+                    case 'EMAIL_TAKEN':
+                        reason = 'badRegisteringEmailTaken';
+                        break;
+
+                    default:
+                        console.log('unknown code: ', body.code);
+                }
+            }
+        }
+        this._setFeedback(reason, true);
     }
 
     _onStoreChange() {
@@ -80,7 +100,7 @@ class RegisterPage extends Component {
             const updateOverlay = () => {
                 switch (storeState.userState) {
                     case USER_STATE_REG_REJECTED:
-                        this._setFeedback('badRegistering', true);
+                        this._regInvalid(storeState.regInvalidReason);
                         store.dispatch(overlay({}));
                         break;
 
@@ -93,11 +113,6 @@ class RegisterPage extends Component {
             };
             setTimeout(updateOverlay, 1);
         }
-    }
-
-    componentWillUnmount() {
-        this._clearFeedback(false);
-        this._unsubStore();
     }
 
     _lockUp() {
@@ -181,6 +196,28 @@ class RegisterPage extends Component {
 
         this._makeFieldDef('password2', 'password', []);
 
+        const pw = this.fieldDefs.get('password');
+
+        const pw2 = this.fieldDefs.get('password2');
+
+        const watchPasswords = () => {
+            const pwValue = pw.fieldValue;
+            const pw2value = pw2.fieldValue;
+            console.log('passwords: ', pwValue, pw2value);
+            const pwMatch = pwValue === pw2value;
+            if (pwMatch){
+                if (this.state.formFeedback === this.s('passwordMismatch')){
+                    this._clearFeedback();
+                }
+            } else {
+                this._setFeedback('passwordMismatch', true);
+            }
+        };
+
+        pw.watch(watchPasswords);
+
+        pw2.watch(watchPasswords);
+
         this.fieldDefs.set('registeredTitle', new FieldDef('registeredTitle', 's.registeredTitle', 'title', {s: this.s}));
     }
 
@@ -199,7 +236,7 @@ class RegisterPage extends Component {
             isValid = isValid && !fieldDef.errors;
         });
 
-        return isValid;
+        return isValid && (this.state.password === this.state.password2)
     }
 
     render() {

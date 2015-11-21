@@ -85,7 +85,8 @@ export const auth = (userData) => {
 
 export const reg = (userData) => {
     var response = null;
-    switch (methodType) {
+    console.log('registering with method ', regMethodType);
+    switch (regMethodType) {
         case VALIDATION_METHOD_TYPE_PROMISE:
             response = injectedRegister(userData);
             break;

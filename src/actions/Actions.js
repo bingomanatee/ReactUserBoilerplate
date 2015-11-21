@@ -81,7 +81,7 @@ const regGood = () => ({type: USER_REG_VALID});
  * call this action after the user's reg data is rejected.
  * @param reason
  */
-const regBad = (reason = false) => ({type: USER_REG_INVALID});
+const regBad = (reason = false) => ({type: USER_REG_INVALID, regInvalidReason: reason});
 
 /**
  * call this action to show, change or hide the overlay that blocks pending action.

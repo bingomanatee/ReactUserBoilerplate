@@ -15,7 +15,8 @@ function getUrl(path) {
 
 const HttpClient = {
 
-    _finish: (req, resolve, reject) => req.accept('application/json').end((err, res) => {
+    _finish: (path, req, resolve, reject) => req.accept('application/json').end((err, res) => {
+        console.log('in promise of ', path, err, res);
         if (err) {
             if (err.status === 404) {
                 resolve(null);
@@ -27,9 +28,9 @@ const HttpClient = {
         }
     }),
 
-    get: path => new Promise((resolve, reject) => HttpClient._finish(request.get(getUrl(path)), resolve, reject)),
+    get: path => new Promise((resolve, reject) => HttpClient._finish(path, request.get(getUrl(path)), resolve, reject)),
 
-    post: (path, params) => new Promise((resolve, reject) => HttpClient._finish(request.post(getUrl(path), params), resolve, reject))
+    post: (path, params) => new Promise((resolve, reject) => HttpClient._finish(path, request.post(getUrl(path), params), resolve, reject))
 
 };
 

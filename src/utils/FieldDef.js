@@ -182,7 +182,7 @@ class FieldDef extends Translatable {
     set fieldValue(pValue) {
         this._fieldValue = pValue;
         this.validators.forEach(val => val.update());
-        this.ee.emit('change', this._fieldValue);
+        this.ee.emit('change', pValue);
     }
 
     get fieldValue() {
