@@ -21,7 +21,6 @@ const linkToTag = (info, i, user) => {
     } else if (info.href === '^twitter') {
         return <TwitterLogin key={i} info={info} />
     } else if (info.href=== '^user'){
-        console.log('======= LINKTOTAG user = ', user);
         return <UserLink key={i * 20} user={user} label={info.label} />
     }
     else {
