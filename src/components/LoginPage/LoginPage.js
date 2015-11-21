@@ -88,11 +88,9 @@ class LoginPage extends Component {
 
     _onStoreChange() {
         const storeState = store.getState();
-        console.log('store state', storeState);
         if (this.state.userState === storeState.userState) {
-            console.log('store state is still ', storeState.userState);
+           // console.log('store state is still ', storeState.userState);
         } else {
-            console.log('store state changed to ', storeState.userState);
             this.setState({userState: storeState.userState});
             const title = this.s('loggingInTitle');
             const text = this.s('loggingInText');
@@ -250,6 +248,7 @@ class LoginPage extends Component {
             </div>
         </form>);
 
+        console.log('rendering LOGIN PAGE WITH state ', this.state.userState);
         switch (this.state.userState) {
             case USER_STATE_VALIDATED:
                 inner = (

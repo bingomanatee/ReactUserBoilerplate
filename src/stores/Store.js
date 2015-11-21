@@ -32,7 +32,7 @@ let authSubscribe = store.subscribe(() => {
         if (newState.userState === USER_STATE_LOGIN_SUBMITTED) {
             auth(newState.user)
                 .then(
-                    () => store.dispatch(logInGood()),
+                    (user) => store.dispatch(logInGood(user)),
                     (result) => store.dispatch(loginBad(result))
                 );
         }

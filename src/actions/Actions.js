@@ -43,7 +43,10 @@ const logIn = (user) => ({type: USER_LOGIN, user: user});
  * this action is called when the server validates the credentials.
  * This state will persist through the lifetime of the app until the user logs off.
  */
-const logInGood = () => ({type: USER_LOGIN_VALID});
+const logInGood = (user) => {
+    console.log('feedback from logInGood: ========', user);
+    return {type: USER_LOGIN_VALID, user: user}
+}
 
 /**
  * this action is called if the users credentials are rejected.
@@ -60,7 +63,7 @@ const resetAnon = () => ({type: USER_RESET_ANON});
 
 /**
  * this action is called to inject a user into the system from session.
- * Useful if the user reloads the paage after having logged in successfully
+ * Useful if the user reloads the paae after having logged in successfully
  */
 const alreadyLoggedIn = (user) => ({type: USER_LOGGED_IN, user: user});
 

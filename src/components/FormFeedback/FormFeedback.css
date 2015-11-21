@@ -4,12 +4,13 @@
   padding: 0;
   margin-top: 0.15rem;
   line-height: 105%;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 0.8rem;
   text-align: center; }
   .form-feedback.hide {
     display: none; }
-  .form-feedback.form-feedback-error {
-    color: red; }
+  .form-feedback.form-feedback--error {
+    font-weight: 400;
+    color: #FF0000; }
 
 /*# sourceMappingURL=FormFeedback.css.map */

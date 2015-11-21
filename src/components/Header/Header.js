@@ -32,7 +32,8 @@ class Header extends Component {
         var storeState = store.getState();
         var userState = storeState.userState;
         this.state = {
-            userState: userState
+            userState: userState,
+            user: null
         };
     }
 
@@ -62,7 +63,7 @@ class Header extends Component {
                         </a>
                     </div>
                     <div className="Header-container__item Header-container__item--nav">
-                        <Navigation className="Header-nav"/>
+                        <Navigation className="Header-nav" user={this.state.user} />
                     </div>
                 </div>
                 <p className="user-state">

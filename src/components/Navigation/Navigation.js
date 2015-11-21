@@ -21,6 +21,7 @@ const linkToTag = (info, i, user) => {
     } else if (info.href === '^twitter') {
         return <TwitterLogin key={i} info={info} />
     } else if (info.href=== '^user'){
+        console.log('======= LINKTOTAG user = ', user);
         return <UserLink key={i * 20} user={user} label={info.label} />
     }
     else {
@@ -55,7 +56,7 @@ class Navigation extends Component {
 
     _onStoreChange() {
         const storeState = store.getState();
-        if (this.state.userState !== storeState.userState) {
+        if (!(this.state.userState === storeState.userState && this.state.user === storeState.user)) {
             this.setState({userState: storeState.userState, user: storeState.user});
         }
     }
@@ -80,8 +81,6 @@ class Navigation extends Component {
                 linkData = {links: []};
         }
 
-        const user = this.state.user;
-
         const labelLink = info => {
             var out = {};
             if (info.label) {
@@ -90,7 +89,7 @@ class Navigation extends Component {
             return out;
         }
 
-        const links = linkData.links.map(info => Object.assign({}, info, labelLink(info))).map((link, i) => linkToTag(link, i, user));
+        const links = linkData.links.map(info => Object.assign({}, info, labelLink(info))).map((link, i) => linkToTag(link, i, this.state.user));
 
         return (
             <div className="Navigation-links" role="navigation">

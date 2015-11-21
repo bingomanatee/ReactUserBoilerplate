@@ -34,7 +34,6 @@ class App extends Component {
         if ((typeof window !== 'undefined')) {
             http.get('/api/users/')
                 .then(result => {
-                    console.log('---------------- api users result: ', result);
                     if (result && result.user) {
                        store.dispatch(alreadyLoggedIn(result.user));
                     }

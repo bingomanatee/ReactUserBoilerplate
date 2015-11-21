@@ -8,7 +8,7 @@ class FormFeedback extends Component {
     render() {
         var classes = 'form-feedback';
         if (this.props.isError) {
-            classes += ' form-feedaback--error';
+            classes += ' form-feedback--error';
         }
         return (<p className={classes}>
             {this.props.text}&nbsp;

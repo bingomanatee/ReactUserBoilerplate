@@ -1,7 +1,7 @@
 @import "../../utils/css3-mixins";
 
-$buttonInsetShadow: rgba(0, 0, 0, 0.25);
-$buttonInsetBlur: 0.25rem;
+$buttonInsetShadow: rgba(0, 0, 0, 0.3333);
+$buttonInsetBlur: 0.33rem;
 
 $buttonColor: #fff698;
 $ButtonGradColorA: rgba(194, 194, 194, 0);
@@ -28,6 +28,14 @@ $label: #654145;
 $inputBorderColor: #aeaeff;
 $inputBorderColorFocus: darken($inputBorderColor, 25%);
 
+.glossy {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#848484+0,000000+65,ffffff+100&amp;0+0,0.1+47,0.25+66,0.25+66,0.1+100 */
+    background: -moz-linear-gradient(top, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00848484', endColorstr='#1affffff', GradientType=0); /* IE6-9 */
+
+}
 .form-def-row {
     display: flex;
     margin-bottom: 1rem;
@@ -55,12 +63,6 @@ $inputBorderColorFocus: darken($inputBorderColor, 25%);
             -webkit-box-shadow:  inset 0 0 $buttonInsetBlur $buttonInsetBlur/2 $buttonInsetShadow;
             -moz-box-shadow: inset 0 0 $buttonInsetBlur $buttonInsetBlur/2 $buttonInsetShadow;
             box-shadow: inset 0 0 $buttonInsetBlur $buttonInsetBlur/2 $buttonInsetShadow;
-
-            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#848484+0,000000+65,ffffff+100&amp;0+0,0.1+47,0.25+66,0.25+66,0.1+100 */
-            background: -moz-linear-gradient(top, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* FF3.6-15 */
-            background: -webkit-linear-gradient(top, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* Chrome10-25,Safari5.1-6 */
-            background: linear-gradient(to bottom, $ButtonGradColor0 0%, $ButtonGradColor1 $p1, $ButtonGradColor2 $p2, $ButtonGradColor3 $p3, $ButtonGradColor4 $p4, $ButtonGradColor5 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00848484', endColorstr='#1affffff', GradientType=0); /* IE6-9 */
             background-color: $buttonColor;
 
             .last {

@@ -46,7 +46,8 @@ const state = (pState, action) => {
             break;
 
         case USER_LOGGED_IN:
-            update = {user: action.user, userState: USER_STATE_VALIDATED};
+            console.log('logged in with USER ========= ', action.user);
+            update = {user: new User(action.user), userState: USER_STATE_VALIDATED};
             break;
 
         case USER_LOGIN:
@@ -59,12 +60,11 @@ const state = (pState, action) => {
             break;
 
         case USER_LOGOFF:
-            console.log('------ logging off------- ')
             update = {user: null, userState: USER_STATE_ANON};
             break;
 
         case USER_LOGIN_VALID:
-            update = {userState: USER_STATE_VALIDATED};
+            update = {userState: USER_STATE_VALIDATED, user: new User(action.user)};
             break;
 
         case USER_LOGIN_INVALID:
@@ -96,11 +96,6 @@ const state = (pState, action) => {
     }
 
     var newState = Object.assign({}, pState || initialState, update);
-    if (newState.user && newState.userState === USER_STATE_VALIDATED){
-        if (!(newState.user instanceof User)){
-            newState.user = new User(newState.user);
-        }
-    }
 
     return newState;
 };
