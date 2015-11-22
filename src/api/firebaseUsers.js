@@ -25,7 +25,7 @@ module.exports = (app) => {
             req.session.destroy(err => err ? res.status(400).send(err) : res.send({loggedOff: true}));
         } catch (err2) {
             console.log('err 2: ', err2);
-            res.status(400).send(err);
+            res.status(400).send(err2);
         }
     });
 
