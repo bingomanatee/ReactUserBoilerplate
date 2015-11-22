@@ -11,7 +11,7 @@ import RegisterPage from './components/RegisterPage';
 import NotFoundPage from './components/NotFoundPage';
 import ErrorPage from './components/ErrorPage';
 import LogoutPage from './components/LogoutPage';
-
+/* eslint-disable no-spaced-func */
 const router = new Router(on => {
   on('*', async (state, next) => {
     const component = await next();

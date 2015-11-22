@@ -13,7 +13,7 @@ import {
     REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME,
     ASK_USERNAME
 } from '../../config';
-import  {
+import {
     logIn,
     logOff,
     logInGood,
@@ -86,10 +86,15 @@ class LoginPage extends Component {
         this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
+    componentWillUnmount() {
+        this._clearFeedback(false);
+        this._unsubStore();
+    }
+
     _onStoreChange() {
         const storeState = store.getState();
         if (this.state.userState === storeState.userState) {
-           // console.log('store state is still ', storeState.userState);
+            // console.log('store state is still ', storeState.userState);
         } else {
             this.setState({userState: storeState.userState});
             const title = this.s('loggingInTitle');
@@ -110,11 +115,6 @@ class LoginPage extends Component {
             };
             setTimeout(updateOverlay, 1);
         }
-    }
-
-    componentWillUnmount() {
-        this._clearFeedback(false);
-        this._unsubStore();
     }
 
     _lockUp() {
@@ -150,17 +150,16 @@ class LoginPage extends Component {
         event.preventDefault();
         if (!this._isValid()) {
             this._setFeedback('formIncomplete', true);
-            return
-        }
-        // call getValue() to get the values of the form
-        var data = {
-            username: username,
-            email: email,
-            password: password
-        };
+        } else {
+            // call getValue() to get the values of the form
+            var data = {
+                username: username,
+                email: email,
+                password: password
+            };
 
-        console.log('logging in with ', data);
-        store.dispatch(logIn(data));
+            store.dispatch(logIn(data));
+        }
     }
 
     _makeFieldDef(name, type, validators) {
@@ -172,9 +171,9 @@ class LoginPage extends Component {
             validators: validators
         });
 
-        def.watch(value => {
+        def.watch(val => {
             let newState = {};
-            newState[name] = value;
+            newState[name] = val;
             this.setState(newState);
         });
 
@@ -248,20 +247,17 @@ class LoginPage extends Component {
             </div>
         </form>);
 
-        console.log('rendering LOGIN PAGE WITH state ', this.state.userState);
-        switch (this.state.userState) {
-            case USER_STATE_VALIDATED:
-                inner = (
-                    <form className="form LoginPage__form">
-                        <FormDefField ref="loggedInTitle" def={this.fieldDefs.get('loggedInTitle')}></FormDefField>
-                        <div className="form-def-row form-def-row-button-row">
-                            <button className="last" type="button" onClick={this._goHome.bind(this)}>
-                                {this.s('goHomeButtonLabel')}
-                            </button>
-                        </div>
-                    </form>
-                );
-                break;
+        if (this.state.userState === USER_STATE_VALIDATED) {
+            inner = (
+                <form className="form LoginPage__form">
+                    <FormDefField ref="loggedInTitle" def={this.fieldDefs.get('loggedInTitle')}></FormDefField>
+                    <div className="form-def-row form-def-row-button-row">
+                        <button className="last" type="button" onClick={this._goHome.bind(this)}>
+                            {this.s('goHomeButtonLabel')}
+                        </button>
+                    </div>
+                </form>
+            );
         }
 
         return (<div className="RegisterPage container-frame">

@@ -45,7 +45,7 @@ class User {
             case PROVIDER_FACEBOOK:
 
                 if (identity.profileImageURL) {
-                    this.image = identity.profileImageURL
+                    this.image = identity.profileImageURL;
                 }
 
                 if (identity.displayName) {
@@ -65,30 +65,33 @@ class User {
                     this.name = identity.username;
                 }
 
-                if (identity.displayName){
+                if (identity.displayName) {
                     this.displayName = identity.displayName;
                 }
 
-                if (identity.profileImageURL){
+                if (identity.profileImageURL) {
                     this.image = identity.profileImageURL;
                 }
 
                 if (identity.id_str) {
                     this.id = identity.id_str;
                 }
-                if (identity.cachedUserProfile){
+                if (identity.cachedUserProfile) {
                     var cup = identity.cachedUserProfile;
 
-                    if (cup.description){
+                    if (cup.description) {
                         this.description = cup.description;
                     }
                 }
                 break;
+
+            default:
+                console.log('cannot identify provider ', this.provider);
         }
 
     }
 
-    set description(d){
+    set description(d) {
         this._description = d;
     }
 
@@ -111,6 +114,7 @@ class User {
 
         return '--name unnown--';
     }
+
     set displayName(pName) {
         this._displayName = pName;
     }
@@ -154,8 +158,7 @@ class User {
                 break;
 
             default:
-                throw new Error('unknown provider: ', +pProv);
-                break;
+                throw new Error('unknown provider: ', pProv);
         }
     }
 

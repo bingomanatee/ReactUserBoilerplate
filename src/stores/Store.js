@@ -42,7 +42,7 @@ let authSubscribe = store.subscribe(() => {
                 .then(
                     () => store.dispatch(regGood()),
                     (result) => {
-                        store.dispatch(regBad(result))
+                        store.dispatch(regBad(result));
                     }
                 );
         }

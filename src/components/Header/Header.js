@@ -5,7 +5,7 @@ import styles from './Header.css';
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 import Navigation from '../Navigation';
-import  {
+import {
     logIn,
     logOff,
     logInGood,

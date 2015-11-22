@@ -1,3 +1,4 @@
+import _ from 'lodash';
 /**
  * This is a "gateway" adapter to user authentication.
  * It doesn't validate user credentials directly but accepts an authentication method
@@ -28,7 +29,7 @@ var injectedValidator = () => {
 }; // until setUserValidation is called, no validation will happen.
 
 export const setUserValidation = (pValidationMethod, pMethodType) => {
-    if (!METHODS.includes(pMethodType)) {
+    if (!_.contains(METHODS, pMethodType)) {
         throw new Error('bad method type ' + (pMethodType || '(none)'));
     }
     injectedValidator = pValidationMethod;
@@ -36,12 +37,12 @@ export const setUserValidation = (pValidationMethod, pMethodType) => {
 };
 
 export const setUserRegistration = (pRegMethod, pMethodType) => {
-    if (!METHODS.includes(pMethodType)) {
+    if (!_.contains(METHODS, pMethodType)) {
         throw new Error('bad method type ' + (pMethodType || '(none)'));
     }
     injectedRegister = pRegMethod;
     regMethodType = pMethodType;
-}
+};
 
 /**
  * note - regardless of the actual method's response system,
@@ -69,7 +70,11 @@ export const auth = (userData) => {
             response = new Promise((resolve, reject) => {
                 try {
                     let result = injectedRegister(userData);
-                    result ? resolve(result) : reject()
+                    if (result) {
+                        resolve(result);
+                    } else {
+                        reject();
+                    }
                 } catch (err) {
                     reject(err);
                 }
@@ -99,7 +104,11 @@ export const reg = (userData) => {
             response = new Promise((resolve, reject) => {
                 try {
                     let result = injectedRegister(userData);
-                    result ? resolve(result) : reject()
+                    if (result) {
+                        resolve(result);
+                    } else {
+                        reject();
+                    }
                 } catch (err) {
                     reject(err);
                 }

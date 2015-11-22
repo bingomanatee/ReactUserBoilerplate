@@ -7,7 +7,7 @@ import strings from './../../utils/Strings';
 import FormDefField from '../FormDefField';
 import {FieldDef } from './../../utils/FieldDef';
 import {MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH, MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH, REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME, ASK_USERNAME } from '../../config';
-import  {
+import {
     reg,
     regGood,
     regBad,
@@ -169,9 +169,9 @@ class RegisterPage extends Component {
             validators: validators
         });
 
-        def.watch(value => {
+        def.watch(val => {
             let newState = {};
-            newState[name] = value;
+            newState[name] = val;
             this.setState(newState);
         });
 
@@ -205,8 +205,8 @@ class RegisterPage extends Component {
             const pw2value = pw2.fieldValue;
             console.log('passwords: ', pwValue, pw2value);
             const pwMatch = pwValue === pw2value;
-            if (pwMatch){
-                if (this.state.formFeedback === this.s('passwordMismatch')){
+            if (pwMatch) {
+                if (this.state.formFeedback === this.s('passwordMismatch')) {
                     this._clearFeedback();
                 }
             } else {
@@ -230,13 +230,7 @@ class RegisterPage extends Component {
     }
 
     _isValid() {
-        var isValid = true;
-//@TODO: reduce?
-        this.fieldDefs.forEach(fieldDef => {
-            isValid = isValid && !fieldDef.errors;
-        });
-
-        return isValid && (this.state.password === this.state.password2)
+        return this.fieldDefs.reduce((memo, def) => memo ? !def.errors : memo, (this.state.password === this.state.password2));
     }
 
     render() {
@@ -249,42 +243,41 @@ class RegisterPage extends Component {
             identity.push(<FormDefField ref="username" key={2} def={this.fieldDefs.get('username')}/>);
         }
 
-        var inner = (<form className="form RegisterPage__form">
-            <h1>{this.s('title')}</h1>
-            <p>{this.s('text')}</p>
-            {identity}
-            <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
-            <FormDefField ref="password2" def={this.fieldDefs.get('password2')}/>
-            <div className="form-def-row form-def-row-button-row">
-                <button className="secondary" type="button" onClick={this._goHome.bind(this)}>
-                    {this.s('cancelButtonLabel')}
-                </button>
-                <button className="last" type="button" onClick={this._save.bind(this)}
-                        disabled={!this._isValid()}>
-                    {this.s('registeringButtonLabel')}
-                </button>
-            </div>
-            <div className="form-def-row">
-                <label>&nbsp;</label>
-                <div className="form-def-row__input">
-                    <FormFeedback isError={this.state.isError} text={this.state.formFeedback}/>
+        var inner;
+        if (this.state.userState === USER_STATE_REG_ACCEPTED) {
+            inner = (
+                <form className="form RegisterPage__form">
+                    <FormDefField ref="registeredTitle" def={this.fieldDefs.get('registeredTitle')}></FormDefField>
+                    <div className="form-def-row form-def-row-button-row">
+                        <button className="last" type="button" onClick={this._goLogin.bind(this)}>
+                            {this.s('logInButtonLabel')}
+                        </button>
+                    </div>
+                </form>
+            );
+        } else {
+            inner = (<form className="form RegisterPage__form">
+                <h1>{this.s('title')}</h1>
+                <p>{this.s('text')}</p>
+                {identity}
+                <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
+                <FormDefField ref="password2" def={this.fieldDefs.get('password2')}/>
+                <div className="form-def-row form-def-row-button-row">
+                    <button className="secondary" type="button" onClick={this._goHome.bind(this)}>
+                        {this.s('cancelButtonLabel')}
+                    </button>
+                    <button className="last" type="button" onClick={this._save.bind(this)}
+                            disabled={!this._isValid()}>
+                        {this.s('registeringButtonLabel')}
+                    </button>
                 </div>
-            </div>
-        </form>);
-
-        switch (this.state.userState) {
-            case USER_STATE_REG_ACCEPTED:
-                inner = (
-                    <form className="form RegisterPage__form">
-                        <FormDefField ref="registeredTitle" def={this.fieldDefs.get('registeredTitle')}></FormDefField>
-                        <div className="form-def-row form-def-row-button-row">
-                            <button className="last" type="button" onClick={this._goLogin.bind(this)}>
-                                {this.s('logInButtonLabel')}
-                            </button>
-                        </div>
-                    </form>
-                );
-                break;
+                <div className="form-def-row">
+                    <label>&nbsp;</label>
+                    <div className="form-def-row__input">
+                        <FormFeedback isError={this.state.isError} text={this.state.formFeedback}/>
+                    </div>
+                </div>
+            </form>);
         }
 
         return (<div className="RegisterPage container-frame">
