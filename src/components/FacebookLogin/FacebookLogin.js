@@ -10,17 +10,16 @@ import { alreadyLoggedIn } from '../../actions/Actions';
 class FacebookLogin extends Component {
     auth(event) {
         event.stopPropagation();
-        const ref = new Firebase("https://eatyourfriends2.firebaseio.com");
-        ref.authWithOAuthPopup("facebook", (error, authData) => {
+        const ref = new Firebase('https://eatyourfriends2.firebaseio.com');
+        ref.authWithOAuthPopup('facebook', (error, authData) => {
                 if (error) {
-                    console.log("Login Failed!", error);
+                    console.log('Login Failed!', error);
                 } else {
-                    console.log("Authenticated successfully with payload:", authData);
                     html.post('/api/users/facebook', authData)
                         .then(result => {
                             console.log('result from auth: ', result);
                             store.dispatch(alreadyLoggedIn(authData));
-                            //@TODO: set logged in to state
+                            // @TODO: set logged in to state
                         }, (err) => console.log('error logging into facebook:', err));
                 }
             }, {

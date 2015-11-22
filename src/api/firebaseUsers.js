@@ -85,7 +85,6 @@ module.exports = (app) => {
                 password: password
             }, function (error, user) {
                 if (error) {
-                    console.log("Login Failed!", error);
                     res.status(400).send(error);
                 } else {
                     req.session.user = user;

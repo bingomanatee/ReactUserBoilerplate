@@ -18,8 +18,6 @@ class Footer extends Component {
     };
 
     render() {
-        const width = this.props.width || 0;
-        const height = this.props.height || 0;
         return (
             <div className="Footer">
                 <div className="Footer-container">
@@ -31,8 +29,6 @@ class Footer extends Component {
                     <span className="Footer-spacer">·</span>
                     <a className="Footer-link" href="/not-found" onClick={Link.handleClick}>Not Found</a>
                     <span className="Footer-spacer"> | </span>
-                    <span ref="viewport"
-                          className="Footer-viewport Footer-text Footer-text--muted">Viewport: {width}x${height}</span>
                 </div>
             </div>
         );

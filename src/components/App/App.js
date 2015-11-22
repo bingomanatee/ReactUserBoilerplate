@@ -10,105 +10,80 @@ import Header from '../Header';
 import Feedback from '../Feedback';
 import Footer from '../Footer';
 import store from '../../stores/Store';
-import { alreadyLoggedIn, resize } from '../../actions/Actions';
 import _ from 'lodash';
 import withViewport from '../../decorators/withViewport';
 
+import  {
+    overlay,
+    alreadyLoggedIn,
+    resize,
+} from '../../actions';
+import html from '../../core/HttpClient';
+import FormFeedback from '../FormFeedback';
+
 var lastWidth = 0, lastHeight = 0;
-const BROADCAST_SIZE_DELAY = 0.8 * 1000;
-const MIN_HEIGHT_FOR_FOOTER = 800;
+const BROADCAST_SIZE_DELAY = 1.5 * 1000;
+const MIN_HEIGHT_FOR_FOOTER = 500;
 
 const broadcastSize = _.debounce((width, height) => store.dispatch(resize(width, height)), BROADCAST_SIZE_DELAY);
 
+/**
+ * note -- this module will broacast (with debounce) any size change to state.
+ * However it itself doesn't listen to state, just its viewport.
+ */
+
+@withViewport
 @withContext
 @withStyles(styles)
 class App extends Component {
 
     constructor() {
         super();
-        this.state = {overlay: {}};
+        this.state = {overlay: {}, firstRun: true};
+
+        this.__updateSize = broadcastSize;
+        this.__updateSize();
     }
 
     componentDidMount() {
-        this._unstore = store.subscribe(this._storeChange.bind(this));
         if ((typeof window !== 'undefined')) {
             http.get('/api/users/')
                 .then(result => {
                     if (result && result.user) {
-                       store.dispatch(alreadyLoggedIn(result.user));
+                        store.dispatch(alreadyLoggedIn(result.user));
                     }
                 }, (err) => {
                     console.log('user poll error: ', err);
                 });
-        }
-        // this._updateSize(this.props);
-    }
-
-    componentWillReceiveProps(nextProps){
-        if (nextProps.viewport){
-            this.setState({width: nextProps.viewport.width, height: nextProps.viewport.height});
-            state.dispatch({
-                width: nextProps.viewport.width,
-                height: nextProps.viewport.height
-            })
+            this.setState({firstRun: false});
         }
     }
 
-    componentWillUpdate(props, state) {
-        // this._updateSize(props);
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.viewport) {
+            if (nextProps.viewport.width != lastWidth || nextProps.viewport.height != lastHeight) {
+                lastWidth = nextProps.viewport.width;
+                lastHeight = nextProps.viewport.height;
+                this.__updateSize();
+            }
+        } else {
+            console.log('no viewport in ', nextProps);
+        }
     }
 
     onWillUnmount() {
         this._unstore();
     }
 
-    _updateSize(props) {
-        if (props) {
-            console.log('########## SIZE props: ', props.width, props.height);
-        } else {
-            console.log('############# SIZE no props');
-            return;
-        }
-        if (isNaN(props.width)) {
-            return;
-        } else if ((typeof window !== 'undefined') && props && ((props.viewport.width != lastWidth) || (props.viewport.height != lastHeight))) {
-            console.log('########## SIZE props: ', props.viewport.width, props.viewport.height);
-            const wasTall = this._isTall();
-            lastWidth = props.viewport.width;
-            lastHeight = props.viewport.height;
-            broadcastSize(lastWidth, lastHeight);
-            if (wasTall !== this._isTall()) {
-                this.forceUpdate();
-            }
-        }
+    _sizeChange() {
+        store.dispatch(resize(
+            this.props.viewport.width,
+            this.props.viewport.height
+        ));
     }
 
-    /*   shouldComponentUpdate(nextProps, nextState) {
-     return this._isTall() !== this._isTall(nextProps.viewport.height);
-     }*/
-
-    _isTall(height) {
-        return true; // (height || lastHeight) > MIN_HEIGHT_FOR_FOOTER;
-    }
-
-    /*
-     static propTypes = {
-     children: PropTypes.element.isRequired,
-     error: PropTypes.object,
-     viewport: PropTypes.shape({
-     width: PropTypes.number.isRequired,
-     height: PropTypes.number.isRequired,
-     }).isRequired
-     }; */
-
-    _storeChange() {
-        /**
-         * note - we are keeping dialogs up at least MIN_TIME ticks
-         * to not jar the readers.
-         */
-        var state = store.getState();
-        var overlay = state.overlay || {};
-        setTimeout(() => this.setState({overlay: overlay}), 1);
+    _isTall() {
+        return (!this.state.firstRun) && this.props.viewport.height > MIN_HEIGHT_FOR_FOOTER;
     }
 
     render() {
@@ -124,7 +99,10 @@ class App extends Component {
             </div>
         </Modal>) : '';
 
-        const feedback = this._isTall() ? <Feedback /> : '';
+        var feedback;
+        if (this._isTall()) {
+            feedback = <Feedback />;
+        }
 
         return !this.props.error ? (
             <div id="app-inner">
