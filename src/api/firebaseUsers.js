@@ -25,7 +25,7 @@ module.exports = (app) => {
           req.session.destroy(err => err ? res.status(400).send(err) : res.send({loggedOff: true}));
         } catch (err2) {
             console.log('err 2: ', err2);
-            rs.status(400).send(err);
+            res.status(400).send(err2);
         }
     });
 
@@ -61,7 +61,6 @@ module.exports = (app) => {
                     console.log('Error creating user:', error);
                     res.status(400).send(error);
                 } else {
-                    console.log('Successfully created user account with uid:', userData.uid);
                     root.child('users/' + userData.uid).set(userData); // copy to app data.
                     res.send(userData);
                 }
@@ -85,7 +84,6 @@ module.exports = (app) => {
                 password: password
             }, function (error, user) {
                 if (error) {
-                    console.log("Login Failed!", error);
                     res.status(400).send(error);
                 } else {
                     req.session.user = user;

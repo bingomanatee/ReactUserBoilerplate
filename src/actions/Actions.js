@@ -45,8 +45,8 @@ const logIn = (user) => ({type: USER_LOGIN, user: user});
  */
 const logInGood = (user) => {
     console.log('feedback from logInGood: ========', user);
-    return {type: USER_LOGIN_VALID, user: user}
-}
+    return {type: USER_LOGIN_VALID, user: user};
+};
 
 /**
  * this action is called if the users credentials are rejected.

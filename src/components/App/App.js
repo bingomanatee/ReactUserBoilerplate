@@ -13,7 +13,7 @@ import store from '../../stores/Store';
 import _ from 'lodash';
 import withViewport from '../../decorators/withViewport';
 
-import  {
+import {
     overlay,
     alreadyLoggedIn,
     resize,
@@ -21,7 +21,8 @@ import  {
 import html from '../../core/HttpClient';
 import FormFeedback from '../FormFeedback';
 
-var lastWidth = 0, lastHeight = 0;
+var lastWidth = 0;
+var lastHeight = 0;
 const BROADCAST_SIZE_DELAY = 1.5 * 1000;
 const MIN_HEIGHT_FOR_FOOTER = 600;
 
@@ -56,7 +57,7 @@ class App extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.viewport) {
-            if (nextProps.viewport.width != lastWidth || nextProps.viewport.height != lastHeight) {
+            if (nextProps.viewport.width !== lastWidth || nextProps.viewport.height !== lastHeight) {
                 lastWidth = nextProps.viewport.width;
                 lastHeight = nextProps.viewport.height;
                 this.__updateSize();

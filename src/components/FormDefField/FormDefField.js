@@ -37,10 +37,11 @@ class FormDefField extends Component {
             requestChange: this._onChange.bind(this)
         };
         var input = null;
+        var out;
 
-        if (def.fieldType == 'title') {
+        if (def.fieldType === 'title') {
             var title = def.fieldValueT;
-            return (<div className="form-def-row">
+            out = (<div className="form-def-row">
                 <h3>{title}</h3>
             </div>);
         } else {
@@ -62,9 +63,9 @@ class FormDefField extends Component {
                                     valueLink={valueLink}/>);
             }
 
-            const errors = def.errors ? ( <FormFeedback text={def.errors} isError={1} />) : '';
+            const errors = def.errors ? ( <FormFeedback text={def.errors} isError={1}/>) : '';
 
-            return (<div className="form-def-row">
+            out = (<div className="form-def-row">
                 <label>{def.label}</label>
                 <div className="form-def-row__input">
                     {input}
@@ -72,7 +73,7 @@ class FormDefField extends Component {
                 </div>
             </div>);
         }
-
+        return out;
     }
 }
 

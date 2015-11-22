@@ -41,15 +41,11 @@ let authSubscribe = store.subscribe(() => {
             reg(newState.user)
                 .then(
                     () => store.dispatch(regGood()),
-                    (result) => {
-                        store.dispatch(regBad(result))
-                    }
-                );
+                    (result) => store.dispatch(regBad(result)));
         }
 
         userState = newState.userState;
     }
-
 });
 
 export default store;
