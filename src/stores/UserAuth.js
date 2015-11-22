@@ -41,7 +41,7 @@ export const setUserRegistration = (pRegMethod, pMethodType) => {
     }
     injectedRegister = pRegMethod;
     regMethodType = pMethodType;
-};
+}
 
 /**
  * note - regardless of the actual method's response system,
@@ -69,9 +69,9 @@ export const auth = (userData) => {
             response = new Promise((resolve, reject) => {
                 try {
                     let result = injectedRegister(userData);
-                    return result ? resolve(result) : reject();
+                    result ? resolve(result) : reject()
                 } catch (err) {
-                    return reject(err);
+                    reject(err);
                 }
             });
             break;
@@ -99,9 +99,9 @@ export const reg = (userData) => {
             response = new Promise((resolve, reject) => {
                 try {
                     let result = injectedRegister(userData);
-                    return result ? resolve(result) : reject();
+                    result ? resolve(result) : reject()
                 } catch (err) {
-                    return reject(err);
+                    reject(err);
                 }
             });
             break;

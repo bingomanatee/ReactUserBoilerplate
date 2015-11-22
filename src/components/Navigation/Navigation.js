@@ -14,28 +14,24 @@ const USER_STATE_ANON_LINKS = require('./links/anon.json');
 const USER_STATE_VALIDATED_LINKS = require('./links/validated.json');
 
 const linkToTag = (info, i, user) => {
-    var out;
     if (info.spacer) {
-        out = (<span key={i} className="Navigation-spacer"> | </span>);
+        return (<span key={i} className="Navigation-spacer"> | </span>)
     } else if (info.href === '^facebook') {
-        out = <FacebookLogin key={i} info={info}/>;
+        return <FacebookLogin key={i} info={info}/>
     } else if (info.href === '^twitter') {
-        out = <TwitterLogin key={i} info={info}/>;
-    } else if (info.href === '^user') {
-        out = <UserLink key={i * 20} user={user} label={info.label}/>;
-    } else {
-        out = (<a key={i} className="Navigation-link" href={info.href} user={user}
-                  onClick={Link.handleClick}>{info.label}</a>);
+        return <TwitterLogin key={i} info={info} />
+    } else if (info.href=== '^user'){
+        console.log('======= LINKTOTAG user = ', user);
+        return <UserLink key={i * 20} user={user} label={info.label} />
     }
-    return out;
-};
+    else {
+        return (<a key={i} className="Navigation-link" href={info.href} user={user} onClick={Link.handleClick}>{info.label}</a>);
+    }
+
+}
 
 @withStyles(styles)
 class Navigation extends Component {
-
-    static propTypes = {
-        className: PropTypes.string,
-    };
 
     constructor() {
         super();
@@ -47,14 +43,15 @@ class Navigation extends Component {
             userState: storeState.userState || USER_STATE_ANON,
             user: storeState.user || null
         };
-    }
 
-    componentDidMount() {
-        this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
     componentWillUnmount() {
         this._unsubStore();
+    }
+
+    componentDidMount() {
+        this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
     }
 
     _onStoreChange() {
@@ -64,8 +61,12 @@ class Navigation extends Component {
         }
     }
 
+    static propTypes = {
+        className: PropTypes.string,
+    };
+
     render() {
-        var linkData = {links: []};
+        var linkData = {links: []}
 
         switch (this.state.userState) {
             case USER_STATE_ANON:
@@ -86,7 +87,7 @@ class Navigation extends Component {
                 out.label = this.s(info.label);
             }
             return out;
-        };
+        }
 
         const links = linkData.links.map(info => Object.assign({}, info, labelLink(info))).map((link, i) => linkToTag(link, i, this.state.user));
 

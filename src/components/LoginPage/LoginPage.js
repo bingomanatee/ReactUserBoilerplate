@@ -13,7 +13,7 @@ import {
     REQUIRE_EMAIL, ASK_EMAIL, REQUIRE_USERNAME,
     ASK_USERNAME
 } from '../../config';
-import {
+import  {
     logIn,
     logOff,
     logInGood,
@@ -79,15 +79,11 @@ class LoginPage extends Component {
         this.s = strings('LoginPage', storeState.lang);
 
         this._makeFieldDefs();
+
     }
 
     componentDidMount() {
         this._unsubStore = store.subscribe(this._onStoreChange.bind(this));
-    }
-
-    componentWillUnmount() {
-        this._clearFeedback(false);
-        this._unsubStore();
     }
 
     _onStoreChange() {
@@ -114,6 +110,11 @@ class LoginPage extends Component {
             };
             setTimeout(updateOverlay, 1);
         }
+    }
+
+    componentWillUnmount() {
+        this._clearFeedback(false);
+        this._unsubStore();
     }
 
     _lockUp() {
@@ -149,7 +150,7 @@ class LoginPage extends Component {
         event.preventDefault();
         if (!this._isValid()) {
             this._setFeedback('formIncomplete', true);
-            return;
+            return
         }
         // call getValue() to get the values of the form
         var data = {
@@ -171,9 +172,9 @@ class LoginPage extends Component {
             validators: validators
         });
 
-        def.watch(val => {
+        def.watch(value => {
             let newState = {};
-            newState[name] = val;
+            newState[name] = value;
             this.setState(newState);
         });
 
@@ -218,14 +219,34 @@ class LoginPage extends Component {
     render() {
         var identity = [];
         if (ASK_EMAIL) {
-            identity.push(<FormDefField ref="email" key={1} def={this.fieldDefs.get('email')}></FormDefField>);
+            identity.push(<FormDefField ref="email" key={1} def={this.fieldDefs.get('email')}/>);
         }
 
         if (ASK_USERNAME) {
-            identity.push(<FormDefField ref="username" key={2} def={this.fieldDefs.get('username')}></FormDefField>);
+            identity.push(<FormDefField ref="username" key={2} def={this.fieldDefs.get('username')}/>);
         }
 
-        var inner;
+        var inner = (<form className="form LoginPage__form">
+            <h1>{this.s('title')}</h1>
+            <p>{this.s('text')}</p>
+            {identity}
+            <FormDefField ref="password" def={this.fieldDefs.get('password')}/>
+            <div className="form-def-row form-def-row-button-row">
+                <button className="secondary" type="button" onClick={this._goHome.bind(this)}>
+                    {this.s('cancelButtonLabel')}
+                </button>
+                <button className="last" type="button" onClick={this._save.bind(this)}
+                        disabled={!this._isValid()}>
+                    {this.s('loginButtonLabel')}
+                </button>
+            </div>
+            <div className="form-def-row">
+                <label>&nbsp;</label>
+                <div className="form-def-row__input">
+                    <FormFeedback isError={this.state.isError} text={this.state.formFeedback}/>
+                </div>
+            </div>
+        </form>);
 
         console.log('rendering LOGIN PAGE WITH state ', this.state.userState);
         switch (this.state.userState) {
@@ -241,29 +262,6 @@ class LoginPage extends Component {
                     </form>
                 );
                 break;
-
-            default:
-                inner = (<form className="form LoginPage__form">
-                    <h1>{this.s('title')}</h1>
-                    <p>{this.s('text')}</p>
-                    {identity}
-                    <FormDefField ref="password" def={this.fieldDefs.get('password')}></FormDefField>
-                    <div className="form-def-row form-def-row-button-row">
-                        <button className="secondary" type="button" onClick={this._goHome.bind(this)}>
-                            {this.s('cancelButtonLabel')}
-                        </button>
-                        <button className="last" type="button" onClick={this._save.bind(this)}
-                                disabled={!this._isValid()}>
-                            {this.s('loginButtonLabel')}
-                        </button>
-                    </div>
-                    <div className="form-def-row">
-                        <label>&nbsp;</label>
-                        <div className="form-def-row__input">
-                            <FormFeedback isError={this.state.isError} text={this.state.formFeedback}></FormFeedback>
-                        </div>
-                    </div>
-                </form>);
         }
 
         return (<div className="RegisterPage container-frame">
@@ -271,7 +269,9 @@ class LoginPage extends Component {
                 {inner}
             </div>
         </div>);
+
     }
+
 }
 
 export default LoginPage;

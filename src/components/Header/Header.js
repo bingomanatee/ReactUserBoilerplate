@@ -5,7 +5,7 @@ import styles from './Header.css';
 import withStyles from '../../decorators/withStyles';
 import Link from '../Link';
 import Navigation from '../Navigation';
-import {
+import  {
     logIn,
     logOff,
     logInGood,
@@ -48,6 +48,7 @@ class Header extends Component {
             userState: storeState.userState,
             user: storeState.user
         });
+
     }
 
     render() {
